@@ -1,70 +1,92 @@
-# Getting Started with Create React App
+Project Title: ActiveCircle
+Overview
+ActiveCircle is a community-driven app designed to help people discover and participate in activities happening near them. Users can post listings for activities such as gym sessions, yoga classes, kids' playdates, and group walks. The app provides an easy way to organize or join events based on location, activity type, and preferences, encouraging social connections through shared interests.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Problem Space
+Many individuals struggle to find local activities that align with their fitness or social interests. There’s a growing need for a platform that consolidates community-driven events, making it easier for people to discover, join, or organize events near them. ActiveCircle solves this problem by providing a simple and effective platform for discovering and managing fitness, family-friendly, and wellness activities in their area.
 
-## Available Scripts
+User Profile
+Primary users:
 
-In the project directory, you can run:
+Fitness Enthusiasts: People who seek workout buddies or want to organize group workouts.
+Parents: Individuals looking to arrange or join kids' playdates.
+Health-Conscious Individuals: People interested in organizing or joining community walks or yoga sessions.
+Community Organizers: Individuals or organizations that host events for welfare, social, or health-focused groups.
+Special Considerations:
 
-### `npm start`
+Users will want to filter activities by location, time, and activity type.
+Parents may need extra security features, such as identifying responsible adults for children’s activities.
+Yoga sessions might require payment processing integration.
+Ease of use and quick access to local activities is crucial to retain engagement.
+Features
+User Listings: Users can post listings for activities (gym sessions, walks, kids' play, and yoga). Each post will include location, number of participants, and details specific to the activity.
+Filters: Filter activities by type (Gym, Yoga, Kids' Play, Walk), location, and time.
+Search Functionality: Search for activities happening nearby, or within a set radius, based on user location.
+Profile Creation: Users can create profiles that store preferences and make posting or joining events easier.
+Community Engagement: Users can join or organize events representing community or welfare groups.
+Safety Features for Kids' Play: Organizers can designate responsible adults for kids' activities.
+Payment Integration: Yoga session listings can include price details and support for payments via Stripe.
+Favorites/RSVP: Users can mark events as favorites or RSVP to activities they’re interested in attending.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Implementation
+Tech Stack
+Frontend: React.js for building dynamic and responsive user interfaces.
+Styling: SASS for styling and maintaining design consistency.
+Backend: Node.js with Express for server-side logic and API requests.
+Database: TBD
+Authentication: TBD
+Payment Integration: TBD
+Deployment: TBD
+APIs
+Google Maps API: For location-based filtering and displaying activities.
+Firebase Authentication: TBD
+Stripe API: TBD
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Sitemap
+Home Page: Displays a list of nearby activities with filters for gym, yoga, kids' play, and walk events.
+Post Listing Page: Allows users to create a new listing for an activity, specifying details such as location, participants, and time.
+Activity Detail Page: Displays the details of a specific activity and provides options to join or contact the organizer.
+Profile Page: Shows user details, event history, and preferences.
+Search Results Page: Lists filtered activities based on user’s search criteria (location, type, time).
+Mockups
+Mockups will show the following pages:
 
-### `npm test`
+Home Page: With filters and activity listings.
+Post Activity Form: For users to post new listings.
+Activity Detail Page: Showing activity information with options to join or contact the organizer.
+Profile Page: With user details and list of posted or joined activities.
+Tools like Figma or hand-drawn sketches can be used to create visual representations.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Data
+Users:
 
-### `npm run build`
+userId: unique identifier
+name: string
+email: string
+preferences: array (e.g., preferred activities)
+Activities:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+activityId: unique identifier
+type: string (Gym, Walk, Kids' Play, Yoga)
+location: string
+organizerId: userId
+details: string (e.g., workout type, kids' activity details)
+Listings:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+listingId: unique identifier
+activityId: activityId
+organizerId: userId
+participants: array of userIds
+Endpoints
+POST /activities: Creates a new activity listing.
+Parameters: activityType, location, details
+Example Response: { activityId: '123', message: 'Activity created successfully.' }
+GET /activities: Retrieves a list of activities based on filters.
+Parameters: type, location, radius
+Example Response: [ { activityId: '123', type: 'Gym', location: 'XYZ' } ]
+POST /join: Allows a user to join an activity.
+Parameters: activityId, userId
+Example Response: { message: 'Joined activity successfully.' }
+GET /user/
+: Retrieves user profile data and activity history.
+Example Response: { name: 'John Doe', activities: [{ activityId: '123', type: 'Walk' }] }
