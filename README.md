@@ -1,4 +1,3 @@
-Project Title: ActiveCircle
 Overview
 ActiveCircle is a community-driven app designed to help people discover and participate in activities happening near them. Users can post listings for activities such as gym sessions, yoga classes, kids' playdates, and group walks. The app provides an easy way to organize or join events based on location, activity type, and preferences, encouraging social connections through shared interests.
 
