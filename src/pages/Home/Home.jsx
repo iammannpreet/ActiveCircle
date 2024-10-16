@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './Home.scss';
+import AnimatedCard from '../../components/AnimatedCard/AnimatedCard';
+import ParallaxSection from '../../components/ParallaxSection/ParallaxSection';
+import HoverCard from '../../components/HoverCard/HoverCard';
+import Page from '../../components/Page/Page';
 
 const Home = () => {
     // State to store activities
@@ -74,7 +78,10 @@ const Home = () => {
                     onChange={handleInputChange}
                     required
                 />
-
+                <AnimatedCard />
+                <ParallaxSection />
+                <HoverCard />
+                <Page />
                 <label>Location:</label>
                 <input
                     type="text"
