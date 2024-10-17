@@ -12,6 +12,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],  // Added backup fonts
+      }, boxShadow: {
+        'custom-lifted': '0 15px 30px rgba(0, 0, 0, 0.5)', // Adjust shadow size and intensity
       },
     },
   },

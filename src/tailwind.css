@@ -6,7 +6,7 @@
   src: url("../src/assets/fonts/Inter-Italic-VariableFont_opsz_wght.woff")
     format("woff");
   font-weight: 100 900; /* Supports all font weights from thin to black */
-  font-style: normal;
+  font-style: italic;
 }
 
 @font-face {
@@ -14,5 +14,5 @@
   src: url("../src/assets/fonts/Inter-VariableFont_opsz_wght.woff")
     format("woff");
   font-weight: 100 900; /* Supports all italic font weights */
-  font-style: italic;
+  font-style: normal;
 }
