@@ -47,7 +47,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
             </motion.a>
             <motion.a
                 href="#services"
-                className="text-2xl mb-4"
+                className="text-xl mb-4"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
@@ -58,7 +58,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
             </motion.a>
             <motion.a
                 href="#contact"
-                className="text-2xl mb-4"
+                className="text-xl mb-4"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
