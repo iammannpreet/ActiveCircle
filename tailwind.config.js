@@ -4,12 +4,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#1E40AF',
-        secondary: '#F59E0B',
+        primary: '#5271FF',
+        secondary: '#38B6FF',
         accent: '#EC4899',
-      }
+        hoverPrimary: '#3B61DB',
+        hoverSecondary: '#2A91D1',
+      },
+      fontFamily: {
+        sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],  // Added backup fonts
+      },
     },
   },
   plugins: [],
 }
-
