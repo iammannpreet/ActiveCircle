@@ -1,4 +1,3 @@
-import './App.scss';
 import './tailwind.css'
 import Home from './pages/Home/Home';
 

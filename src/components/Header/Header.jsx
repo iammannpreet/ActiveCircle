@@ -10,7 +10,6 @@ import HamburgerIcon from '../HamburgerIcon/HamburgerIcon';
 import Menu from '../Menu/Menu';
 import { menuItems } from '../../utils/menuItems'; // Import menuItems
 import { useToggleMenu } from '../../hooks/useToggeMenu';
-
 const Header = () => {
     const { isOpen, toggleMenu } = useToggleMenu(); // Custom hook for menu logic
 
@@ -27,6 +26,13 @@ const Header = () => {
                 <img src={aclogo} alt="Logo" className="hidden md:block w-18 h-5 lg:hidden" />
                 <img src={desktoplogo} alt="Logo" className="hidden lg:block w-15 h-6" />
             </motion.div>
+
+            {/* Centered Tab Text (Visible only on tablet) */}
+            <div
+                className=" hidden md:block lg:hidden"
+            >
+                <img src={tabtext} alt="Tab Text" className="w-24 h-7" />
+            </div>
 
             {/* Desktop View: Menu Links */}
             <motion.div

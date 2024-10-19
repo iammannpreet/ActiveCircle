@@ -1,9 +1,9 @@
 import React from 'react';
-import './Home.scss';
 import Header from '../../components/Header/Header';
 import ParallaxSection from '../../components/ParallaxSection/ParallaxSection';
 import HoverCard from '../../components/HoverCard/HoverCard';
 import useActivities from '../../hooks/useActivities';
+import Hero from '../../components/Hero/Hero';
 
 const Home = () => {
     const { activities, newActivity, setNewActivity, handleAddActivity, handleDelete } = useActivities();
@@ -16,6 +16,7 @@ const Home = () => {
     return (
         <>
             <Header />
+            <Hero />
 
             <div className="home">
                 <form onSubmit={(e) => {

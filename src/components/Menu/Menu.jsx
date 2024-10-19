@@ -1,4 +1,3 @@
-// components/Menu/Menu.jsx
 import { motion } from 'framer-motion';
 
 const Menu = ({ isOpen, toggleMenu }) => {
@@ -15,7 +14,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
 
     return (
         <motion.div
-            className="fixed bottom-0 p-4 right-0 w-1/2 h-full bg-[#5271FF] z-40 flex flex-col items-end text-white shadow-custom-lifted"
+            className="fixed bottom-0 p-4 right-0 w-full md:w-1/2 h-full bg-[#5271FF] z-40 flex flex-col items-center md:items-end lg:hidden text-white shadow-custom-lifted"
             initial="hidden"
             style={{ top: '56px' }}
             animate={isOpen ? 'visible' : 'hidden'}
@@ -23,6 +22,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
             variants={menuVariants}
             transition={{ type: 'tween', duration: 0.5 }}
         >
+            {/* Centered on mobile, aligned to the right on tablet */}
             <motion.a
                 href="#home"
                 className="text-xl mb-4"
