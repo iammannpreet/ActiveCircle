@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../../components/Header/Header';
-import ParallaxSection from '../../components/ParallaxSection/ParallaxSection';
-import HoverCard from '../../components/HoverCard/HoverCard';
-import useActivities from '../../hooks/useActivities';
-import Hero from '../../components/Hero/Hero';
+import Header from '../components/Header';
+import ParallaxSection from '../components/ParallaxSection';
+import HoverCard from '../components/HoverCard';
+import useActivities from '../hooks/useActivities';
+import Hero from '../components/Hero';
 
 const Home = () => {
     const { activities, newActivity, setNewActivity, handleAddActivity, handleDelete } = useActivities();

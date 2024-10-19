@@ -1,15 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import logo from '../../assets/icons/AC.gif';
-import aclogo from '../../assets/icons/AC-icon.svg';
-import tabtext from '../../assets/icons/tab-AC.gif';
-import desktoplogo from '../../assets/icons/AC-desktop.gif';
+import logo from '../assets/icons/AC.gif';
+import aclogo from '../assets/icons/AC-icon.svg';
+import tabtext from '../assets/icons/tab-AC.gif';
+import desktoplogo from '../assets/icons/AC-desktop.gif';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import HamburgerIcon from '../HamburgerIcon/HamburgerIcon';
-import Menu from '../Menu/Menu';
-import { menuItems } from '../../utils/menuItems'; // Import menuItems
-import { useToggleMenu } from '../../hooks/useToggeMenu';
+import HamburgerIcon from './HamburgerIcon';
+import Menu from './Menu';
+import { menuItems } from '../utils/menuItems'; // Import menuItems
+import { useToggleMenu } from '../hooks/useToggeMenu';
 const Header = () => {
     const { isOpen, toggleMenu } = useToggleMenu(); // Custom hook for menu logic
 

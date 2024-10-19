@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import customIcon from '../../assets/images/pointer.png';  // Your custom marker icon
+import customIcon from '../assets/images/pointer.png';  // Your custom marker icon
 
 const containerStyle = {
     width: '100%',
