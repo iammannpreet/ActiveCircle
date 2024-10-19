@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import ParallaxSection from '../components/ParallaxSection';
 import HoverCard from '../components/HoverCard';
 import useActivities from '../hooks/useActivities';
+import Map from '../components/Map';
 import Hero from '../components/Hero';
 
 const Home = () => {
@@ -17,7 +18,6 @@ const Home = () => {
         <>
             <Header />
             <Hero />
-
             <div className="home">
                 <form onSubmit={(e) => {
                     e.preventDefault();
