@@ -1,4 +1,3 @@
-// src/utils/menuItems.js
 export const menuItems = {
     discover: { href: '#events', label: 'Discover New Events' },
     explore: { href: '#explore', label: 'Explore Activities' },

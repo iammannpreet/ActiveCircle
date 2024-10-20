@@ -53,7 +53,11 @@ const HappeningNowPage = () => {
                     {!activitiesLoading && !activitiesError && activities.length > 0 && (
                         <ul>
                             {activities.map((activity) => (
-                                <li key={activity._id} className="mb-4 border-b pb-2">
+                                <li key={activity._id} className="mb-4 border-b pb-2"
+                                    onMouseEnter={() => setHoveredItem(activity)} // Set hovered item for the map
+                                    onMouseLeave={() => setHoveredItem(null)} // Clear hovered item when mouse leaves
+
+                                >
                                     <h4 className="font-bold text-lg">{activity.type}</h4>
                                     <p>{activity.location}</p>
                                     <p>Organized by: {activity.organizer}</p><button
