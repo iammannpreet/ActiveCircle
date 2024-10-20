@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import EventModal from './EventModal'; // Import the EventModal component
+import EventModal from './eventModal'; // Import the EventModal component
 import ActivityModal from './ActivityModal';
 import getCenter from 'geolib/es/getCenter';
 import useFetchEvents from '../hooks/useFetchEvents';
