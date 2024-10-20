@@ -1,20 +1,23 @@
-import './App.scss';
-import Header from './components/Header/Header';
-import Home from './pages/Home/Home';
+import './tailwind.css';
+import Home from './pages/Home';
+import AddActivityPage from './pages/AddActivityPage';
+import AddEventPage from './pages/AddEventPage';
+import HappeningNowPage from './pages/HappeningNowPage';  // Import the Happening Now Page
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <div>
-
-      {/* Header */}
-      <Home />
-      <Header />
-      {/* Banner this is a testt */}
-      {/* Section */}
-      {/* Footer */}
-    </div>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />  {/* Home Page Route */}
+          <Route path="/add-activity" element={<AddActivityPage />} />  {/* Add Activity Page */}
+          <Route path="/add-event" element={<AddEventPage />} />  {/* Add Event Page */}
+          <Route path="/happening-now" element={<HappeningNowPage />} />  {/* Happening Now Page */}
+        </Routes>
+      </div>
+    </Router>
   );
-
 }
 
 export default App;
