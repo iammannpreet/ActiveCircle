@@ -4,8 +4,8 @@ import useActivities from '../hooks/useActivities';
 import Map from '../components/Map'; // Your existing Map component
 
 const HappeningNowPage = () => {
-    const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
-    const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
+    const { events, loading: eventsLoading, error: eventsError, handleDeleteEvent } = useFetchEvents(process.env.REACT_APP_API_URL);
+    const { activities, loading: activitiesLoading, error: activitiesError, handleDeleteActivity } = useActivities();
     const [hoveredItem, setHoveredItem] = useState(null); // Track the hovered item
 
     return (
@@ -33,7 +33,12 @@ const HappeningNowPage = () => {
                                 >
                                     <h4 className="font-bold text-lg">{event.type}</h4>
                                     <p>{event.location}</p>
-                                    <p>Organized by: {event.organizer}</p>
+                                    <p>Organized by: {event.organizer}</p><button
+                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                        onClick={() => handleDeleteEvent(event._id)} // Delete event
+                                    >
+                                        Delete
+                                    </button>
                                 </li>
                             ))}
                         </ul>
@@ -48,22 +53,21 @@ const HappeningNowPage = () => {
                     {!activitiesLoading && !activitiesError && activities.length > 0 && (
                         <ul>
                             {activities.map((activity) => (
-                                <li
-                                    key={activity._id}
-                                    className="mb-4 border-b pb-2"
-                                    onMouseEnter={() => setHoveredItem(activity)} // Set hovered activity for the map
-                                    onMouseLeave={() => setHoveredItem(null)} // Clear hovered activity when mouse leaves
-                                >
+                                <li key={activity._id} className="mb-4 border-b pb-2">
                                     <h4 className="font-bold text-lg">{activity.type}</h4>
                                     <p>{activity.location}</p>
-                                    <p>Organized by: {activity.organizer}</p>
+                                    <p>Organized by: {activity.organizer}</p><button
+                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                        onClick={() => handleDeleteActivity(activity._id)} // Delete event
+                                    >
+                                        Delete
+                                    </button>
                                 </li>
                             ))}
                         </ul>
                     )}
                 </div>
             </div>
-
             {/* Right Section: Map */}
             <div className="w-full md:w-2/3">
                 {/* Pass the hovered item to the Map */}

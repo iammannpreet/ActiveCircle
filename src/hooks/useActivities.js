@@ -23,13 +23,13 @@ const useActivities = () => {
             .catch((error) => console.error('Error adding activity:', error));
     };
 
-    const handleDelete = (id) => {
+    const handleDeleteActivity = (id) => {
         deleteActivity(id)
             .then(() => setActivities(activities.filter(activity => activity._id !== id)))
             .catch((error) => console.error('Error deleting activity:', error));
     };
 
-    return { activities, newActivity, setNewActivity, handleAddActivity, handleDelete };
+    return { activities, newActivity, setNewActivity, handleAddActivity, handleDeleteActivity };
 };
 
 export default useActivities;
