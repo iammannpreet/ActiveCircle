@@ -3,14 +3,14 @@ import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import EventModal from './EventModal'; // Import the EventModal component
 import ActivityModal from './ActivityModal';
-import useFetchEvents from '../hooks/useFetchEvents';
-import useActivities from '../hooks/useActivities'; // Import the activity hook
 import getCenter from 'geolib/es/getCenter';
+import useFetchEvents from '../hooks/useFetchEvents';
+import useActivities from '../hooks/useActivities';
 
-function Map() {
-    const [hoveredLocation, setHoveredLocation] = useState(null); // State for hovered popup
-    const [selectedItem, setSelectedItem] = useState(null); // State for the selected event/activity (for modal)
-    const [isEvent, setIsEvent] = useState(true); // State to track if the selected item is an event or activity
+function Map({ hoveredItem }) {
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isEvent, setIsEvent] = useState(true);
+    const [hoveredLocation, setHoveredLocation] = useState(null); // State for hovered item marker
     const [viewport, setViewport] = useState({
         width: '100vw',
         height: '100vh',
@@ -19,32 +19,20 @@ function Map() {
         zoom: 11,
     });
 
-    // Use the custom hook to fetch events
     const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
     const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 
     useEffect(() => {
         if (!eventsLoading && !activitiesLoading && (events.length > 0 || activities.length > 0)) {
-            // Combine events and activities and filter out items with missing coordinates
-            const coordinates = [...events, ...activities].filter(item => {
-                return item.latitude && item.longitude && !isNaN(item.latitude) && !isNaN(item.longitude);
-            }).map(item => ({
-                latitude: item.latitude,
-                longitude: item.longitude,
-            }));
+            const coordinates = [...events, ...activities]
+                .filter(item => item.latitude && item.longitude)
+                .map(item => ({ latitude: item.latitude, longitude: item.longitude }));
 
-            // Check if there are valid coordinates to calculate the center
             if (coordinates.length > 0) {
-                const centerCoordinates = coordinates.map(coord => ({
-                    lat: coord.latitude,
-                    lng: coord.longitude,
-                }));
-
-                const center = getCenter(centerCoordinates);
-
+                const center = getCenter(coordinates.map(coord => ({ lat: coord.latitude, lng: coord.longitude })));
                 if (center) {
-                    setViewport((prevViewport) => ({
-                        ...prevViewport,
+                    setViewport(prev => ({
+                        ...prev,
                         latitude: center.latitude,
                         longitude: center.longitude,
                     }));
@@ -53,32 +41,27 @@ function Map() {
         }
     }, [events, activities, eventsLoading, activitiesLoading]);
 
-
-    const handleMarkerClick = (item, isEvent = true) => {
-        setSelectedItem(item); // Set the clicked item (event/activity) for the modal
-        setIsEvent(isEvent); // Set whether the clicked item is an event or activity
-    };
-
-    const handleCloseModal = () => {
-        setSelectedItem(null); // Close the modal
-    };
-
-    if (eventsLoading || activitiesLoading) return <div>Loading...</div>;
-    if (eventsError || activitiesError) return <div>Error loading data</div>;
+    // Highlight the marker corresponding to the hovered item in the list
+    useEffect(() => {
+        if (hoveredItem) {
+            setHoveredLocation(hoveredItem);
+        } else {
+            setHoveredLocation(null); // Reset hovered location when no item is hovered
+        }
+    }, [hoveredItem]);
 
     return (
         <>
             <ReactMapGL
                 {...viewport}
-                onMove={(evt) => setViewport(evt.viewState)}
+                onMove={evt => setViewport(evt.viewState)}
                 mapStyle='mapbox://styles/iammannpreet/cm2giu9tp00do01p92fr11v7d'
                 mapboxAccessToken={process.env.REACT_APP_MAPBOX_KEY}
                 scrollZoom={true}
                 dragPan={true}
                 dragRotate={true}
             >
-                {/* Display event markers */}
-                {events.map((event) => (
+                {events.map(event => (
                     <Marker
                         key={event._id}
                         longitude={event.longitude}
@@ -87,19 +70,17 @@ function Map() {
                         offsetTop={-10}
                     >
                         <p
-                            onMouseEnter={() => setHoveredLocation(event)} // Set hovered event for popup
-                            onMouseLeave={() => setHoveredLocation(null)} // Clear hovered event on mouse leave
-                            onClick={() => handleMarkerClick(event, true)} // Open event modal on marker click
-                            className='cursor-pointer text-2xl animate-bounce text-red-500'
-                            style={{ cursor: 'pointer' }}
+                            onMouseEnter={() => setHoveredLocation(event)} // Highlight the marker on hover
+                            onMouseLeave={() => setHoveredLocation(null)} // Remove highlight on leave
+                            onClick={() => setSelectedItem(event)}
+                            className={`cursor-pointer text-2xl ${hoveredLocation === event ? 'text-red-700' : 'text-red-500'} animate-bounce`}
                         >
                             📍
                         </p>
                     </Marker>
                 ))}
 
-                {/* Display activity markers */}
-                {activities.map((activity) => (
+                {activities.map(activity => (
                     <Marker
                         key={activity._id}
                         longitude={activity.longitude}
@@ -108,24 +89,22 @@ function Map() {
                         offsetTop={-10}
                     >
                         <p
-                            onMouseEnter={() => setHoveredLocation(activity)} // Set hovered activity for popup
-                            onMouseLeave={() => setHoveredLocation(null)} // Clear hovered activity on mouse leave
-                            onClick={() => handleMarkerClick(activity, false)} // Open activity modal on marker click
-                            className='cursor-pointer text-2xl animate-bounce text-green-500' // Style activity markers differently
-                            style={{ cursor: 'pointer' }}
+                            onMouseEnter={() => setHoveredLocation(activity)}
+                            onMouseLeave={() => setHoveredLocation(null)}
+                            onClick={() => setSelectedItem(activity)}
+                            className={`cursor-pointer text-2xl ${hoveredLocation === activity ? 'text-green-700' : 'text-green-500'} animate-bounce`}
                         >
                             🏃
                         </p>
                     </Marker>
                 ))}
 
-                {/* Show Popup for the hovered location */}
                 {hoveredLocation && (
                     <Popup
                         longitude={hoveredLocation.longitude}
                         latitude={hoveredLocation.latitude}
-                        onClose={() => setHoveredLocation(null)} // Close popup when not hovered
-                        closeOnClick={false} // Don't close popup on marker click (we want modal)
+                        onClose={() => setHoveredLocation(null)}
+                        closeOnClick={false}
                         anchor="top"
                     >
                         <div className="p-2">
@@ -134,16 +113,15 @@ function Map() {
                         </div>
                     </Popup>
                 )}
+
+                {selectedItem && (
+                    isEvent ? (
+                        <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />
+                    ) : (
+                        <ActivityModal activity={selectedItem} onClose={() => setSelectedItem(null)} />
+                    )
+                )}
             </ReactMapGL>
-
-            {/* Render the EventModal or ActivityModal based on the item type */}
-            {isEvent && selectedItem && (
-                <EventModal event={selectedItem} onClose={handleCloseModal} />
-            )}
-
-            {!isEvent && selectedItem && (
-                <ActivityModal activity={selectedItem} onClose={handleCloseModal} />
-            )}
         </>
     );
 }
