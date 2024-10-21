@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import EventModal from './eventModal'; // Import the EventModal component
+import EventModal from './eventModal';
 import ActivityModal from './ActivityModal';
 import getCenter from 'geolib/es/getCenter';
 import useFetchEvents from '../hooks/useFetchEvents';
@@ -10,7 +10,7 @@ import useActivities from '../hooks/useActivities';
 function Map({ hoveredItem }) {
     const [selectedItem, setSelectedItem] = useState(null);
     const [isEvent, setIsEvent] = useState(true);
-    const [hoveredLocation, setHoveredLocation] = useState(null); // State for hovered item marker
+    const [hoveredLocation, setHoveredLocation] = useState(null);
     const [viewport, setViewport] = useState({
         width: '100vw',
         height: '100vh',
