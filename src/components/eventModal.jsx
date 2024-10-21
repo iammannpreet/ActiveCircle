@@ -30,8 +30,9 @@ const EventModal = ({ event, onClose }) => {
 
     if (!event) return null;
 
-    // Format the date if available
+    // Format the date and time if available
     const eventDate = event.date ? new Date(event.date).toLocaleDateString() : "Date not available";
+    const eventTime = event.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Time not available";
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={onClose}>
@@ -54,6 +55,9 @@ const EventModal = ({ event, onClose }) => {
                 </p>
                 <p className="mb-2">
                     <span className="font-semibold">Event Date:</span> {eventDate}
+                </p>
+                <p className="mb-2">
+                    <span className="font-semibold">Event Time:</span> {eventTime}
                 </p>
                 <p className="mb-4">
                     <span className="font-semibold">City:</span> {locationDetails ? locationDetails.city : 'Loading...'}

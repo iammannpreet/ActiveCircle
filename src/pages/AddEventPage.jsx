@@ -1,64 +1,74 @@
 import React, { useState } from 'react';
 import useFetchEvents from '../hooks/useFetchEvents';
+import { fetchLocationSuggestions, geocodeLocation } from '../utils/location'; // Import location utilities
+import TypeDropdown from '../components/TypeDropdown'; // Import reusable dropdown component
 
-// Function to geocode the location (using Mapbox API)
-const geocodeLocation = async (location) => {
-    const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?access_token=${process.env.REACT_APP_MAPBOX_KEY}`
-    );
-    const data = await response.json();
-    if (data.features && data.features.length > 0) {
-        const [longitude, latitude] = data.features[0].center; // Get coordinates from the response
-        return { latitude, longitude };
-    }
-    throw new Error('Location not found');
+// Initial event state
+const initialEventState = {
+    type: '',
+    location: '',
+    organizer: '',
+    date: '',
+    time: '',
+    details: ''
 };
 
 const AddEventPage = () => {
     const { newEvent, setNewEvent, handleAddEvent } = useFetchEvents(process.env.REACT_APP_API_URL);
-    const [error, setError] = useState(null);  // State to handle errors
+    const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
+    const [locationSuggestions, setLocationSuggestions] = useState([]);
 
-    const handleInputChange = (e) => {
+    const handleInputChange = async (e) => {
         const { name, value } = e.target;
         setNewEvent({ ...newEvent, [name]: value });
+
+        if (name === 'location' && value) {
+            const suggestions = await fetchLocationSuggestions(value);
+            setLocationSuggestions(suggestions);
+        } else {
+            setLocationSuggestions([]);
+        }
+    };
+
+    const handleLocationSelect = (location) => {
+        setNewEvent({ ...newEvent, location });
+        setLocationSuggestions([]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Geocode the location to get latitude and longitude
+            const dateTime = new Date(`${newEvent.date}T${newEvent.time}`);
             const { latitude, longitude } = await geocodeLocation(newEvent.location);
 
-            // Add latitude and longitude to the new event data
-            const eventWithCoords = {
+            const eventWithCoordsAndDate = {
                 ...newEvent,
                 latitude,
                 longitude,
+                date: dateTime,
             };
 
-            // Call the add function with geocoded data
-            handleAddEvent(eventWithCoords);
+            await handleAddEvent(eventWithCoordsAndDate);
+            setNewEvent(initialEventState);
+            setError(null);
+            setSuccessMessage('Event added successfully!');
         } catch (err) {
-            console.error('Error adding event:', err);
             setError('Failed to add event. Please check the location.');
+            setSuccessMessage(null);
         }
     };
+
+    const today = new Date().toISOString().split("T")[0];
 
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Add New Event</h1>
-            {error && <p className="text-red-500 mb-4">{error}</p>}  {/* Display error message if there's an error */}
-            <form onSubmit={handleSubmit}>  {/* Call handleSubmit instead of handleAddEvent directly */}
-                <label className="block mb-2">Type:</label>
-                <input
-                    type="text"
-                    name="type"
-                    value={newEvent.type}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
+            <form onSubmit={handleSubmit}>
+                <TypeDropdown value={newEvent.type} onChange={handleInputChange} label="Event Type" />
+                {/* Location with Autocomplete */}
                 <label className="block mb-2">Location:</label>
                 <input
                     type="text"
@@ -68,7 +78,48 @@ const AddEventPage = () => {
                     className="border p-2 mb-4 w-full"
                     required
                 />
-
+                {locationSuggestions.length > 0 && (
+                    <ul className="border border-gray-300 bg-white max-h-48 overflow-y-auto mb-4">
+                        {locationSuggestions.map((suggestion, index) => (
+                            <li
+                                key={index}
+                                className="p-2 hover:bg-gray-200 cursor-pointer"
+                                onClick={() => handleLocationSelect(suggestion.place_name)}
+                            >
+                                {suggestion.place_name}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+                {/* Date and Time Fields */}
+                <label className="block mb-2">Date:</label>
+                <input
+                    type="date"
+                    name="date"
+                    value={newEvent.date}
+                    onChange={handleInputChange}
+                    className="border p-2 mb-4 w-full"
+                    min={today}
+                    required
+                />
+                <label className="block mb-2">Time:</label>
+                <input
+                    type="time"
+                    name="time"
+                    value={newEvent.time}
+                    onChange={handleInputChange}
+                    className="border p-2 mb-4 w-full"
+                    required
+                />
+                {/* Other Fields */}
+                <label className="block mb-2">Details:</label>
+                <input
+                    type="text"
+                    name="details"
+                    value={newEvent.details}
+                    onChange={handleInputChange}
+                    className="border p-2 mb-4 w-full"
+                />
                 <label className="block mb-2">Organizer:</label>
                 <input
                     type="text"
@@ -76,9 +127,7 @@ const AddEventPage = () => {
                     value={newEvent.organizer}
                     onChange={handleInputChange}
                     className="border p-2 mb-4 w-full"
-                    required
                 />
-
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                     Add Event
                 </button>

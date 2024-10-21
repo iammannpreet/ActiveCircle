@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import EventModal from './eventModal'; // Import the EventModal component
+import EventModal from './eventModal';
 import ActivityModal from './ActivityModal';
 import getCenter from 'geolib/es/getCenter';
 import useFetchEvents from '../hooks/useFetchEvents';
@@ -9,19 +9,38 @@ import useActivities from '../hooks/useActivities';
 
 function Map({ hoveredItem }) {
     const [selectedItem, setSelectedItem] = useState(null);
-    const [isEvent, setIsEvent] = useState(true);
-    const [hoveredLocation, setHoveredLocation] = useState(null); // State for hovered item marker
+    const [hoveredLocation, setHoveredLocation] = useState(null);
     const [viewport, setViewport] = useState({
         width: '100vw',
         height: '100vh',
-        latitude: 47.7577,
-        longitude: -122.4376,
+        latitude: 47.7577, // Default latitude if user location is not available
+        longitude: -122.4376, // Default longitude if user location is not available
         zoom: 11,
     });
 
     const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
     const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 
+    // Get user's current location on mount
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setViewport((prevViewport) => ({
+                        ...prevViewport,
+                        latitude,
+                        longitude,
+                    }));
+                },
+                (error) => {
+                    console.error("Error fetching user's location:", error);
+                }
+            );
+        }
+    }, []);
+
+    // Center map based on events/activities or user location
     useEffect(() => {
         if (!eventsLoading && !activitiesLoading && (events.length > 0 || activities.length > 0)) {
             const coordinates = [...events, ...activities]
@@ -115,7 +134,7 @@ function Map({ hoveredItem }) {
                 )}
 
                 {selectedItem && (
-                    isEvent ? (
+                    selectedItem.type ? (
                         <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />
                     ) : (
                         <ActivityModal activity={selectedItem} onClose={() => setSelectedItem(null)} />

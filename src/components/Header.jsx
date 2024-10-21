@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import logo from '../assets/icons/AC.gif';
 import aclogo from '../assets/icons/AC-icon.svg';
@@ -10,8 +10,15 @@ import HamburgerIcon from './HamburgerIcon';
 import Menu from './Menu';
 import { menuItems } from '../utils/menuItems'; // Import menuItems
 import { useToggleMenu } from '../hooks/useToggeMenu';
-const Header = () => {
+import SearchComponent from './SearchComponent'; // Import the search component
+
+const Header = ({ events, activities }) => {
     const { isOpen, toggleMenu } = useToggleMenu(); // Custom hook for menu logic
+    const [isSearchOpen, setIsSearchOpen] = useState(false); // Track search bar visibility
+
+    const toggleSearch = () => {
+        setIsSearchOpen(!isSearchOpen);
+    };
 
     return (
         <header className="bg-[#f6f8fd] text-white p-4 flex justify-between items-center relative">
@@ -28,9 +35,7 @@ const Header = () => {
             </motion.div>
 
             {/* Centered Tab Text (Visible only on tablet) */}
-            <div
-                className=" hidden md:block lg:hidden"
-            >
+            <div className=" hidden md:block lg:hidden">
                 <img src={tabtext} alt="Tab Text" className="w-24 h-7" />
             </div>
 
@@ -41,7 +46,6 @@ const Header = () => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                {/* Map through menuItems and render each one */}
                 {Object.keys(menuItems).map((key) => (
                     <a
                         key={key}
@@ -68,15 +72,22 @@ const Header = () => {
 
             {/* Mobile view: Icons */}
             <motion.div className="flex space-x-6 items-center lg:hidden">
-                <a href={menuItems.discover.href}>
+                <button onClick={toggleSearch}>
                     <SearchIcon style={{ color: '#6A8FFF' }} />
-                </a>
+                </button>
                 <FilterAltIcon style={{ color: '#6A8FFF' }} />
                 <HamburgerIcon isOpen={isOpen} toggleMenu={toggleMenu} />
             </motion.div>
 
             {/* Mobile Menu */}
             <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
+
+            {/* Search Component */}
+            {isSearchOpen && (
+                <div className="absolute top-16 left-0 w-full bg-white p-4 shadow-md z-50">
+                    <SearchComponent events={events} activities={activities} />
+                </div>
+            )}
         </header>
     );
 };
