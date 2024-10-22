@@ -9,6 +9,29 @@ const SearchComponent = () => {
     const [error, setError] = useState(null);  // Store error state
     const [selectedItem, setSelectedItem] = useState(null);  // Store selected item for the modal
     const [isEvent, setIsEvent] = useState(true);  // Track if the selected item is an event or activity
+    const [placeholder, setPlaceholder] = useState('Step outside. Find an adventure.'); // Default placeholder for mobile
+
+    // Detect screen width and adjust placeholder
+    useEffect(() => {
+        const updatePlaceholder = () => {
+            if (window.innerWidth < 768) {
+                setPlaceholder('Step outside. Find an adventure.');
+            } else {
+                setPlaceholder('Search the perfect workout, event, or weekend adventure Here!');
+            }
+        };
+
+        // Initial check when component mounts
+        updatePlaceholder();
+
+        // Update placeholder on window resize
+        window.addEventListener('resize', updatePlaceholder);
+
+        // Cleanup listener on unmount
+        return () => {
+            window.removeEventListener('resize', updatePlaceholder);
+        };
+    }, []);
 
     // Function to fetch search results from the backend
     const fetchSearchResults = async (query) => {
@@ -52,14 +75,14 @@ const SearchComponent = () => {
     };
 
     return (
-        <div className="p-6 bg-lightGray text-darkGray rounded-xl shadow-lg max-w-3xl mx-auto">
+        <div className="p-6 bg-lightGray text-darkGray shadow-lg max-w-3xl mx-auto">
             {/* Search Input */}
             <input
                 type="text"
                 value={searchInput}
                 onChange={handleInputChange}
-                className="border border-gray-300 p-3 mb-6 w-full rounded-lg bg-white text-darkGray placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Search activities or events (e.g., Weightlifting, Yoga, location, details)"
+                className="border border-gray-300 p-3 w-full rounded-lg bg-white text-darkGray placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder={placeholder}  // Dynamically set placeholder based on screen size
             />
 
             {/* Loading State */}
