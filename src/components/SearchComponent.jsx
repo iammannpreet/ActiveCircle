@@ -52,36 +52,36 @@ const SearchComponent = () => {
     };
 
     return (
-        <div className="p-4 bg-gray-100 text-gray-900 rounded-lg shadow-md">
+        <div className="p-6 bg-lightGray text-darkGray rounded-xl shadow-lg max-w-3xl mx-auto">
             {/* Search Input */}
             <input
                 type="text"
                 value={searchInput}
                 onChange={handleInputChange}
-                className="border p-2 mb-4 w-full rounded-lg bg-white text-gray-900 placeholder-gray-500"
+                className="border border-gray-300 p-3 mb-6 w-full rounded-lg bg-white text-darkGray placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Search activities or events (e.g., Weightlifting, Yoga, location, details)"
             />
 
             {/* Loading State */}
-            {loading && <p>Loading search results...</p>}
+            {loading && <p className="text-primary text-center">Loading search results...</p>}
 
             {/* Error State */}
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500 text-center">{error}</p>}
 
             {/* Display Search Results */}
             {!loading && filteredResults.length > 0 && (
                 <div>
-                    <h2 className="text-xl font-bold mb-4">Search Results</h2>
-                    <ul className="bg-white rounded-lg shadow-lg">
+                    <h2 className="text-xl font-semibold mb-4">Search Results</h2>
+                    <ul className="bg-white rounded-lg shadow-lg divide-y divide-gray-200">
                         {filteredResults.map((item, index) => (
                             <li
                                 key={index}
-                                className="p-4 border-b cursor-pointer hover:bg-blue-100"
+                                className="p-4 cursor-pointer hover:bg-gray-100 transition-all duration-200 ease-in-out"
                                 onClick={() => handleItemClick(item)}  // Handle click to show modal
                             >
-                                <h4 className="font-bold text-lg">{item.type || item.details}</h4>
-                                <p>{item.location}</p>
-                                <p>Organized by: {item.organizer}</p>
+                                <h4 className="font-semibold text-lg mb-1 text-primary">{item.type || item.details}</h4>
+                                <p className="text-sm text-gray-600">{item.location}</p>
+                                <p className="text-sm text-gray-500">Organized by: {item.organizer}</p>
                             </li>
                         ))}
                     </ul>
@@ -90,7 +90,7 @@ const SearchComponent = () => {
 
             {/* No Results Message */}
             {!loading && filteredResults.length === 0 && searchInput.length > 2 && (
-                <p>No matching events or activities found.</p>
+                <p className="text-center text-gray-600">No matching events or activities found.</p>
             )}
 
             {/* Display Modal for the selected item */}

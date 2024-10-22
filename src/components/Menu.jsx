@@ -14,9 +14,9 @@ const Menu = ({ isOpen, toggleMenu }) => {
 
     return (
         <motion.div
-            className="fixed bottom-0 p-4 right-0 w-full md:w-1/2 h-full bg-[#5271FF] z-40 flex flex-col items-center md:items-end lg:hidden text-white shadow-custom-lifted"
+            className="fixed bottom-0 p-4 right-0 w-full md:w-1/2 h-full bg-lightGray z-40 flex flex-col items-center md:items-end lg:hidden text-darkGray shadow-custom-lifted"
             initial="hidden"
-            style={{ top: '56px' }}
+            style={{ top: '76px' }}
             animate={isOpen ? 'visible' : 'hidden'}
             exit="exit"
             variants={menuVariants}
