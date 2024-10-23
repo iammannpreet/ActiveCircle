@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify'; // Import toast
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import useActivities from '../hooks/useActivities';
 import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
@@ -12,7 +12,8 @@ const initialActivityState = {
     organizer: '',
     date: '',
     time: '',
-    details: ''
+    details: '',
+    image: null // Added field for image
 };
 
 const AddActivityPage = () => {
@@ -29,6 +30,14 @@ const AddActivityPage = () => {
             setLocationSuggestions(suggestions);
         } else {
             setLocationSuggestions([]);
+        }
+    };
+
+    // Handle image selection
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setNewActivity({ ...newActivity, image: file });
         }
     };
 
@@ -61,14 +70,23 @@ const AddActivityPage = () => {
             const dateTime = new Date(`${newActivity.date}T${newActivity.time}`);
             const { latitude, longitude } = await geocodeLocation(newActivity.location);
 
-            const activityWithCoords = {
-                ...newActivity,
-                latitude,
-                longitude,
-                date: dateTime,
-            };
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('type', newActivity.type);
+            formData.append('location', newActivity.location);
+            formData.append('details', newActivity.details);
+            formData.append('organizer', newActivity.organizer);
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
+            formData.append('date', dateTime.toISOString());
 
-            await handleAddActivity(activityWithCoords);
+            // Append the image if it exists
+            if (newActivity.image) {
+                formData.append('image', newActivity.image);
+            }
+
+            // Send the FormData using your existing handleAddActivity function
+            await handleAddActivity(formData);
             setNewActivity(initialActivityState);
 
             toast.success('Activity added successfully!', {
@@ -90,7 +108,7 @@ const AddActivityPage = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <ToastContainer /> {/* Toast container to show notifications */}
+            <ToastContainer />
             <h1 className="text-2xl font-bold mb-4">Add New Activity</h1>
             <form onSubmit={handleSubmit}>
                 <TypeDropdown value={newActivity.type} onChange={handleInputChange} label="Activity Type" />
@@ -152,6 +170,13 @@ const AddActivityPage = () => {
                     onChange={handleInputChange}
                     className="border p-2 mb-4 w-full"
                     required
+                />
+                <label className="block mb-2">Image:</label>
+                <input
+                    type="file"
+                    name="image"
+                    onChange={handleFileChange}
+                    className="border p-2 mb-4 w-full"
                 />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                     Add Activity

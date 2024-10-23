@@ -50,8 +50,8 @@ const Glowingpng = () => {
             <img
                 src={images[currentImageIndex]}
                 alt="Yoga Silhouette"
-                className={`w-60 h-60 md:w-80 md:h-80 object-cover md:p-16 object-center glowing-outline transition-opacity duration-[1000ms] ease-in-out transform ${fade ? 'opacity-100' : 'opacity-0'
-                    }`}
+                className={`w-60 h-60 md:w-80 md:h-80 object-cover md:p-16 object-center glowing-outline transition-opacity duration-[1000ms] ease-in-out transform ${fade ? 'opacity-100' : 'opacity-0'} md:ml-28 lg:ml-48`}
+
             />
         </div>
     );

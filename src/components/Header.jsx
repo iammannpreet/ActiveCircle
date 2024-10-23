@@ -76,7 +76,7 @@ const Header = ({ events, activities }) => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="relative w-16 h-8 bg-black overflow-hidden inline-block rounded-xl">
+                    <div className="w-16 h-8 bg-black overflow-hidden inline-block rounded-xl">
                         <a
                             href="#login"
                             className="relative z-10 text-sm text-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
@@ -85,7 +85,7 @@ const Header = ({ events, activities }) => {
                         </a>
                     </div>
 
-                    <div className="relative w-16 h-8 bg-white overflow-hidden inline-block rounded-xl">
+                    <div className=" w-16 h-8 bg-white overflow-hidden inline-block rounded-xl">
                         <a href="#signup" className="relative z-10 text-sm bg-primary text-black rounded-lg hover:bg-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300">
                             Sign Up
                         </a>
