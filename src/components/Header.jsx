@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { motion } from 'framer-motion';
 import { menuItems } from '../utils/menuItems';
 import { useToggleMenu } from '../hooks/useToggeMenu';
@@ -30,9 +31,9 @@ const Header = ({ events, activities }) => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <a href="/" className="block items-center">
+                    <Link to="/" className="block items-center">
                         <img src={aclogo} alt="Logo" className="block w-10 h-8 md:min-w-11 md:h-9" />
-                    </a>
+                    </Link>
                 </motion.div>
 
                 {/* Centered Tab Text (Visible only on tablet) */}
@@ -47,18 +48,26 @@ const Header = ({ events, activities }) => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    {Object.keys(menuItems).map((key) => (
-                        <a
-                            key={key}
-                            href={menuItems[key].href}
-                            className="text-base font-light font-interthin text-primary pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
-                        >
-                            {menuItems[key].label}
-                        </a>
+                    {Object.entries(menuItems).map(([key, item]) => (
+                        item.to ? (
+                            <Link
+                                key={key}
+                                to={item.to}
+                                className="text-base font-light font-interthin text-primary pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                            >
+                                {item.label}
+                            </Link>
+                        ) : (
+                            <a
+                                key={key}
+                                href={item.href}
+                                className="text-base font-light font-interthin text-primary pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                            >
+                                {item.label}
+                            </a>
+                        )
                     ))}
                 </motion.div>
-
-
 
                 {/* Right side: Login and Sign Up */}
                 <motion.div

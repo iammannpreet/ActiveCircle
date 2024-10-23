@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../tailwind.css';
 import yoga1 from '../assets/images/mob-cycling.png';
-import yoga2 from '../assets/images/mob-balance.png';
 import yoga3 from '../assets/images/mob-leg-wide.png';
 import yoga4 from '../assets/images/mob-one-arm-push.png';
 import yoga5 from '../assets/images/mob-push-up.png';
@@ -9,10 +8,8 @@ import yoga6 from '../assets/images/mob-stretch.png';
 import yoga7 from '../assets/images/dance.png';
 import yoga11 from '../assets/images/yoga-pure.png';
 
-const mobileImages = [yoga1, yoga2, yoga3, yoga4, yoga5, yoga6];
-const desktopImages = [
-    yoga11, yoga7, yoga6
-];
+const mobileImages = [yoga1, yoga4, yoga3, yoga5, yoga6];
+const desktopImages = [yoga11, yoga7, yoga6];
 
 const Glowingpng = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);

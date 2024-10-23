@@ -1,7 +1,7 @@
 export const menuItems = {
-    discover: { href: '#events', label: 'Discover New Events' },
-    explore: { href: '#explore', label: 'Create an Activity' },
-    events: { href: '#events-near-you', label: 'Host an Event' },
+    discover: { to: '/happening-now', label: 'Discover New Events' },
+    explore: { to: '/add-activity', label: 'Create an Activity' },
+    events: { to: '/add-event', label: 'Host an Event' },
     partner: { href: '#partner', label: 'Our Mission' },
     about: { href: '#about', label: 'About' }
 };
