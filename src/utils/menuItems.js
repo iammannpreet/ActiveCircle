@@ -1,8 +1,7 @@
 export const menuItems = {
     discover: { href: '#events', label: 'Discover New Events' },
-    explore: { href: '#explore', label: 'Explore Activities' },
-    partner: { href: '#partner', label: 'Find a Partner' },
-    events: { href: '#events-near-you', label: 'Events Near You' },
-    about: { href: '#about', label: 'About' },
-    // Login and Sign Up will be handled separately
+    explore: { href: '#explore', label: 'Create an Activity' },
+    events: { href: '#events-near-you', label: 'Host an Event' },
+    partner: { href: '#partner', label: 'Our Mission' },
+    about: { href: '#about', label: 'About' }
 };

@@ -33,7 +33,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 onClick={toggleMenu}
             ><Link to="/happening-now">
                     <a>
-                        Happening Now!
+                        Discover New Events
                     </a>
                 </Link>
 
@@ -47,7 +47,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 transition={{ delay: 0.6 }}
                 onClick={toggleMenu}
             >
-                Find Your Next Adventure
+                Create an Activity
             </motion.a>
             <motion.a
                 href="#services"
@@ -57,8 +57,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.7 }}
                 onClick={toggleMenu}
-            >
-                Our Mission
+            >Host an Event
             </motion.a>
             <motion.a
                 href="#contact"
@@ -68,8 +67,34 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.8 }}
                 onClick={toggleMenu}
-            >
-                Contact
+            >Our Mission
+            </motion.a><motion.a
+                href="#contact"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
+                variants={itemVariants}
+                initial="hidden"
+                animate={isOpen ? 'visible' : 'hidden'}
+                transition={{ delay: 0.8 }}
+                onClick={toggleMenu}
+            >About
+            </motion.a><motion.a
+                href="#contact"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
+                variants={itemVariants}
+                initial="hidden"
+                animate={isOpen ? 'visible' : 'hidden'}
+                transition={{ delay: 0.8 }}
+                onClick={toggleMenu}
+            >Log In
+            </motion.a><motion.a
+                href="#contact"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
+                variants={itemVariants}
+                initial="hidden"
+                animate={isOpen ? 'visible' : 'hidden'}
+                transition={{ delay: 0.8 }}
+                onClick={toggleMenu}
+            >Sign Up
             </motion.a>
         </motion.div >
     );

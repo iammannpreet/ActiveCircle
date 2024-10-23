@@ -1,14 +1,15 @@
 import React from "react";
 import useCursorPosition from "../hooks/useCursorPosition"; // Import the custom hook
 import useTextShadowAnimation from "../hooks/useTextShadowAnimation"; // Import the new custom hook
+import Glowingpng from "./Glowingpng";
 
 const Hero = () => {
     const cursorPos = useCursorPosition(); // Use the custom hook
     useTextShadowAnimation(); // Apply the text shadow animations
 
     return (
-        <div className="hero-container relative w-full h-screen p-4 md:p-8 lg:p-12 bg-black overflow-hidden cursor-none flex  justify-center">
-            <div className="text-left space-y-4">
+        <div className="hero-container relative w-full p-4 md:p-8 lg:p-12 bg-black overflow-hidden cursor-none md:flex lg:flex  justify-center">
+            <div className="text-left my-16 space-y-4">
                 <h1 className="text-5xl lg:text-6xl font-bold text-white relative line">
                     Stay Active.
                 </h1>
@@ -21,10 +22,9 @@ const Hero = () => {
             </div>
 
             {/* Right side: Image or visual element */}
-            <div className="md:w-1/2">
+            <div className="md:w-1/2"><Glowingpng />
                 {/* Add your image or visual component here */}
             </div>
-
             {/* Cursor Follower */}
             <div
                 className="cursor-follower"

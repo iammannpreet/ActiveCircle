@@ -53,3 +53,6 @@
     overflow: hidden;
   }
 }
+.glowing-outline {
+  filter: drop-shadow(0 0 2px #ff833f) drop-shadow(0 0 10px #ff833f);
+}
