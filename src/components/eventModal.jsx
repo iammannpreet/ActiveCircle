@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 const EventModal = ({ event, onClose }) => {
     const [locationDetails, setLocationDetails] = useState(null); // Store city and postal code
     const MAPBOX_API_KEY = process.env.REACT_APP_MAPBOX_KEY;
+    const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         if (event && event.latitude && event.longitude) {
@@ -34,6 +35,9 @@ const EventModal = ({ event, onClose }) => {
     const eventDate = event.date ? new Date(event.date).toLocaleDateString() : "Date not available";
     const eventTime = event.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Time not available";
 
+    // Build the image URL with the correct path
+    const imageUrl = event.image ? `${API_URL}/public${event.image}` : null;
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={onClose}>
             <div
@@ -47,6 +51,23 @@ const EventModal = ({ event, onClose }) => {
                     ✖
                 </button>
                 <h2 className="text-2xl font-bold mb-4">{event.type}</h2>
+
+                {/* Display the dynamic image if available */}
+                {imageUrl ? (
+                    <div className="mb-4 bg-gray-100 rounded-md" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
+                        <img
+                            src={imageUrl}
+                            alt={`${event.type}`}
+                            className="w-full h-full object-cover"
+                            onError={() => console.error("Error loading image from URL:", imageUrl)} // Logs error if image fails to load
+                        />
+                    </div>
+                ) : (
+                    <div className="mb-4 border-2 border-red-500 p-2 rounded-md bg-gray-100">
+                        <p className="text-red-500 text-center">No image available</p>
+                    </div>
+                )}
+
                 <p className="mb-2">
                     <span className="font-semibold">Location:</span> {event.location}
                 </p>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import EventModal from './eventModal';
-import ActivityModal from './ActivityModal';
 import getCenter from 'geolib/es/getCenter';
 import useFetchEvents from '../hooks/useFetchEvents';
 import useActivities from '../hooks/useActivities';
@@ -137,7 +136,7 @@ function Map({ hoveredItem }) {
                     selectedItem.type ? (
                         <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />
                     ) : (
-                        <ActivityModal activity={selectedItem} onClose={() => setSelectedItem(null)} />
+                        <EventModal activity={selectedItem} onClose={() => setSelectedItem(null)} />
                     )
                 )}
             </ReactMapGL>

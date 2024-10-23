@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import EventModal from './eventModal'; // Import your EventModal component
-import ActivityModal from './ActivityModal'; // Import your ActivityModal component
 
 const SearchComponent = () => {
     const [searchInput, setSearchInput] = useState('');  // Store the user's search input
@@ -121,7 +120,7 @@ const SearchComponent = () => {
                 isEvent ? (
                     <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />  // Show event modal
                 ) : (
-                    <ActivityModal activity={selectedItem} onClose={() => setSelectedItem(null)} />  // Show activity modal
+                    <EventModal activity={selectedItem} onClose={() => setSelectedItem(null)} />  // Show activity modal
                 )
             )}
         </div>
