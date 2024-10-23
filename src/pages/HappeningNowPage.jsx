@@ -5,6 +5,7 @@ import Map from '../components/Map';
 import FilterButton from '../components/FilterButton'; // Import the reusable button
 import { applyDateFilter } from '../utils/dateFilters'; // Import the date filter logic
 import { applyTypeFilter } from '../utils/typeFilters'; // Import the type filter logic
+import { applyContentFilter } from '../utils/contentFilters'; // Import the content filter logic
 import { TypeFilterOptions } from '../utils/filterOptions'; // Import the predefined filter options
 
 // Date-based filter options
@@ -17,6 +18,13 @@ const FilterOptions = {
     THIS_MONTH: 'this_month',
 };
 
+// Content filter options
+const ContentFilterOptions = {
+    EVENTS_ONLY: 'events_only',
+    ACTIVITIES_ONLY: 'activities_only',
+    ALL: 'all',
+};
+
 const HappeningNowPage = () => {
     const { events, loading: eventsLoading, error: eventsError, handleDeleteEvent } = useFetchEvents(process.env.REACT_APP_API_URL);
     const { activities, loading: activitiesLoading, error: activitiesError, handleDeleteActivity } = useActivities();
@@ -24,6 +32,7 @@ const HappeningNowPage = () => {
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([]);
     const [filter, setFilter] = useState(FilterOptions.ALL);
+    const [contentFilter, setContentFilter] = useState(ContentFilterOptions.ALL);
     const [selectedType, setSelectedType] = useState('');
     const [hoveredItem, setHoveredItem] = useState(null);
 
@@ -32,16 +41,23 @@ const HappeningNowPage = () => {
         const { filteredEvents: eventsFiltered, filteredActivities: activitiesFiltered } = applyDateFilter(filter, events, activities);
 
         // Apply Type Filter
-        const { filteredEvents: finalEvents, filteredActivities: finalActivities } = applyTypeFilter(
+        const { filteredEvents: typeFilteredEvents, filteredActivities: typeFilteredActivities } = applyTypeFilter(
             selectedType,
             eventsFiltered,
             activitiesFiltered,
             TypeFilterOptions
         );
 
-        setFilteredEvents(finalEvents);
-        setFilteredActivities(finalActivities);
-    }, [filter, selectedType, events, activities]);
+        // Apply Content Filter
+        const { filteredEvents: finalFilteredEvents, filteredActivities: finalFilteredActivities } = applyContentFilter(
+            contentFilter,
+            typeFilteredEvents,
+            typeFilteredActivities
+        );
+
+        setFilteredEvents(finalFilteredEvents);
+        setFilteredActivities(finalFilteredActivities);
+    }, [filter, selectedType, contentFilter, events, activities]);
 
     return (
         <div className="flex flex-col md:flex-row h-screen">
@@ -74,6 +90,13 @@ const HappeningNowPage = () => {
                     <FilterButton label="Dance" onClick={() => setSelectedType('DANCE')} />
                     <FilterButton label="Cycling" onClick={() => setSelectedType('CYCLING')} />
                     <FilterButton label="All Types" onClick={() => setSelectedType('')} />
+                </div>
+
+                {/* Content Filter Buttons */}
+                <div className="filter-buttons mb-4">
+                    <FilterButton label="All" onClick={() => setContentFilter(ContentFilterOptions.ALL)} />
+                    <FilterButton label="Events Only" onClick={() => setContentFilter(ContentFilterOptions.EVENTS_ONLY)} />
+                    <FilterButton label="Activities Only" onClick={() => setContentFilter(ContentFilterOptions.ACTIVITIES_ONLY)} />
                 </div>
 
                 {/* Events Section */}

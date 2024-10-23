@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify'; // Import toast
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast
 import useActivities from '../hooks/useActivities';
-import { fetchLocationSuggestions, geocodeLocation } from '../utils/location'; // Import location utilities
-import TypeDropdown from '../components/TypeDropdown'; // Import reusable dropdown component
+import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
+import TypeDropdown from '../components/TypeDropdown';
 
 const initialActivityState = {
     type: '',
@@ -14,9 +17,8 @@ const initialActivityState = {
 
 const AddActivityPage = () => {
     const { newActivity, setNewActivity, handleAddActivity } = useActivities();
-    const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null);
     const [locationSuggestions, setLocationSuggestions] = useState([]);
+    const navigate = useNavigate();
 
     const handleInputChange = async (e) => {
         const { name, value } = e.target;
@@ -35,8 +37,26 @@ const AddActivityPage = () => {
         setLocationSuggestions([]);
     };
 
+    const validateForm = () => {
+        const { type, location, organizer, date, time, details } = newActivity;
+        if (!type || !location || !organizer || !date || !time || !details) {
+            return 'Please fill out all required fields.';
+        }
+        return null;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate the form
+        const validationError = validateForm();
+        if (validationError) {
+            toast.error(validationError, {
+                position: "top-center"
+            });
+            return;
+        }
+
         try {
             const dateTime = new Date(`${newActivity.date}T${newActivity.time}`);
             const { latitude, longitude } = await geocodeLocation(newActivity.location);
@@ -50,11 +70,19 @@ const AddActivityPage = () => {
 
             await handleAddActivity(activityWithCoords);
             setNewActivity(initialActivityState);
-            setError(null);
-            setSuccessMessage('Activity added successfully!');
+
+            toast.success('Activity added successfully!', {
+                position: "top-center"
+            });
+
+            // Redirect to the 'Happening Now' page after success
+            setTimeout(() => {
+                navigate('/happening-now');
+            }, 1500); // Delay redirect to let the toast show
         } catch (err) {
-            setError('Failed to add activity. Please check the location.');
-            setSuccessMessage(null);
+            toast.error('Failed to add activity. Please check the location.', {
+                position: "top-center"
+            });
         }
     };
 
@@ -62,9 +90,8 @@ const AddActivityPage = () => {
 
     return (
         <div className="container mx-auto p-4">
+            <ToastContainer /> {/* Toast container to show notifications */}
             <h1 className="text-2xl font-bold mb-4">Add New Activity</h1>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-            {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
             <form onSubmit={handleSubmit}>
                 <TypeDropdown value={newActivity.type} onChange={handleInputChange} label="Activity Type" />
                 <label className="block mb-2">Location:</label>
@@ -115,6 +142,7 @@ const AddActivityPage = () => {
                     value={newActivity.details}
                     onChange={handleInputChange}
                     className="border p-2 mb-4 w-full"
+                    required
                 />
                 <label className="block mb-2">Organizer:</label>
                 <input
@@ -123,6 +151,7 @@ const AddActivityPage = () => {
                     value={newActivity.organizer}
                     onChange={handleInputChange}
                     className="border p-2 mb-4 w-full"
+                    required
                 />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                     Add Activity

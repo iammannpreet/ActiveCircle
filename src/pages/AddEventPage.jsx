@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify'; // Import toast
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast
 import useFetchEvents from '../hooks/useFetchEvents';
 import { fetchLocationSuggestions, geocodeLocation } from '../utils/location'; // Import location utilities
 import TypeDropdown from '../components/TypeDropdown'; // Import reusable dropdown component
@@ -15,9 +18,8 @@ const initialEventState = {
 
 const AddEventPage = () => {
     const { newEvent, setNewEvent, handleAddEvent } = useFetchEvents(process.env.REACT_APP_API_URL);
-    const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null);
     const [locationSuggestions, setLocationSuggestions] = useState([]);
+    const navigate = useNavigate();
 
     const handleInputChange = async (e) => {
         const { name, value } = e.target;
@@ -36,8 +38,26 @@ const AddEventPage = () => {
         setLocationSuggestions([]);
     };
 
+    const validateForm = () => {
+        const { type, location, organizer, date, time, details } = newEvent;
+        if (!type || !location || !organizer || !date || !time || !details) {
+            return 'Please fill out all required fields.';
+        }
+        return null;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate the form
+        const validationError = validateForm();
+        if (validationError) {
+            toast.error(validationError, {
+                position: "top-center"
+            });
+            return;
+        }
+
         try {
             const dateTime = new Date(`${newEvent.date}T${newEvent.time}`);
             const { latitude, longitude } = await geocodeLocation(newEvent.location);
@@ -51,11 +71,19 @@ const AddEventPage = () => {
 
             await handleAddEvent(eventWithCoordsAndDate);
             setNewEvent(initialEventState);
-            setError(null);
-            setSuccessMessage('Event added successfully!');
+
+            toast.success('Event added successfully!', {
+                position: "top-center"
+            });
+
+            // Redirect to the 'Happening Now' page after success
+            setTimeout(() => {
+                navigate('/happening-now');
+            }, 1500); // Delay redirect to let the toast show
         } catch (err) {
-            setError('Failed to add event. Please check the location.');
-            setSuccessMessage(null);
+            toast.error('Failed to add event. Please check the location.', {
+                position: "top-center"
+            });
         }
     };
 
@@ -63,9 +91,8 @@ const AddEventPage = () => {
 
     return (
         <div className="container mx-auto p-4">
+            <ToastContainer /> {/* Toast container to show notifications */}
             <h1 className="text-2xl font-bold mb-4">Add New Event</h1>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-            {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
             <form onSubmit={handleSubmit}>
                 <TypeDropdown value={newEvent.type} onChange={handleInputChange} label="Event Type" />
                 {/* Location with Autocomplete */}
@@ -119,6 +146,7 @@ const AddEventPage = () => {
                     value={newEvent.details}
                     onChange={handleInputChange}
                     className="border p-2 mb-4 w-full"
+                    required
                 />
                 <label className="block mb-2">Organizer:</label>
                 <input
@@ -127,6 +155,7 @@ const AddEventPage = () => {
                     value={newEvent.organizer}
                     onChange={handleInputChange}
                     className="border p-2 mb-4 w-full"
+                    required
                 />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                     Add Event

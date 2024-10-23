@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 
+import { Link } from 'react-router-dom';
 const Menu = ({ isOpen, toggleMenu }) => {
     const menuVariants = {
         hidden: { opacity: 0, y: '100%' },
@@ -22,43 +23,46 @@ const Menu = ({ isOpen, toggleMenu }) => {
             variants={menuVariants}
             transition={{ type: 'tween', duration: 0.5 }}
         >
-            {/* Centered on mobile, aligned to the right on tablet */}
+            {/* Centeed on mobile, aligned to the right on tablet */}
             <motion.a
-                href="#home"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.5 }}
                 onClick={toggleMenu}
-            >
-                Home
+            ><Link to="/happening-now">
+                    <a>
+                        Happening Now!
+                    </a>
+                </Link>
+
             </motion.a>
             <motion.a
                 href="#about"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.6 }}
                 onClick={toggleMenu}
             >
-                About
+                Find Your Next Adventure
             </motion.a>
             <motion.a
                 href="#services"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.7 }}
                 onClick={toggleMenu}
             >
-                Services
+                Our Mission
             </motion.a>
             <motion.a
                 href="#contact"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
@@ -67,7 +71,7 @@ const Menu = ({ isOpen, toggleMenu }) => {
             >
                 Contact
             </motion.a>
-        </motion.div>
+        </motion.div >
     );
 };
 
