@@ -54,11 +54,11 @@ const EventModal = ({ event, onClose }) => {
 
                 {/* Display the dynamic image if available */}
                 {imageUrl ? (
-                    <div className="mb-4 bg-gray-100 rounded-md" style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
+                    <div className="mb-4 border-2 border-gray-300 p-2 rounded-md bg-gray-100">
                         <img
                             src={imageUrl}
                             alt={`${event.type}`}
-                            className="w-full h-full object-cover"
+                            className="w-full h-48 object-cover rounded-md"
                             onError={() => console.error("Error loading image from URL:", imageUrl)} // Logs error if image fails to load
                         />
                     </div>

@@ -6,7 +6,8 @@ const useFetchEvents = (apiUrl) => {
     const [newEvent, setNewEvent] = useState({
         type: '',
         location: '',
-        organizer: '',
+        details: '',
+        organizer: ''
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
