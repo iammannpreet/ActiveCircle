@@ -23,7 +23,7 @@ const Header = ({ events, activities }) => {
     return (
         <>
             {/* Header Section */}
-            <header className="sticky top-0 z-50 bg-lightGray text-darkGray p-4 md:px-8 lg:px-12 xl:px-16 flex justify-between items-center" style={{ height: '76px' }}>
+            <header className="sticky top-0 z-50 bg-lightGray text-darkGray p-4 md:px-8 lg:px-12 flex justify-between items-center" style={{ height: '76px' }}>
                 {/* Left side: Logo */}
                 <motion.div
                     className="flex items-center relative"

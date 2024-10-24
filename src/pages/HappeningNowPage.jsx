@@ -8,48 +8,28 @@ import { applyContentFilter } from '../utils/contentFilters';
 import { TypeFilterOptions } from '../utils/filterOptions';
 import EventModal from '../components/eventModal';
 import Header from '../components/Header';
-import Button from '@mui/material/Button';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ButtonGroup from '@mui/material/ButtonGroup';
-
-const FilterOptions = {
-    ALL: 'all',
-    TODAY: 'today',
-    THIS_WEEKEND: 'this_weekend',
-    NEXT_7_DAYS: 'next_7_days',
-    NEXT_10_DAYS: 'next_10_days',
-    THIS_MONTH: 'this_month',
-};
-
-const ContentFilterOptions = {
-    EVENTS_ONLY: 'events_only',
-    ACTIVITIES_ONLY: 'activities_only',
-    ALL: 'all',
-};
+import FilterSection from '../components/FilterSection';
 
 const HappeningNowPage = () => {
     const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
     const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([]);
-    const [filter, setFilter] = useState(FilterOptions.ALL);
-    const [contentFilter, setContentFilter] = useState(ContentFilterOptions.ALL);
+    const [filter, setFilter] = useState('all');
+    const [contentFilter, setContentFilter] = useState('all');
     const [selectedType, setSelectedType] = useState('');
     const [hoveredItem, setHoveredItem] = useState(null);
-    const [activeDialog, setActiveDialog] = useState(null); // State to manage which dialog is open
+    const [activeDialog, setActiveDialog] = useState(null);
     const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
-        // Apply Date Filter
         const { filteredEvents: eventsFiltered, filteredActivities: activitiesFiltered } = applyDateFilter(filter, events, activities);
-        // Apply Type Filter
         const { filteredEvents: typeFilteredEvents, filteredActivities: typeFilteredActivities } = applyTypeFilter(
             selectedType,
             eventsFiltered,
             activitiesFiltered,
             TypeFilterOptions
         );
-        // Apply Content Filter
         const { filteredEvents: finalFilteredEvents, filteredActivities: finalFilteredActivities } = applyContentFilter(
             contentFilter,
             typeFilteredEvents,
@@ -60,250 +40,28 @@ const HappeningNowPage = () => {
         setFilteredActivities(finalFilteredActivities);
     }, [filter, selectedType, contentFilter, events, activities]);
 
-    const handleMouseEnter = (dialogName) => {
-        setActiveDialog(dialogName); // Set the active dialog on hover
-    };
-
-    const handleMouseLeave = () => {
-        setActiveDialog(null); // Close the dialog when the mouse leaves
-    };
-    // Handle item click to open modal
+    // Define the handleItemClick function to open the modal with the selected item
     const handleItemClick = (item) => {
         setSelectedItem(item);
     };
 
-    // Close modal
-    const handleCloseModal = () => {
-        setSelectedItem(null);
-    };
     return (
         <>
             <Header />
-
             <div className="flex p-4 md:px-8 lg:px-12 overflow-auto bg-lightGray text-darkGray h-screen">
-                <div className='w-100 md:1/2 lg:w-2/3'>
-                    <div className='flex -ml-2 md:mb-4'>
-                        <Button size="small"
-                            sx={{
-                                color: '#545454',
-                                '&:hover': {
-                                    backgroundColor: '#ff833f',
+                <div className='w-100 md:1/2 lg:w-2/3 pr-4'>
+                    <h2 className="text-2xl font-bold text-black text-center md:text-start mb-4">Happening Now</h2>
+                    <FilterSection
+                        filter={filter}
+                        setFilter={setFilter}
+                        selectedType={selectedType}
+                        setSelectedType={setSelectedType}
+                        contentFilter={contentFilter}
+                        setContentFilter={setContentFilter}
+                        activeDialog={activeDialog}
+                        setActiveDialog={setActiveDialog} // Pass the function here
+                    />
 
-                                },
-                                '&:focus-visible': {
-                                    outline: '2px solid #FF6F00',
-                                    outlineOffset: '2px',
-                                },
-                                borderRadius: '8px',
-                                gap: '.2rem',
-                                textTransform: 'none',
-                            }}>
-                            <a href="/" className='text-base'>
-                                <ArrowBackIcon />
-                                Back
-                            </a>
-                        </Button>
-                    </div>
-
-                    <h2 className="text-2xl font-bold text-black text-center lg:text-start mb-4">Happening Now</h2>
-                    <div className='flex justify-center md:justify-start'>
-                        <ButtonGroup>
-                            {/* Date Filter Button */}
-                            <div
-                                className="mb-4 relative"
-                                onMouseEnter={() => handleMouseEnter('date')}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <Button
-                                    sx={{
-                                        backgroundColor: 'Gray',
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: '#ff833f',
-                                        },
-                                        borderRadius: '8px',
-                                        textTransform: 'none',
-                                        border: '2px solid darkGray', // Your primary orange shade for the border
-                                    }}
-
-                                >
-                                    {filter !== FilterOptions.ALL ? `${filter.replace('_', ' ')}` : 'Date'}
-                                </Button>
-
-                                {/* Hover-Based Dialog for Date Options */}
-                                {activeDialog === 'date' && (
-                                    <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
-                                        <div className="flex flex-row justify-between space-x-4">
-                                            {/* First List */}
-                                            <div className="w-1/2">
-                                                <h3 className="font-semibold mb-2">This Week</h3>
-                                                {Object.keys(FilterOptions).slice(0, 3).map((key) => (
-                                                    <button
-                                                        key={key}
-                                                        onClick={() => {
-                                                            setFilter(FilterOptions[key]);
-                                                            setActiveDialog(null); // Close dialog after selection
-                                                        }}
-                                                        className="block w-full text-left px-2 py-1 hover:bg-gray-200"
-                                                    >
-                                                        {key.replace('_', ' ')}
-                                                    </button>
-                                                ))}
-                                            </div>
-
-                                            {/* Second List */}
-                                            <div className="w-1/2">
-                                                <h3 className="font-semibold mb-2">This Month</h3>
-                                                {Object.keys(FilterOptions).slice(3).map((key) => (
-                                                    <button
-                                                        key={key}
-                                                        onClick={() => {
-                                                            setFilter(FilterOptions[key]);
-                                                            setActiveDialog(null); // Close dialog after selection
-                                                        }}
-                                                        className="block w-full text-left px-2 py-1 hover:bg-gray-200"
-                                                    >
-                                                        {key.replace('_', ' ')}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Type Filter Button */}
-                            <div
-                                className="mb-4 relative"
-                                onMouseEnter={() => handleMouseEnter('type')}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <Button
-                                    sx={{
-                                        backgroundColor: 'Gray',
-                                        color: 'white',
-                                        '&:hover': {
-                                            backgroundColor: '#ff833f',
-                                        },
-                                        borderRadius: '8px',
-                                        textTransform: 'none',
-                                        border: '2px solid darkgray', // Your primary orange shade for the border
-                                    }}
-
-                                >
-                                    {selectedType !== '' ? `${selectedType}` : 'Type'}
-                                </Button>
-
-                                {/* Hover-Based Dialog for Type Options */}
-                                {activeDialog === 'type' && (
-                                    <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
-                                        <div className="flex flex-row justify-between space-x-4">
-                                            {/* First List */}
-                                            <div className="w-1/2">
-                                                <h3 className="font-semibold mb-2">Indoor Types</h3>
-                                                {['GYM', 'YOGA', 'DANCE'].map((type) => (
-                                                    <button
-                                                        key={type}
-                                                        onClick={() => {
-                                                            setSelectedType(type);
-                                                            setActiveDialog(null); // Close dialog after selection
-                                                        }}
-                                                        className="block w-full text-left px-2 py-1 hover:bg-gray-200"
-                                                    >
-                                                        {type.replace('_', ' ')}
-                                                    </button>
-                                                ))}
-                                            </div>
-
-                                            {/* Second List */}
-                                            <div className="w-1/2">
-                                                <h3 className="font-semibold mb-2">Outdoor Types</h3>
-                                                {['WALK_RUN', 'FISHING', 'SPORTS', 'WATER', 'CYCLING'].map((type) => (
-                                                    <button
-                                                        key={type}
-                                                        onClick={() => {
-                                                            setSelectedType(type);
-                                                            setActiveDialog(null); // Close dialog after selection
-                                                        }}
-                                                        className="block w-full text-left px-2 py-1 hover:bg-gray-200"
-                                                    >
-                                                        {type.replace('_', ' ')}
-                                                    </button>
-                                                ))}
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedType('');
-                                                        setActiveDialog(null);
-                                                    }}
-                                                    className="block w-full text-left px-2 py-1 hover:bg-gray-200"
-                                                >
-                                                    All Types
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Content Filter Button */}
-                            <div
-                                className="mb-4 relative"
-                                onMouseEnter={() => handleMouseEnter('content')}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <Button sx={{
-                                    backgroundColor: 'Gray',
-                                    color: 'white',
-                                    '&:hover': {
-                                        backgroundColor: '#ff833f',
-                                    },
-                                    borderRadius: '8px',
-                                    textTransform: 'none',
-                                    border: '2px solid darkGray', // Your primary orange shade for the border
-                                }}
-
-                                >
-                                    {contentFilter !== ContentFilterOptions.ALL ? `${contentFilter.replace('_', ' ')}` : 'Events & Activities'}
-                                </Button>
-
-                                {/* Hover-Based Dialog for Content Options */}
-                                {activeDialog === 'content' && (
-                                    <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
-                                        <div className="flex flex-row justify-between space-x-4">
-                                            {/* First List */}
-                                            <div className="w-1/2">
-                                                {['EVENTS_ONLY', 'ACTIVITIES_ONLY'].map((key) => (
-                                                    <button
-                                                        key={key}
-                                                        onClick={() => {
-                                                            setContentFilter(ContentFilterOptions[key]);
-                                                            setActiveDialog(null); // Close dialog after selection
-                                                        }}
-                                                        className="block w-full text-left px-2 py-1 hover:bg-gray-200"
-                                                    >
-                                                        {key.replace('_', ' ')}
-                                                    </button>
-                                                ))}
-                                            </div>
-
-                                            {/* Second List */}
-                                            <div className="w-1/2">
-                                                <button
-                                                    onClick={() => {
-                                                        setContentFilter(ContentFilterOptions.ALL);
-                                                        setActiveDialog(null);
-                                                    }}
-                                                    className="block w-full text-left px-2 py-1 hover:bg-gray-200"
-                                                >
-                                                    All
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </ButtonGroup>
-                    </div>
                     {/* Events Section */}
                     <div className="mb-6">
                         <h3 className="text-xl font-bold mb-2 text-black">Events</h3>
@@ -354,21 +112,14 @@ const HappeningNowPage = () => {
                 </div>
 
                 {/* Right Section: Map */}
-                <div className="hidden md:block md:w-screen ">
+                <div className="hidden md:block md:w-screen">
                     <Map hoveredItem={hoveredItem} />
                 </div>
+            </div>
 
-
-            </div >
-            {
-                selectedItem && (
-                    <EventModal
-                        event={selectedItem}
-                        onClose={handleCloseModal}
-                    />
-                )
-            }
-
+            {selectedItem && (
+                <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />
+            )}
         </>
     );
 };
