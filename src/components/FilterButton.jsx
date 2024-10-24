@@ -1,17 +1,34 @@
-// components/FilterButton.js
+// FilterButton.jsx
 import React from 'react';
 import Button from '@mui/material/Button';
 
-const FilterButton = ({ label, onClick }) => {
+const FilterButton = ({ label, activeDialog, dialogName, handleMouseEnter, handleMouseLeave, children }) => {
     return (
-        <Button
-            onClick={onClick}
-            className="px-4 py-2 border mb-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-            variant="outlined"
-            sx={{ borderColor: '#ff833f', color: '#545454', '&:hover': { borderColor: '#ff7043', backgroundColor: '#f5f5f5' } }}
+        <div
+            className="mb-4 relative"
+            onMouseEnter={() => handleMouseEnter(dialogName)}
+            onMouseLeave={handleMouseLeave}
         >
-            {label}
-        </Button>
+            <Button
+                sx={{
+                    backgroundColor: 'Gray',
+                    color: 'white',
+                    '&:hover': {
+                        backgroundColor: '#ff833f',
+                    },
+                    borderRadius: '8px',
+                    textTransform: 'none',
+                    border: '2px solid darkGray',
+                }}
+            >
+                {label}
+            </Button>
+            {activeDialog === dialogName && (
+                <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
+                    {children}
+                </div>
+            )}
+        </div>
     );
 };
 

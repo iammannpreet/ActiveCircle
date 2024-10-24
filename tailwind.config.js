@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#ff833f', // You can rename this to 'primary' if it's your main brand color
+        primary: '#ff833f',
         darkGray: '#545454',
         lightGray: '#d7d7d7',
         orange: {
@@ -14,7 +14,7 @@ module.exports = {
           100: '#ffe4d2',
           200: '#ffc2a1',
           300: '#ffa370',
-          400: '#ff833f', // Main orange color
+          400: '#ff833f',
           500: '#e57133',
           600: '#cc6028',
           700: '#b34f1d',

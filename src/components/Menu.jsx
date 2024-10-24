@@ -24,20 +24,18 @@ const Menu = ({ isOpen, toggleMenu }) => {
             transition={{ type: 'tween', duration: 0.5 }}
         >
             {/* Centeed on mobile, aligned to the right on tablet */}
-            <motion.a
+            <motion.div
                 className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.5 }}
                 onClick={toggleMenu}
-            ><Link to="/happening-now">
-                    <a>
-                        Discover New Events
-                    </a>
+            >
+                <Link to="/happening-now">
+                    Discover New Events
                 </Link>
-
-            </motion.a>
+            </motion.div>
             <motion.a
                 href="#about"
                 className="text-xl mb-4 hover:scale-110 hover:text-black"
