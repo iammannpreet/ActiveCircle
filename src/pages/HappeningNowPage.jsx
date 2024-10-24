@@ -6,6 +6,7 @@ import { applyDateFilter } from '../utils/dateFilters';
 import { applyTypeFilter } from '../utils/typeFilters';
 import { applyContentFilter } from '../utils/contentFilters';
 import { TypeFilterOptions } from '../utils/filterOptions';
+import EventModal from '../components/eventModal';
 
 // Date-based filter options
 const FilterOptions = {
@@ -35,6 +36,7 @@ const HappeningNowPage = () => {
     const [selectedType, setSelectedType] = useState('');
     const [hoveredItem, setHoveredItem] = useState(null);
     const [activeDialog, setActiveDialog] = useState(null); // State to manage which dialog is open
+    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
         // Apply Date Filter
@@ -64,7 +66,15 @@ const HappeningNowPage = () => {
     const handleMouseLeave = () => {
         setActiveDialog(null); // Close the dialog when the mouse leaves
     };
+    // Handle item click to open modal
+    const handleItemClick = (item) => {
+        setSelectedItem(item);
+    };
 
+    // Close modal
+    const handleCloseModal = () => {
+        setSelectedItem(null);
+    };
     return (
         <div className="bg-lightGray text-darkGray flex flex-col md:flex-row h-screen">
             {/* Filter Section */}
@@ -253,6 +263,7 @@ const HappeningNowPage = () => {
                                     className="mb-4 border-b pb-2 hover:text-black hover:scale"
                                     onMouseEnter={() => setHoveredItem(event)}
                                     onMouseLeave={() => setHoveredItem(null)}
+                                    onClick={() => handleItemClick(event)}
                                 >
                                     <h4 className="font-bold text-lg">{event.type}</h4>
                                     <p>{event.location}</p>
@@ -276,6 +287,7 @@ const HappeningNowPage = () => {
                                     className="mb-4 border-b pb-2 hover:text-black"
                                     onMouseEnter={() => setHoveredItem(activity)}
                                     onMouseLeave={() => setHoveredItem(null)}
+                                    onClick={() => handleItemClick(activity)}
                                 >
                                     <h4 className="font-bold text-lg">{activity.type}</h4>
                                     <p>{activity.location}</p>
@@ -290,7 +302,13 @@ const HappeningNowPage = () => {
             {/* Right Section: Map */}
             <div className="w-full md:w-2/3">
                 <Map hoveredItem={hoveredItem} />
-            </div>
+            </div>  {/* Modal for selected item */}
+            {selectedItem && (
+                <EventModal
+                    event={selectedItem} // Pass the selected item to the modal
+                    onClose={handleCloseModal} // Function to close the modal
+                />
+            )}
         </div>
     );
 };
