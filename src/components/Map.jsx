@@ -4,7 +4,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import EventModal from './eventModal';
 import getCenter from 'geolib/es/getCenter';
 import useFetchEvents from '../hooks/useFetchEvents';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import useActivities from '../hooks/useActivities';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 
 function Map({ hoveredItem }) {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -88,12 +90,15 @@ function Map({ hoveredItem }) {
                         offsetTop={-10}
                     >
                         <p
-                            onMouseEnter={() => setHoveredLocation(event)} // Highlight the marker on hover
-                            onMouseLeave={() => setHoveredLocation(null)} // Remove highlight on leave
+                            onMouseEnter={() => setHoveredLocation(event)}
+                            onMouseLeave={() => setHoveredLocation(null)}
                             onClick={() => setSelectedItem(event)}
-                            className={`cursor-pointer text-2xl ${hoveredLocation === event ? 'text-red-700' : 'text-red-500'} animate-bounce`}
+                            className="cursor-pointer text-2xl animate-bounce"
+                            style={{
+                                color: hoveredLocation === event ? '#ff5722' : '#ff833f',
+                            }}
                         >
-                            📍
+                            < DirectionsBikeIcon />
                         </p>
                     </Marker>
                 ))}
@@ -110,9 +115,12 @@ function Map({ hoveredItem }) {
                             onMouseEnter={() => setHoveredLocation(activity)}
                             onMouseLeave={() => setHoveredLocation(null)}
                             onClick={() => setSelectedItem(activity)}
-                            className={`cursor-pointer text-2xl ${hoveredLocation === activity ? 'text-green-700' : 'text-green-500'} animate-bounce`}
+                            className="cursor-pointer text-2xl animate-pulse"
+                            style={{
+                                color: hoveredLocation === activity ? '#ff5722' : '#ff833f', // Darker shade of orange when hovered
+                            }}
                         >
-                            🏃
+                            <EmojiPeopleIcon />
                         </p>
                     </Marker>
                 ))}

@@ -9,12 +9,18 @@ const Home = () => {
     return (
         <>
             <Header />
+
             <Hero />
-            <CarouselSection />
+
+            <ParallaxSection />
+
+            <CarouselSection
+                fetchData={true}
+                title="Explore Activities" />
 
 
             <div className="home">
-                <ParallaxSection />
+
                 <HoverCard />
             </div>
         </>

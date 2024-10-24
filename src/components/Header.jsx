@@ -7,6 +7,7 @@ import aclogo from '../assets/icons/AC-logo.png';
 import tabtext from '../assets/icons/tab-AC.gif';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import HamburgerIcon from './HamburgerIcon';
 import Menu from './Menu';
 import SearchComponent from './SearchComponent';

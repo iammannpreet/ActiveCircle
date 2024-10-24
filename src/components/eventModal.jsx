@@ -58,7 +58,7 @@ const EventModal = ({ event, onClose }) => {
                         <img
                             src={imageUrl}
                             alt={`${event.type}`}
-                            className="w-full h-48 object-cover rounded-md"
+                            className="w-full  object-cover rounded-md"
                             onError={() => console.error("Error loading image from URL:", imageUrl)} // Logs error if image fails to load
                         />
                     </div>
