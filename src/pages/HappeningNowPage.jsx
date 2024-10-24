@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import useFetchEvents from '../hooks/useFetchEvents';
 import useActivities from '../hooks/useActivities';
 import Map from '../components/Map';
-import FilterButton from '../components/FilterButton'; // Import the reusable button
-import { applyDateFilter } from '../utils/dateFilters'; // Import the date filter logic
-import { applyTypeFilter } from '../utils/typeFilters'; // Import the type filter logic
-import { applyContentFilter } from '../utils/contentFilters'; // Import the content filter logic
-import { TypeFilterOptions } from '../utils/filterOptions'; // Import the predefined filter options
+import { applyDateFilter } from '../utils/dateFilters';
+import { applyTypeFilter } from '../utils/typeFilters';
+import { applyContentFilter } from '../utils/contentFilters';
+import { TypeFilterOptions } from '../utils/filterOptions';
 
 // Date-based filter options
 const FilterOptions = {
@@ -26,8 +25,8 @@ const ContentFilterOptions = {
 };
 
 const HappeningNowPage = () => {
-    const { events, loading: eventsLoading, error: eventsError, handleDeleteEvent } = useFetchEvents(process.env.REACT_APP_API_URL);
-    const { activities, loading: activitiesLoading, error: activitiesError, handleDeleteActivity } = useActivities();
+    const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
+    const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([]);
@@ -35,11 +34,11 @@ const HappeningNowPage = () => {
     const [contentFilter, setContentFilter] = useState(ContentFilterOptions.ALL);
     const [selectedType, setSelectedType] = useState('');
     const [hoveredItem, setHoveredItem] = useState(null);
+    const [activeDialog, setActiveDialog] = useState(null); // State to manage which dialog is open
 
     useEffect(() => {
         // Apply Date Filter
         const { filteredEvents: eventsFiltered, filteredActivities: activitiesFiltered } = applyDateFilter(filter, events, activities);
-
         // Apply Type Filter
         const { filteredEvents: typeFilteredEvents, filteredActivities: typeFilteredActivities } = applyTypeFilter(
             selectedType,
@@ -47,7 +46,6 @@ const HappeningNowPage = () => {
             activitiesFiltered,
             TypeFilterOptions
         );
-
         // Apply Content Filter
         const { filteredEvents: finalFilteredEvents, filteredActivities: finalFilteredActivities } = applyContentFilter(
             contentFilter,
@@ -59,49 +57,192 @@ const HappeningNowPage = () => {
         setFilteredActivities(finalFilteredActivities);
     }, [filter, selectedType, contentFilter, events, activities]);
 
+    const handleMouseEnter = (dialogName) => {
+        setActiveDialog(dialogName); // Set the active dialog on hover
+    };
+
+    const handleMouseLeave = () => {
+        setActiveDialog(null); // Close the dialog when the mouse leaves
+    };
+
     return (
-        <div className="flex flex-col md:flex-row h-screen">
-            <div>
-                <a href="/">Back</a>
-            </div>
-
+        <div className="bg-lightGray text-darkGray flex flex-col md:flex-row h-screen">
             {/* Filter Section */}
-            <div className="w-full md:w-1/3 bg-white p-4 overflow-auto">
-                <h2 className="text-2xl font-bold mb-4">Happening Now</h2>
+            <div className="w-full md:w-1/3 p-4 md:px-8 overflow-auto relative">
+                <a href="/">Back</a>
+                <h2 className="text-2xl font-bold mb-4 text-black">Happening Now</h2>
 
-                {/* Date Filter Buttons */}
-                <div className="filter-buttons mb-4">
-                    <FilterButton label="All Dates" onClick={() => setFilter(FilterOptions.ALL)} />
-                    <FilterButton label="Today" onClick={() => setFilter(FilterOptions.TODAY)} />
-                    <FilterButton label="This Weekend" onClick={() => setFilter(FilterOptions.THIS_WEEKEND)} />
-                    <FilterButton label="Next 7 Days" onClick={() => setFilter(FilterOptions.NEXT_7_DAYS)} />
-                    <FilterButton label="Next 10 Days" onClick={() => setFilter(FilterOptions.NEXT_10_DAYS)} />
-                    <FilterButton label="This Month" onClick={() => setFilter(FilterOptions.THIS_MONTH)} />
+                {/* Date Filter Button */}
+                <div
+                    className="mb-4 relative"
+                    onMouseEnter={() => handleMouseEnter('date')}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <button
+                        className={`px-4 py-2 border rounded ${activeDialog === 'date' ? 'bg-gray-200' : 'bg-white'}`}
+                    >
+                        {filter !== FilterOptions.ALL ? `${filter.replace('_', ' ')} ✕` : 'Choose Date Here'}
+                    </button>
+
+                    {/* Hover-Based Dialog for Date Options */}
+                    {activeDialog === 'date' && (
+                        <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
+                            <div className="flex flex-row justify-between space-x-4">
+                                {/* First List */}
+                                <div className="w-1/2">
+                                    <h3 className="font-semibold mb-2">Date Range 1</h3>
+                                    {Object.keys(FilterOptions).slice(0, 3).map((key) => (
+                                        <button
+                                            key={key}
+                                            onClick={() => {
+                                                setFilter(FilterOptions[key]);
+                                                setActiveDialog(null); // Close dialog after selection
+                                            }}
+                                            className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                        >
+                                            {key.replace('_', ' ')}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Second List */}
+                                <div className="w-1/2">
+                                    <h3 className="font-semibold mb-2">Date Range 2</h3>
+                                    {Object.keys(FilterOptions).slice(3).map((key) => (
+                                        <button
+                                            key={key}
+                                            onClick={() => {
+                                                setFilter(FilterOptions[key]);
+                                                setActiveDialog(null); // Close dialog after selection
+                                            }}
+                                            className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                        >
+                                            {key.replace('_', ' ')}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {/* Type Filter Buttons */}
-                <div className="filter-buttons mb-4">
-                    <FilterButton label="Gym Activities" onClick={() => setSelectedType('GYM')} />
-                    <FilterButton label="Yoga Sessions" onClick={() => setSelectedType('YOGA')} />
-                    <FilterButton label="Walking/Running" onClick={() => setSelectedType('WALK_RUN')} />
-                    <FilterButton label="Fishing" onClick={() => setSelectedType('FISHING')} />
-                    <FilterButton label="Sports" onClick={() => setSelectedType('SPORTS')} />
-                    <FilterButton label="Water Activities" onClick={() => setSelectedType('WATER')} />
-                    <FilterButton label="Dance" onClick={() => setSelectedType('DANCE')} />
-                    <FilterButton label="Cycling" onClick={() => setSelectedType('CYCLING')} />
-                    <FilterButton label="All Types" onClick={() => setSelectedType('')} />
+                {/* Type Filter Button */}
+                <div
+                    className="mb-4 relative"
+                    onMouseEnter={() => handleMouseEnter('type')}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <button
+                        className={`px-4 py-2 border rounded ${activeDialog === 'type' ? 'bg-gray-200' : 'bg-white'}`}
+                    >
+                        {selectedType !== '' ? `${selectedType} ✕` : 'Choose Types Here'}
+                    </button>
+
+                    {/* Hover-Based Dialog for Type Options */}
+                    {activeDialog === 'type' && (
+                        <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
+                            <div className="flex flex-row justify-between space-x-4">
+                                {/* First List */}
+                                <div className="w-1/2">
+                                    <h3 className="font-semibold mb-2">Indoor Types</h3>
+                                    {['GYM', 'YOGA', 'DANCE'].map((type) => (
+                                        <button
+                                            key={type}
+                                            onClick={() => {
+                                                setSelectedType(type);
+                                                setActiveDialog(null); // Close dialog after selection
+                                            }}
+                                            className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                        >
+                                            {type.replace('_', ' ')}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Second List */}
+                                <div className="w-1/2">
+                                    <h3 className="font-semibold mb-2">Outdoor Types</h3>
+                                    {['WALK_RUN', 'FISHING', 'SPORTS', 'WATER', 'CYCLING'].map((type) => (
+                                        <button
+                                            key={type}
+                                            onClick={() => {
+                                                setSelectedType(type);
+                                                setActiveDialog(null); // Close dialog after selection
+                                            }}
+                                            className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                        >
+                                            {type.replace('_', ' ')}
+                                        </button>
+                                    ))}
+                                    <button
+                                        onClick={() => {
+                                            setSelectedType('');
+                                            setActiveDialog(null);
+                                        }}
+                                        className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                    >
+                                        All Types
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {/* Content Filter Buttons */}
-                <div className="filter-buttons mb-4">
-                    <FilterButton label="All" onClick={() => setContentFilter(ContentFilterOptions.ALL)} />
-                    <FilterButton label="Events Only" onClick={() => setContentFilter(ContentFilterOptions.EVENTS_ONLY)} />
-                    <FilterButton label="Activities Only" onClick={() => setContentFilter(ContentFilterOptions.ACTIVITIES_ONLY)} />
+                {/* Content Filter Button */}
+                <div
+                    className="mb-4 relative"
+                    onMouseEnter={() => handleMouseEnter('content')}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <button
+                        className={`px-4 py-2 border rounded ${activeDialog === 'content' ? 'bg-gray-200' : 'bg-white'}`}
+                    >
+                        {contentFilter !== ContentFilterOptions.ALL ? `${contentFilter.replace('_', ' ')} ✕` : 'For Events & Activities'}
+                    </button>
+
+                    {/* Hover-Based Dialog for Content Options */}
+                    {activeDialog === 'content' && (
+                        <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
+                            <div className="flex flex-row justify-between space-x-4">
+                                {/* First List */}
+                                <div className="w-1/2">
+                                    <h3 className="font-semibold mb-2">Content 1</h3>
+                                    {['EVENTS_ONLY', 'ACTIVITIES_ONLY'].map((key) => (
+                                        <button
+                                            key={key}
+                                            onClick={() => {
+                                                setContentFilter(ContentFilterOptions[key]);
+                                                setActiveDialog(null); // Close dialog after selection
+                                            }}
+                                            className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                        >
+                                            {key.replace('_', ' ')}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Second List */}
+                                <div className="w-1/2">
+                                    <h3 className="font-semibold mb-2">Content 2</h3>
+                                    <button
+                                        onClick={() => {
+                                            setContentFilter(ContentFilterOptions.ALL);
+                                            setActiveDialog(null);
+                                        }}
+                                        className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                    >
+                                        All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Events Section */}
                 <div className="mb-6">
-                    <h3 className="text-xl font-bold mb-2">Events</h3>
+                    <h3 className="text-xl font-bold mb-2 text-black">Events</h3>
                     {eventsLoading && <p>Loading events...</p>}
                     {eventsError && <p>Error loading events</p>}
                     {!eventsLoading && !eventsError && filteredEvents.length > 0 && (
@@ -109,19 +250,13 @@ const HappeningNowPage = () => {
                             {filteredEvents.map((event) => (
                                 <li
                                     key={event._id}
-                                    className="mb-4 border-b pb-2"
+                                    className="mb-4 border-b pb-2 hover:text-black hover:scale"
                                     onMouseEnter={() => setHoveredItem(event)}
                                     onMouseLeave={() => setHoveredItem(null)}
                                 >
                                     <h4 className="font-bold text-lg">{event.type}</h4>
                                     <p>{event.location}</p>
                                     <p>Organized by: {event.organizer}</p>
-                                    <button
-                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                                        onClick={() => handleDeleteEvent(event._id)}
-                                    >
-                                        Delete
-                                    </button>
                                 </li>
                             ))}
                         </ul>
@@ -130,7 +265,7 @@ const HappeningNowPage = () => {
 
                 {/* Activities Section */}
                 <div>
-                    <h3 className="text-xl font-bold mb-2">Activities</h3>
+                    <h3 className="text-xl font-bold mb-2 text-black">Activities</h3>
                     {activitiesLoading && <p>Loading activities...</p>}
                     {activitiesError && <p>Error loading activities</p>}
                     {!activitiesLoading && !activitiesError && filteredActivities.length > 0 && (
@@ -138,19 +273,13 @@ const HappeningNowPage = () => {
                             {filteredActivities.map((activity) => (
                                 <li
                                     key={activity._id}
-                                    className="mb-4 border-b pb-2"
+                                    className="mb-4 border-b pb-2 hover:text-black"
                                     onMouseEnter={() => setHoveredItem(activity)}
                                     onMouseLeave={() => setHoveredItem(null)}
                                 >
                                     <h4 className="font-bold text-lg">{activity.type}</h4>
                                     <p>{activity.location}</p>
                                     <p>Organized by: {activity.organizer}</p>
-                                    <button
-                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                                        onClick={() => handleDeleteActivity(activity._id)}
-                                    >
-                                        Delete
-                                    </button>
                                 </li>
                             ))}
                         </ul>

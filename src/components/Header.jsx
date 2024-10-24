@@ -7,7 +7,6 @@ import aclogo from '../assets/icons/AC-logo.png';
 import tabtext from '../assets/icons/tab-AC.gif';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import HamburgerIcon from './HamburgerIcon';
 import Menu from './Menu';
 import SearchComponent from './SearchComponent';
@@ -54,7 +53,7 @@ const Header = ({ events, activities }) => {
                             <Link
                                 key={key}
                                 to={item.to}
-                                className="text-base font-light font-interthin text-primary pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
                                 {item.label}
                             </Link>
@@ -62,7 +61,7 @@ const Header = ({ events, activities }) => {
                             <a
                                 key={key}
                                 href={item.href}
-                                className="text-base font-light font-interthin text-primary pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
                                 {item.label}
                             </a>
