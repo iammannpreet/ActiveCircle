@@ -12,7 +12,7 @@ const Home = () => {
 
             <Hero />
 
-            <ParallaxSection />
+            {/* <ParallaxSection />
 
             <CarouselSection
                 fetchData={true}
@@ -22,7 +22,7 @@ const Home = () => {
             <div className="home">
 
                 <HoverCard />
-            </div>
+            </div> */}
         </>
     );
 };
