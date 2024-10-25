@@ -51,7 +51,7 @@ const HappeningNowPage = () => {
             <Header />
             <div className="flex p-4 md:px-8 lg:px-12 bg-lightGray text-darkGray h-screen">
                 {/* Left Section: List */}
-                <div className='w-full md:w-1/3 lg:w-1/3 pr-4 h-full overflow-y-auto'>
+                <div className='w-full md:w-1/2 lg:w-1/3 pr-4 h-full overflow-y-auto'>
                     <h2 className="text-2xl font-bold text-black text-center md:text-start mb-4">Happening Now</h2>
                     <div className='flex align-middle justify-center md:justify-start'>
                         <FilterSection
@@ -83,10 +83,10 @@ const HappeningNowPage = () => {
                                             onClick={() => handleItemClick(event)}
                                         >
                                             {/* Event Details */}
-                                            <div className="w-2/3">
-                                                <h4 className="font-bold text-lg">{event.type}</h4>
-                                                <p>{event.location}</p>
-                                                <p>Organized by: {event.organizer}</p>
+                                            <div className="w-1/2">
+                                                <h4 className="font-bold text-base">{event.type}</h4>
+                                                <p className='text-xs lg:text-sm mt-2'>{event.location}</p>
+                                                <p className='text-xs lg:text-sm mt-2'>Organized by: {event.organizer}</p>
                                             </div>
 
                                             {/* Display the image if available */}
@@ -94,7 +94,7 @@ const HappeningNowPage = () => {
                                                 <img
                                                     src={imageUrl}
                                                     alt={`${event.type}`}
-                                                    className="w-1/3 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105 "
+                                                    className="w-1/2 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105 "
                                                     onError={() => console.error("Error loading image:", imageUrl)}
                                                 />
                                             )}
@@ -122,11 +122,12 @@ const HappeningNowPage = () => {
                                             onMouseLeave={() => setHoveredItem(null)}
                                             onClick={() => handleItemClick(activity)}
                                         >
+
                                             {/* Activity Details */}
-                                            <div className="w-2/3">
-                                                <h4 className="font-bold text-lg">{activity.type}</h4>
-                                                <p>{activity.location}</p>
-                                                <p>Organized by: {activity.organizer}</p>
+                                            <div className="w-1/2">
+                                                <h4 className="font-bold text-base">{activity.type}</h4>
+                                                <p className='text-xs lg:text-sm mt-2'>{activity.location}</p>
+                                                <p className='text-xs lg:text-sm mt-2'>Organized by: {activity.organizer}</p>
                                             </div>
 
                                             {/* Display the image if available */}
@@ -134,7 +135,7 @@ const HappeningNowPage = () => {
                                                 <img
                                                     src={imageUrl}
                                                     alt={`${activity.type}`}
-                                                    className="w-1/3 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105"
+                                                    className="w-1/2 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105"
                                                     onError={() => console.error("Error loading image:", imageUrl)}
                                                 />
                                             )}
@@ -147,7 +148,7 @@ const HappeningNowPage = () => {
                 </div>
 
                 {/* Right Section: Map */}
-                <div className="hidden md:block md:w-2/3 lg:w-2/3 h-full">
+                <div className="hidden md:block md:w-1/2 lg:w-2/3 h-full">
                     <Map hoveredItem={hoveredItem} />
                 </div>
             </div>

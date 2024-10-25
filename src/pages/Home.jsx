@@ -5,6 +5,8 @@ import HoverCard from '../components/HoverCard';
 import Hero from '../components/Hero';
 import CarouselSection from '../components/CarouselSection';
 import TestPage from '../components/TestPage';
+import AnimatedCard from '../components/AnimatedCard';
+import Slider from '../components/Slider';
 
 const Home = () => {
     return (
@@ -13,6 +15,9 @@ const Home = () => {
 
             <Hero />
 
+            {/* 
+            <TestPage />
+            <HoverCard />
             <ParallaxSection />
 
             <CarouselSection
@@ -22,9 +27,9 @@ const Home = () => {
 
             <div className="home">
 
-                <HoverCard />
-            </div>
-            <TestPage />
+            </div> */}
+
+            <AnimatedCard></AnimatedCard><Slider></Slider>
         </>
     );
 };

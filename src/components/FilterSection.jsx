@@ -193,7 +193,7 @@ const FilterSection = ({
                         onClick={() => handleButtonClick('content')}
                         sx={{ backgroundColor: 'Gray', color: 'white', '&:hover': { backgroundColor: '#ff833f' }, borderRadius: '8px', textTransform: 'none' }}
                     >
-                        {contentFilter !== 'all' ? `${contentFilter.replace('_', ' ')}` : 'Events & Activities'}
+                        {contentFilter !== 'all' ? `${contentFilter.replace('_', ' ')}` : 'Category'}
                     </Button>
                 </div>
             </ButtonGroup>
