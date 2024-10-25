@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Inter";
+  src: url("../src/assets/fonts/Inter-Italic-VariableFont_opsz_wght.woff")
+    format("woff");
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../src/assets/fonts/Inter-VariableFont_opsz_wght.woff")
+    format("woff");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+/* Extend Tailwind with custom keyframes and classes */
+@layer utilities {
+  @keyframes budgetShiny {
+    0% {
+      transform: scale(0) rotate(45deg);
+      opacity: 0;
+    }
+    93% {
+      transform: scale(0) rotate(45deg);
+      opacity: 0.1;
+    }
+    95% {
+      transform: scale(4) rotate(45deg);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(50) rotate(45deg);
+      opacity: 0;
+    }
+  }
+
+  .link-shiny::before {
+    position: absolute;
+    content: "";
+    display: inline-block;
+    top: -4px;
+    left: 0;
+    width: 8px;
+    height: 50%;
+    background-color: #fff;
+    animation: budgetShiny 6s ease-in-out infinite;
+    pointer-events: none;
+    overflow: hidden;
+  }
+}
+.glowing-outline {
+  filter: drop-shadow(0 0 2px #ff833f) drop-shadow(0 0 10px #ff833f);
+}
+.filter-dialog {
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease-out,
+    opacity 0.4s ease-out;
+  opacity: 0;
+  max-height: 0;
+}
+
+.filter-dialog.active {
+  opacity: 1;
+  max-height: 300px; /* Adjust max-height based on your content size */
+}
+.modal-overlay {
+  position: fixed; /* Ensures it's fixed to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Same as bg-opacity-50 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+.input {
+  @apply border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200;
+}
+
+.dropdown {
+  @apply border border-gray-300 bg-white max-h-48 overflow-y-auto rounded-lg shadow-lg;
+}
+
+.dropdown-item {
+  @apply p-2 hover:bg-blue-100 cursor-pointer transition duration-200;
+}
