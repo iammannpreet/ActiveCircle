@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import useFetchEvents from '../hooks/useFetchEvents';
-import { fetchLocationSuggestions, geocodeLocation } from '../utils/location'; // Import location utilities
-import TypeDropdown from '../components/TypeDropdown'; // Import reusable dropdown component
+import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
+import TypeDropdown from '../components/TypeDropdown';
 
 // Initial event state
 const initialEventState = {
@@ -10,22 +13,25 @@ const initialEventState = {
     organizer: '',
     date: '',
     time: '',
-    details: ''
+    details: '',
+    image: null // Added field for image
 };
 
 const AddEventPage = () => {
     const { newEvent, setNewEvent, handleAddEvent } = useFetchEvents(process.env.REACT_APP_API_URL);
-    const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null);
     const [locationSuggestions, setLocationSuggestions] = useState([]);
+    const navigate = useNavigate();
 
-    const handleInputChange = async (e) => {
+    useEffect(() => {
+        console.log("Updated newEvent:", newEvent);
+    }, [newEvent]);
+
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewEvent({ ...newEvent, [name]: value });
 
         if (name === 'location' && value) {
-            const suggestions = await fetchLocationSuggestions(value);
-            setLocationSuggestions(suggestions);
+            fetchLocationSuggestions(value).then(setLocationSuggestions);
         } else {
             setLocationSuggestions([]);
         }
@@ -36,36 +42,97 @@ const AddEventPage = () => {
         setLocationSuggestions([]);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const dateTime = new Date(`${newEvent.date}T${newEvent.time}`);
-            const { latitude, longitude } = await geocodeLocation(newEvent.location);
-
-            const eventWithCoordsAndDate = {
-                ...newEvent,
-                latitude,
-                longitude,
-                date: dateTime,
-            };
-
-            await handleAddEvent(eventWithCoordsAndDate);
-            setNewEvent(initialEventState);
-            setError(null);
-            setSuccessMessage('Event added successfully!');
-        } catch (err) {
-            setError('Failed to add event. Please check the location.');
-            setSuccessMessage(null);
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setNewEvent({ ...newEvent, image: file });
         }
     };
+
+    const validateForm = () => {
+        const { type, location, organizer, date, time, details } = newEvent;
+        if (!type || !location || !organizer || !date || !time || !details) {
+            return 'Please fill out all required fields.';
+        }
+        return null;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Validate the form
+        const validationError = validateForm();
+        if (validationError) {
+            toast.error(validationError, {
+                position: "top-center"
+            });
+            return;
+        }
+
+        try {
+            // Parse and log the date and time
+            const dateTime = new Date(`${newEvent.date}T${newEvent.time}`);
+            console.log("Parsed DateTime:", dateTime.toISOString());
+
+            // Fetch and log geocoded location
+            const { latitude, longitude } = await geocodeLocation(newEvent.location);
+            console.log("Geocoded Location:", { latitude, longitude });
+
+            // Check for valid latitude and longitude
+            if (isNaN(latitude) || isNaN(longitude)) {
+                toast.error("Invalid location. Please check the address.", {
+                    position: "top-center"
+                });
+                return;
+            }
+
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('type', newEvent.type);
+            formData.append('location', newEvent.location);
+            formData.append('details', newEvent.details);
+            formData.append('organizer', newEvent.organizer);
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
+            formData.append('date', dateTime.toISOString());
+
+            // Append the image if it exists
+            if (newEvent.image) {
+                formData.append('image', newEvent.image);
+            }
+
+            // Log FormData for debugging
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            // Send the FormData using your existing handleAddEvent function
+            await handleAddEvent(formData);
+            setNewEvent(initialEventState);
+
+            toast.success('Event added successfully!', {
+                position: "top-center"
+            });
+
+            // Redirect to the 'Events' page after success
+            setTimeout(() => {
+                navigate('/happening-now');
+            }, 1500); // Delay redirect to let the toast show
+        } catch (err) {
+            toast.error('Failed to add event. Please check the location.', {
+                position: "top-center"
+            });
+            console.error("Error adding event:", err); // Add a detailed error message
+        }
+    };
+
 
     const today = new Date().toISOString().split("T")[0];
 
     return (
         <div className="container mx-auto p-4">
+            <ToastContainer />
             <h1 className="text-2xl font-bold mb-4">Add New Event</h1>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
-            {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
             <form onSubmit={handleSubmit}>
                 <TypeDropdown value={newEvent.type} onChange={handleInputChange} label="Event Type" />
                 {/* Location with Autocomplete */}
@@ -119,6 +186,7 @@ const AddEventPage = () => {
                     value={newEvent.details}
                     onChange={handleInputChange}
                     className="border p-2 mb-4 w-full"
+                    required
                 />
                 <label className="block mb-2">Organizer:</label>
                 <input
@@ -126,6 +194,15 @@ const AddEventPage = () => {
                     name="organizer"
                     value={newEvent.organizer}
                     onChange={handleInputChange}
+                    className="border p-2 mb-4 w-full"
+                    required
+                />
+                {/* Image Upload */}
+                <label className="block mb-2">Image:</label>
+                <input
+                    type="file"
+                    name="image"
+                    onChange={handleFileChange}
                     className="border p-2 mb-4 w-full"
                 />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">

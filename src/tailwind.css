@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
   font-family: "Inter";
   src: url("../src/assets/fonts/Inter-Italic-VariableFont_opsz_wght.woff")
@@ -15,4 +16,43 @@
     format("woff");
   font-weight: 100 900; /* Supports all italic font weights */
   font-style: normal;
+}
+
+/* Extend Tailwind with custom keyframes and classes */
+@layer utilities {
+  @keyframes budgetShiny {
+    0% {
+      transform: scale(0) rotate(45deg);
+      opacity: 0;
+    }
+    93% {
+      transform: scale(0) rotate(45deg);
+      opacity: 0.1;
+    }
+    95% {
+      transform: scale(4) rotate(45deg);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(50) rotate(45deg);
+      opacity: 0;
+    }
+  }
+
+  .link-shiny::before {
+    position: absolute;
+    content: "";
+    display: inline-block;
+    top: -4px;
+    left: 0;
+    width: 8px;
+    height: 50%;
+    background-color: #fff;
+    animation: budgetShiny 6s ease-in-out infinite;
+    pointer-events: none;
+    overflow: hidden;
+  }
+}
+.glowing-outline {
+  filter: drop-shadow(0 0 2px #ff833f) drop-shadow(0 0 10px #ff833f);
 }

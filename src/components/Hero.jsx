@@ -1,92 +1,44 @@
-// import React, { useState, useEffect } from 'react';
-// import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-// import customIcon from '../assets/images/pointer.png';  // Your custom marker icon
-
-// const containerStyle = {
-//     width: '100%',
-//     height: '400px',
-// };
-
-// const defaultCenter = {
-//     lat: 40.785091,
-//     lng: -73.968285,
-// };
-
-// // Hardcoded events data for testing
-// const hardcodedEvents = [
-//     { _id: '1', type: 'Cycling Event', lat: 40.785091, lng: -73.968285 },
-//     { _id: '2', type: 'Yoga Session', lat: 50.758896, lng: -73.985130 },
-//     { _id: '3', type: 'Marathon', lat: 40.706086, lng: -73.996864 },
-// ];
-
-// function Hero() {
-//     const [mapCenter, setMapCenter] = useState(defaultCenter);
-//     const [isMapLoaded, setIsMapLoaded] = useState(false);  // State to check if map is loaded
-
-//     // Handle map load event
-//     const handleMapLoad = (map) => {
-//         console.log('Map has loaded:', map);
-//         setIsMapLoaded(true);  // Set the map as loaded
-//     };
-
-//     // Handle click event for markers
-//     const handleMarkerClick = (event) => {
-//         console.log('Marker clicked:', event);
-//     };
-
-//     return (
-//         <div className="hero-section">
-//             <div>
-//                 <img className='w-9 h-9' src={customIcon}></img>
-//             </div>
-//             {/* Google Map */}
-//             <div className="map-container">
-//                 <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-//                     <GoogleMap
-//                         mapContainerStyle={containerStyle}
-//                         center={mapCenter}
-//                         zoom={12}
-//                         onLoad={handleMapLoad}  // Detect when map has loaded
-//                     >
-//                         {/* Render markers only if the map has loaded */}
-//                         {isMapLoaded && hardcodedEvents.map(event => (
-//                             <Marker
-//                                 key={event._id}
-//                                 position={{ lat: event.lat, lng: event.lng }}  // Use lat/lng from the event
-//                                 title={event.type}
-//                                 onClick={() => handleMarkerClick(event)}  // Marker click eventanimation={google.maps.Animation.DROP}  // Optional: add animation
-//                                 draggable={true}  // Optional: make marker draggable
-//                                 zIndex={event.importanceLevel}  // Optional: control stacking order
-//                             />
-//                         ))}
-//                     </GoogleMap>
-//                 </LoadScript>
-//             </div>
-
-//             {/* List of Events */}
-//             <ul className="activity-list">
-//                 {hardcodedEvents.map((event) => (
-//                     <li key={event._id} className="activity-item" onClick={() => setMapCenter({ lat: event.lat, lng: event.lng })}>
-//                         <h3>{event.type}</h3>
-//                         <p>Location: {event.location}</p>
-//                         <p>Organizer: {event.organizer}</p>
-//                     </li>
-//                 ))}
-//             </ul>
-//         </div>
-//     );
-// }
-
-// export default Hero;
-import React from 'react'
-import Map from './Map'
+import React from "react";
+import useCursorPosition from "../hooks/useCursorPosition"; // Import the custom hook
+import useTextShadowAnimation from "../hooks/useTextShadowAnimation"; // Import the new custom hook
+import Glowingpng from "./Glowingpng";
+import specialC from "../assets/icons/special-c.svg"
 
 const Hero = () => {
-    return (
-        <div style={{ height: '500px', width: '100%' }}>
-            <Map />
-        </div>
-    )
-}
+    const cursorPos = useCursorPosition(); // Use the custom hook
+    useTextShadowAnimation(); // Apply the text shadow animations
 
-export default Hero
+    return (
+        <div className="hero-container  w-full p-4 md:p-8 lg:p-12 bg-black overflow-hidden cursor-none md:flex lg:flex  justify-center">
+            <div
+                className="cursor-follower"
+                style={{
+                    position: "absolute",
+                    top: cursorPos.y,
+                    left: cursorPos.x,
+                    pointerEvents: "none",
+                    backgroundColor: "#ff833f",
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "50%",
+                }}
+            /> <div className="text-left my-16 space-y-4">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white relative line">
+                    Stay Active.
+                </h1>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white relative line">
+                    Stay Connected.
+                </h1>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white relative whitespace-nowrap">
+                    Explore the <img src={specialC} alt="Special C" className="inline-flex align-middle w-12 lg:w-16" style={{ height: 'auto' }} />ircle.
+                </h1>
+            </div>
+
+            <div className="md:w-1/2"><Glowingpng />
+            </div>
+
+        </div>
+    );
+};
+
+export default Hero;

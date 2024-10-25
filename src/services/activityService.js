@@ -13,10 +13,8 @@ export const fetchActivities = () => {
 export const addActivity = (newActivity) => {
     return fetch(`${API_URL}/api/v1/activities`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newActivity),
+        // Removed headers since we're sending FormData
+        body: newActivity,  // Assuming `newActivity` is a FormData object
     }).then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

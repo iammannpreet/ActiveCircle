@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 
+import { Link } from 'react-router-dom';
 const Menu = ({ isOpen, toggleMenu }) => {
     const menuVariants = {
         hidden: { opacity: 0, y: '100%' },
@@ -14,60 +15,88 @@ const Menu = ({ isOpen, toggleMenu }) => {
 
     return (
         <motion.div
-            className="fixed bottom-0 p-4 right-0 w-full md:w-1/2 h-full bg-[#5271FF] z-40 flex flex-col items-center md:items-end lg:hidden text-white shadow-custom-lifted"
+            className="fixed bottom-0 p-4 md:px-6 right-0 w-full md:w-1/2 h-full bg-lightGray z-40 flex flex-col items-center md:items-end lg:hidden text-darkGray shadow-custom-lifted"
             initial="hidden"
-            style={{ top: '56px' }}
+            style={{ top: '76px' }}
             animate={isOpen ? 'visible' : 'hidden'}
             exit="exit"
             variants={menuVariants}
             transition={{ type: 'tween', duration: 0.5 }}
         >
-            {/* Centered on mobile, aligned to the right on tablet */}
+            {/* Centeed on mobile, aligned to the right on tablet */}
             <motion.a
-                href="#home"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.5 }}
                 onClick={toggleMenu}
-            >
-                Home
+            ><Link to="/happening-now">
+                    <a>
+                        Discover New Events
+                    </a>
+                </Link>
+
             </motion.a>
             <motion.a
                 href="#about"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.6 }}
                 onClick={toggleMenu}
             >
-                About
+                Create an Activity
             </motion.a>
             <motion.a
                 href="#services"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.7 }}
                 onClick={toggleMenu}
-            >
-                Services
+            >Host an Event
             </motion.a>
             <motion.a
                 href="#contact"
-                className="text-xl mb-4"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.8 }}
                 onClick={toggleMenu}
-            >
-                Contact
+            >Our Mission
+            </motion.a><motion.a
+                href="#contact"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
+                variants={itemVariants}
+                initial="hidden"
+                animate={isOpen ? 'visible' : 'hidden'}
+                transition={{ delay: 0.8 }}
+                onClick={toggleMenu}
+            >About
+            </motion.a><motion.a
+                href="#contact"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
+                variants={itemVariants}
+                initial="hidden"
+                animate={isOpen ? 'visible' : 'hidden'}
+                transition={{ delay: 0.8 }}
+                onClick={toggleMenu}
+            >Log In
+            </motion.a><motion.a
+                href="#contact"
+                className="text-xl mb-4 hover:scale-110 hover:text-black"
+                variants={itemVariants}
+                initial="hidden"
+                animate={isOpen ? 'visible' : 'hidden'}
+                transition={{ delay: 0.8 }}
+                onClick={toggleMenu}
+            >Sign Up
             </motion.a>
-        </motion.div>
+        </motion.div >
     );
 };
 
