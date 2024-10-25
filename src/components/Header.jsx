@@ -103,7 +103,7 @@ const Header = ({ events, activities }) => {
                     </div>
                 </motion.div>
 
-                <motion.div className=" lg:hidden flex space-x-6 items-center">
+                <motion.div className="flex space-x-6 items-center  lg:hidden " >
                     {/* Search Icon */}
                     <button onClick={toggleSearch} className="transform transition-transform duration-200 hover:scale-120">
                         <SearchIcon className="text-darkGray hover:text-black" />
@@ -131,14 +131,16 @@ const Header = ({ events, activities }) => {
 
             {/* Search Component (with no padding and z-index adjustments) */}
             <motion.div
-                className={`fixed left-0 w-full bg-gray-200 z-50 ${isSearchOpen ? 'block' : 'hidden'}`}
-                style={{ top: '76px' }}  // Fixed top value to start below the header
-                initial={{ y: '-100%', opacity: 0 }}  // Initially hidden above the header
-                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }}  // Slides in from above
-                transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+                className="fixed left-0 w-full bg-gray-200 z-50"
+                style={{ top: '76px' }} // Fixed top value to start below the header
+                initial={{ y: '-100%', opacity: 0 }} // Start hidden above the header
+                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }} // Animate visibility based on state
+                transition={{ type: 'spring', stiffness: 100, damping: 20 }} // Smooth spring effect
             >
-                <SearchComponent events={events} activities={activities} />
+                {/* Conditionally Render Search Component if search is open */}
+                {isSearchOpen && <SearchComponent events={events} activities={activities} />}
             </motion.div>
+
         </>
     );
 };

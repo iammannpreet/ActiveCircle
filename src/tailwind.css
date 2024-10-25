@@ -56,3 +56,28 @@
 .glowing-outline {
   filter: drop-shadow(0 0 2px #ff833f) drop-shadow(0 0 10px #ff833f);
 }
+.filter-dialog {
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease-out,
+    opacity 0.4s ease-out;
+  opacity: 0;
+  max-height: 0;
+}
+
+.filter-dialog.active {
+  opacity: 1;
+  max-height: 300px; /* Adjust max-height based on your content size */
+}
+.modal-overlay {
+  position: fixed; /* Ensures it's fixed to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Same as bg-opacity-50 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}

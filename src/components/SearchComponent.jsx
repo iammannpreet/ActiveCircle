@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import EventModal from './eventModal'; // Import your EventModal component
 
-const SearchComponent = () => {
+const SearchComponent = ({ events, activities }) => {
     const [searchInput, setSearchInput] = useState('');  // Store the user's search input
     const [filteredResults, setFilteredResults] = useState([]);  // Store results from the database
     const [loading, setLoading] = useState(false);  // Store loading state
@@ -74,7 +74,7 @@ const SearchComponent = () => {
     };
 
     return (
-        <div className="p-6 bg-lightGray text-darkGray shadow-lg max-w-3xl mx-auto">
+        <div className="p-6 bg-lightGray text-darkGray shadow-lg max-w-3xl mx-auto h-full flex flex-col">
             {/* Search Input */}
             <input
                 type="text"
@@ -92,7 +92,7 @@ const SearchComponent = () => {
 
             {/* Display Search Results */}
             {!loading && filteredResults.length > 0 && (
-                <div>
+                <div className="flex-grow overflow-y-auto mt-4" style={{ minHeight: '80vh' }}>
                     <h2 className="text-xl font-semibold mb-4">Search Results</h2>
                     <ul className="bg-white rounded-lg shadow-lg divide-y divide-gray-200">
                         {filteredResults.map((item, index) => (
