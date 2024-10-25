@@ -4,6 +4,7 @@ import ParallaxSection from '../components/ParallaxSection';
 import HoverCard from '../components/HoverCard';
 import Hero from '../components/Hero';
 import CarouselSection from '../components/CarouselSection';
+import TestPage from '../components/TestPage';
 
 const Home = () => {
     return (
@@ -12,7 +13,7 @@ const Home = () => {
 
             <Hero />
 
-            {/* <ParallaxSection />
+            <ParallaxSection />
 
             <CarouselSection
                 fetchData={true}
@@ -22,7 +23,8 @@ const Home = () => {
             <div className="home">
 
                 <HoverCard />
-            </div> */}
+            </div>
+            <TestPage />
         </>
     );
 };
