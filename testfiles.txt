@@ -1,164 +1,376 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify'; // Import toast
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast
-import useActivities from '../hooks/useActivities';
-import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
-import TypeDropdown from '../components/TypeDropdown';
+// import React, { useState, useEffect } from 'react';
+// import useFetchEvents from '../hooks/useFetchEvents';
+// import useActivities from '../hooks/useActivities';
+// import Map from '../components/Map';
+// import { applyDateFilter } from '../utils/dateFilters';
+// import { applyTypeFilter } from '../utils/typeFilters';
+// import { applyContentFilter } from '../utils/contentFilters';
+// import { TypeFilterOptions } from '../utils/filterOptions';
+// import EventModal from '../components/eventModal';
+// import Header from '../components/Header';
+// import Button from '@mui/material/Button';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import ButtonGroup from '@mui/material/ButtonGroup';
 
-const initialActivityState = {
-    type: '',
-    location: '',
-    organizer: '',
-    date: '',
-    time: '',
-    details: ''
-};
+// const FilterOptions = {
+//     ALL: 'all',
+//     TODAY: 'today',
+//     THIS_WEEKEND: 'this_weekend',
+//     NEXT_7_DAYS: 'next_7_days',
+//     NEXT_10_DAYS: 'next_10_days',
+//     THIS_MONTH: 'this_month',
+// };
 
-const AddActivityPage = () => {
-    const { newActivity, setNewActivity, handleAddActivity } = useActivities();
-    const [locationSuggestions, setLocationSuggestions] = useState([]);
-    const navigate = useNavigate();
+// const ContentFilterOptions = {
+//     EVENTS_ONLY: 'events_only',
+//     ACTIVITIES_ONLY: 'activities_only',
+//     ALL: 'all',
+// };
 
-    const handleInputChange = async (e) => {
-        const { name, value } = e.target;
-        setNewActivity({ ...newActivity, [name]: value });
+// const HappeningNowPage = () => {
+//     const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
+//     const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
+//     const [filteredEvents, setFilteredEvents] = useState([]);
+//     const [filteredActivities, setFilteredActivities] = useState([]);
+//     const [filter, setFilter] = useState(FilterOptions.ALL);
+//     const [contentFilter, setContentFilter] = useState(ContentFilterOptions.ALL);
+//     const [selectedType, setSelectedType] = useState('');
+//     const [hoveredItem, setHoveredItem] = useState(null);
+//     const [activeDialog, setActiveDialog] = useState(null); // State to manage which dialog is open
+//     const [selectedItem, setSelectedItem] = useState(null);
 
-        if (name === 'location' && value) {
-            const suggestions = await fetchLocationSuggestions(value);
-            setLocationSuggestions(suggestions);
-        } else {
-            setLocationSuggestions([]);
-        }
-    };
+//     useEffect(() => {
+//         // Apply Date Filter
+//         const { filteredEvents: eventsFiltered, filteredActivities: activitiesFiltered } = applyDateFilter(filter, events, activities);
+//         // Apply Type Filter
+//         const { filteredEvents: typeFilteredEvents, filteredActivities: typeFilteredActivities } = applyTypeFilter(
+//             selectedType,
+//             eventsFiltered,
+//             activitiesFiltered,
+//             TypeFilterOptions
+//         );
+//         // Apply Content Filter
+//         const { filteredEvents: finalFilteredEvents, filteredActivities: finalFilteredActivities } = applyContentFilter(
+//             contentFilter,
+//             typeFilteredEvents,
+//             typeFilteredActivities
+//         );
 
-    const handleLocationSelect = (location) => {
-        setNewActivity({ ...newActivity, location });
-        setLocationSuggestions([]);
-    };
+//         setFilteredEvents(finalFilteredEvents);
+//         setFilteredActivities(finalFilteredActivities);
+//     }, [filter, selectedType, contentFilter, events, activities]);
 
-    const validateForm = () => {
-        const { type, location, organizer, date, time, details } = newActivity;
-        if (!type || !location || !organizer || !date || !time || !details) {
-            return 'Please fill out all required fields.';
-        }
-        return null;
-    };
+//     const handleMouseEnter = (dialogName) => {
+//         setActiveDialog(dialogName); // Set the active dialog on hover
+//     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+//     const handleMouseLeave = () => {
+//         setActiveDialog(null); // Close the dialog when the mouse leaves
+//     };
+//     // Handle item click to open modal
+//     const handleItemClick = (item) => {
+//         setSelectedItem(item);
+//     };
 
-        // Validate the form
-        const validationError = validateForm();
-        if (validationError) {
-            toast.error(validationError, {
-                position: "top-center"
-            });
-            return;
-        }
+//     // Close modal
+//     const handleCloseModal = () => {
+//         setSelectedItem(null);
+//     };
+//     return (
+//         <>
+//             <Header />
 
-        try {
-            const dateTime = new Date(`${newActivity.date}T${newActivity.time}`);
-            const { latitude, longitude } = await geocodeLocation(newActivity.location);
+//             <div className="flex p-4 md:px-8 lg:px-12 overflow-auto bg-lightGray text-darkGray h-screen">
+//                 <div className='w-100 md:1/2 lg:w-2/3'>
+//                     <div className='flex -ml-2 md:mb-4'>
+//                         <Button size="small"
+//                             sx={{
+//                                 color: '#545454',
+//                                 '&:hover': {
+//                                     backgroundColor: '#ff833f',
 
-            const activityWithCoords = {
-                ...newActivity,
-                latitude,
-                longitude,
-                date: dateTime,
-            };
+//                                 },
+//                                 '&:focus-visible': {
+//                                     outline: '2px solid #FF6F00',
+//                                     outlineOffset: '2px',
+//                                 },
+//                                 borderRadius: '8px',
+//                                 gap: '.2rem',
+//                                 textTransform: 'none',
+//                             }}>
+//                             <a href="/" className='text-base'>
+//                                 <ArrowBackIcon />
+//                                 Back
+//                             </a>
+//                         </Button>
+//                     </div>
 
-            await handleAddActivity(activityWithCoords);
-            setNewActivity(initialActivityState);
+//                     <h2 className="text-2xl font-bold text-black text-center lg:text-start mb-4">Happening Now</h2>
+//                     <div className='flex justify-center md:justify-start'>
+//                         <ButtonGroup>
+//                             {/* Date Filter Button */}
+//                             <div
+//                                 className="mb-4 relative"
+//                                 onMouseEnter={() => handleMouseEnter('date')}
+//                                 onMouseLeave={handleMouseLeave}
+//                             >
+//                                 <Button
+//                                     sx={{
+//                                         backgroundColor: 'Gray',
+//                                         color: 'white',
+//                                         '&:hover': {
+//                                             backgroundColor: '#ff833f',
+//                                         },
+//                                         borderRadius: '8px',
+//                                         textTransform: 'none',
+//                                         border: '2px solid darkGray', // Your primary orange shade for the border
+//                                     }}
 
-            toast.success('Activity added successfully!', {
-                position: "top-center"
-            });
+//                                 >
+//                                     {filter !== FilterOptions.ALL ? `${filter.replace('_', ' ')}` : 'Date'}
+//                                 </Button>
 
-            // Redirect to the 'Happening Now' page after success
-            setTimeout(() => {
-                navigate('/happening-now');
-            }, 1500); // Delay redirect to let the toast show
-        } catch (err) {
-            toast.error('Failed to add activity. Please check the location.', {
-                position: "top-center"
-            });
-        }
-    };
+//                                 {/* Hover-Based Dialog for Date Options */}
+//                                 {activeDialog === 'date' && (
+//                                     <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
+//                                         <div className="flex flex-row justify-between space-x-4">
+//                                             {/* First List */}
+//                                             <div className="w-1/2">
+//                                                 <h3 className="font-semibold mb-2">This Week</h3>
+//                                                 {Object.keys(FilterOptions).slice(0, 3).map((key) => (
+//                                                     <button
+//                                                         key={key}
+//                                                         onClick={() => {
+//                                                             setFilter(FilterOptions[key]);
+//                                                             setActiveDialog(null); // Close dialog after selection
+//                                                         }}
+//                                                         className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+//                                                     >
+//                                                         {key.replace('_', ' ')}
+//                                                     </button>
+//                                                 ))}
+//                                             </div>
 
-    const today = new Date().toISOString().split("T")[0];
+//                                             {/* Second List */}
+//                                             <div className="w-1/2">
+//                                                 <h3 className="font-semibold mb-2">This Month</h3>
+//                                                 {Object.keys(FilterOptions).slice(3).map((key) => (
+//                                                     <button
+//                                                         key={key}
+//                                                         onClick={() => {
+//                                                             setFilter(FilterOptions[key]);
+//                                                             setActiveDialog(null); // Close dialog after selection
+//                                                         }}
+//                                                         className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+//                                                     >
+//                                                         {key.replace('_', ' ')}
+//                                                     </button>
+//                                                 ))}
+//                                             </div>
+//                                         </div>
+//                                     </div>
+//                                 )}
+//                             </div>
 
-    return (
-        <div className="container mx-auto p-4">
-            <ToastContainer /> {/* Toast container to show notifications */}
-            <h1 className="text-2xl font-bold mb-4">Add New Activity</h1>
-            <form onSubmit={handleSubmit}>
-                <TypeDropdown value={newActivity.type} onChange={handleInputChange} label="Activity Type" />
-                <label className="block mb-2">Location:</label>
-                <input
-                    type="text"
-                    name="location"
-                    value={newActivity.location}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                {locationSuggestions.length > 0 && (
-                    <ul className="border border-gray-300 bg-white max-h-48 overflow-y-auto mb-4">
-                        {locationSuggestions.map((suggestion, index) => (
-                            <li
-                                key={index}
-                                className="p-2 hover:bg-gray-200 cursor-pointer"
-                                onClick={() => handleLocationSelect(suggestion.place_name)}
-                            >
-                                {suggestion.place_name}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                <label className="block mb-2">Date:</label>
-                <input
-                    type="date"
-                    name="date"
-                    value={newActivity.date}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    min={today}
-                    required
-                />
-                <label className="block mb-2">Time:</label>
-                <input
-                    type="time"
-                    name="time"
-                    value={newActivity.time}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                <label className="block mb-2">Details:</label>
-                <input
-                    type="text"
-                    name="details"
-                    value={newActivity.details}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                <label className="block mb-2">Organizer:</label>
-                <input
-                    type="text"
-                    name="organizer"
-                    value={newActivity.organizer}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Add Activity
-                </button>
-            </form>
-        </div>
-    );
-};
+//                             {/* Type Filter Button */}
+//                             <div
+//                                 className="mb-4 relative"
+//                                 onMouseEnter={() => handleMouseEnter('type')}
+//                                 onMouseLeave={handleMouseLeave}
+//                             >
+//                                 <Button
+//                                     sx={{
+//                                         backgroundColor: 'Gray',
+//                                         color: 'white',
+//                                         '&:hover': {
+//                                             backgroundColor: '#ff833f',
+//                                         },
+//                                         borderRadius: '8px',
+//                                         textTransform: 'none',
+//                                         border: '2px solid darkgray', // Your primary orange shade for the border
+//                                     }}
 
-export default AddActivityPage;
+//                                 >
+//                                     {selectedType !== '' ? `${selectedType}` : 'Type'}
+//                                 </Button>
+
+//                                 {/* Hover-Based Dialog for Type Options */}
+//                                 {activeDialog === 'type' && (
+//                                     <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
+//                                         <div className="flex flex-row justify-between space-x-4">
+//                                             {/* First List */}
+//                                             <div className="w-1/2">
+//                                                 <h3 className="font-semibold mb-2">Indoor Types</h3>
+//                                                 {['GYM', 'YOGA', 'DANCE'].map((type) => (
+//                                                     <button
+//                                                         key={type}
+//                                                         onClick={() => {
+//                                                             setSelectedType(type);
+//                                                             setActiveDialog(null); // Close dialog after selection
+//                                                         }}
+//                                                         className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+//                                                     >
+//                                                         {type.replace('_', ' ')}
+//                                                     </button>
+//                                                 ))}
+//                                             </div>
+
+//                                             {/* Second List */}
+//                                             <div className="w-1/2">
+//                                                 <h3 className="font-semibold mb-2">Outdoor Types</h3>
+//                                                 {['WALK_RUN', 'FISHING', 'SPORTS', 'WATER', 'CYCLING'].map((type) => (
+//                                                     <button
+//                                                         key={type}
+//                                                         onClick={() => {
+//                                                             setSelectedType(type);
+//                                                             setActiveDialog(null); // Close dialog after selection
+//                                                         }}
+//                                                         className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+//                                                     >
+//                                                         {type.replace('_', ' ')}
+//                                                     </button>
+//                                                 ))}
+//                                                 <button
+//                                                     onClick={() => {
+//                                                         setSelectedType('');
+//                                                         setActiveDialog(null);
+//                                                     }}
+//                                                     className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+//                                                 >
+//                                                     All Types
+//                                                 </button>
+//                                             </div>
+//                                         </div>
+//                                     </div>
+//                                 )}
+//                             </div>
+
+//                             {/* Content Filter Button */}
+//                             <div
+//                                 className="mb-4 relative"
+//                                 onMouseEnter={() => handleMouseEnter('content')}
+//                                 onMouseLeave={handleMouseLeave}
+//                             >
+//                                 <Button sx={{
+//                                     backgroundColor: 'Gray',
+//                                     color: 'white',
+//                                     '&:hover': {
+//                                         backgroundColor: '#ff833f',
+//                                     },
+//                                     borderRadius: '8px',
+//                                     textTransform: 'none',
+//                                     border: '2px solid darkGray', // Your primary orange shade for the border
+//                                 }}
+
+//                                 >
+//                                     {contentFilter !== ContentFilterOptions.ALL ? `${contentFilter.replace('_', ' ')}` : 'Events & Activities'}
+//                                 </Button>
+
+//                                 {/* Hover-Based Dialog for Content Options */}
+//                                 {activeDialog === 'content' && (
+//                                     <div className="absolute left-[40%] ml-4 top-0 bg-white border rounded shadow-lg p-4 z-10 w-72 transition-opacity duration-300">
+//                                         <div className="flex flex-row justify-between space-x-4">
+//                                             {/* First List */}
+//                                             <div className="w-1/2">
+//                                                 {['EVENTS_ONLY', 'ACTIVITIES_ONLY'].map((key) => (
+//                                                     <button
+//                                                         key={key}
+//                                                         onClick={() => {
+//                                                             setContentFilter(ContentFilterOptions[key]);
+//                                                             setActiveDialog(null); // Close dialog after selection
+//                                                         }}
+//                                                         className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+//                                                     >
+//                                                         {key.replace('_', ' ')}
+//                                                     </button>
+//                                                 ))}
+//                                             </div>
+
+//                                             {/* Second List */}
+//                                             <div className="w-1/2">
+//                                                 <button
+//                                                     onClick={() => {
+//                                                         setContentFilter(ContentFilterOptions.ALL);
+//                                                         setActiveDialog(null);
+//                                                     }}
+//                                                     className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+//                                                 >
+//                                                     All
+//                                                 </button>
+//                                             </div>
+//                                         </div>
+//                                     </div>
+//                                 )}
+//                             </div>
+//                         </ButtonGroup>
+//                     </div>
+//                     {/* Events Section */}
+//                     <div className="mb-6">
+//                         <h3 className="text-xl font-bold mb-2 text-black">Events</h3>
+//                         {eventsLoading && <p>Loading events...</p>}
+//                         {eventsError && <p>Error loading events</p>}
+//                         {!eventsLoading && !eventsError && filteredEvents.length > 0 && (
+//                             <ul>
+//                                 {filteredEvents.map((event) => (
+//                                     <li
+//                                         key={event._id}
+//                                         className="mb-4 border-b pb-2 hover:text-black hover:scale"
+//                                         onMouseEnter={() => setHoveredItem(event)}
+//                                         onMouseLeave={() => setHoveredItem(null)}
+//                                         onClick={() => handleItemClick(event)}
+//                                     >
+//                                         <h4 className="font-bold text-lg">{event.type}</h4>
+//                                         <p>{event.location}</p>
+//                                         <p>Organized by: {event.organizer}</p>
+//                                     </li>
+//                                 ))}
+//                             </ul>
+//                         )}
+//                     </div>
+
+//                     {/* Activities Section */}
+//                     <div>
+//                         <h3 className="text-xl font-bold mb-2 text-black">Activities</h3>
+//                         {activitiesLoading && <p>Loading activities...</p>}
+//                         {activitiesError && <p>Error loading activities</p>}
+//                         {!activitiesLoading && !activitiesError && filteredActivities.length > 0 && (
+//                             <ul>
+//                                 {filteredActivities.map((activity) => (
+//                                     <li
+//                                         key={activity._id}
+//                                         className="mb-4 border-b pb-2 hover:text-black"
+//                                         onMouseEnter={() => setHoveredItem(activity)}
+//                                         onMouseLeave={() => setHoveredItem(null)}
+//                                         onClick={() => handleItemClick(activity)}
+//                                     >
+//                                         <h4 className="font-bold text-lg">{activity.type}</h4>
+//                                         <p>{activity.location}</p>
+//                                         <p>Organized by: {activity.organizer}</p>
+//                                     </li>
+//                                 ))}
+//                             </ul>
+//                         )}
+//                     </div>
+//                 </div>
+
+//                 {/* Right Section: Map */}
+//                 <div className="hidden md:block md:w-screen ">
+//                     <Map hoveredItem={hoveredItem} />
+//                 </div>
+
+
+//             </div >
+//             {
+//                 selectedItem && (
+//                     <EventModal
+//                         event={selectedItem}
+//                         onClose={handleCloseModal}
+//                     />
+//                 )
+//             }
+
+//         </>
+//     );
+// };
+
+// export default HappeningNowPage;

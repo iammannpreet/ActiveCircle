@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import useFetchEvents from '../hooks/useFetchEvents';
 import useActivities from '../hooks/useActivities';
@@ -48,20 +49,22 @@ const HappeningNowPage = () => {
     return (
         <>
             <Header />
-            <div className="flex p-4 md:px-8 lg:px-12 overflow-auto bg-lightGray text-darkGray h-screen">
-                <div className='w-100 md:1/2 lg:w-2/3 pr-4'>
+            <div className="flex p-4 md:px-8 lg:px-12 bg-lightGray text-darkGray h-screen">
+                {/* Left Section: List */}
+                <div className='w-full md:w-1/3 lg:w-1/3 pr-4 h-full overflow-y-auto'>
                     <h2 className="text-2xl font-bold text-black text-center md:text-start mb-4">Happening Now</h2>
-                    <FilterSection
-                        filter={filter}
-                        setFilter={setFilter}
-                        selectedType={selectedType}
-                        setSelectedType={setSelectedType}
-                        contentFilter={contentFilter}
-                        setContentFilter={setContentFilter}
-                        activeDialog={activeDialog}
-                        setActiveDialog={setActiveDialog} // Pass the function here
-                    />
-
+                    <div className='flex align-middle justify-center md:justify-start'>
+                        <FilterSection
+                            filter={filter}
+                            setFilter={setFilter}
+                            selectedType={selectedType}
+                            setSelectedType={setSelectedType}
+                            contentFilter={contentFilter}
+                            setContentFilter={setContentFilter}
+                            activeDialog={activeDialog}
+                            setActiveDialog={setActiveDialog}
+                        />
+                    </div>
                     {/* Events Section */}
                     <div className="mb-6">
                         <h3 className="text-xl font-bold mb-2 text-black">Events</h3>
@@ -69,19 +72,35 @@ const HappeningNowPage = () => {
                         {eventsError && <p>Error loading events</p>}
                         {!eventsLoading && !eventsError && filteredEvents.length > 0 && (
                             <ul>
-                                {filteredEvents.map((event) => (
-                                    <li
-                                        key={event._id}
-                                        className="mb-4 border-b pb-2 hover:text-black hover:scale"
-                                        onMouseEnter={() => setHoveredItem(event)}
-                                        onMouseLeave={() => setHoveredItem(null)}
-                                        onClick={() => handleItemClick(event)}
-                                    >
-                                        <h4 className="font-bold text-lg">{event.type}</h4>
-                                        <p>{event.location}</p>
-                                        <p>Organized by: {event.organizer}</p>
-                                    </li>
-                                ))}
+                                {filteredEvents.map((event) => {
+                                    const imageUrl = event.image ? `${process.env.REACT_APP_API_URL}/public${event.image}` : null;
+                                    return (
+                                        <li
+                                            key={event._id}
+                                            className="mb-4 border-b pb-2 hover:border-gray-700 hover:text-black transform transition duration-300 flex items-center justify-between group"
+                                            onMouseEnter={() => setHoveredItem(event)}
+                                            onMouseLeave={() => setHoveredItem(null)}
+                                            onClick={() => handleItemClick(event)}
+                                        >
+                                            {/* Event Details */}
+                                            <div className="w-2/3">
+                                                <h4 className="font-bold text-lg">{event.type}</h4>
+                                                <p>{event.location}</p>
+                                                <p>Organized by: {event.organizer}</p>
+                                            </div>
+
+                                            {/* Display the image if available */}
+                                            {imageUrl && (
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={`${event.type}`}
+                                                    className="w-1/3 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105 "
+                                                    onError={() => console.error("Error loading image:", imageUrl)}
+                                                />
+                                            )}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         )}
                     </div>
@@ -93,26 +112,42 @@ const HappeningNowPage = () => {
                         {activitiesError && <p>Error loading activities</p>}
                         {!activitiesLoading && !activitiesError && filteredActivities.length > 0 && (
                             <ul>
-                                {filteredActivities.map((activity) => (
-                                    <li
-                                        key={activity._id}
-                                        className="mb-4 border-b pb-2 hover:text-black"
-                                        onMouseEnter={() => setHoveredItem(activity)}
-                                        onMouseLeave={() => setHoveredItem(null)}
-                                        onClick={() => handleItemClick(activity)}
-                                    >
-                                        <h4 className="font-bold text-lg">{activity.type}</h4>
-                                        <p>{activity.location}</p>
-                                        <p>Organized by: {activity.organizer}</p>
-                                    </li>
-                                ))}
+                                {filteredActivities.map((activity) => {
+                                    const imageUrl = activity.image ? `${process.env.REACT_APP_API_URL}/public${activity.image}` : null;
+                                    return (
+                                        <li
+                                            key={activity._id}
+                                            className="mb-4 border-b pb-2 hover:border-gray-700 hover:text-black transform  transition duration-300 flex items-center justify-between group"
+                                            onMouseEnter={() => setHoveredItem(activity)}
+                                            onMouseLeave={() => setHoveredItem(null)}
+                                            onClick={() => handleItemClick(activity)}
+                                        >
+                                            {/* Activity Details */}
+                                            <div className="w-2/3">
+                                                <h4 className="font-bold text-lg">{activity.type}</h4>
+                                                <p>{activity.location}</p>
+                                                <p>Organized by: {activity.organizer}</p>
+                                            </div>
+
+                                            {/* Display the image if available */}
+                                            {imageUrl && (
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={`${activity.type}`}
+                                                    className="w-1/3 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105"
+                                                    onError={() => console.error("Error loading image:", imageUrl)}
+                                                />
+                                            )}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         )}
                     </div>
                 </div>
 
                 {/* Right Section: Map */}
-                <div className="hidden md:block md:w-screen">
+                <div className="hidden md:block md:w-2/3 lg:w-2/3 h-full">
                     <Map hoveredItem={hoveredItem} />
                 </div>
             </div>
@@ -125,3 +160,4 @@ const HappeningNowPage = () => {
 };
 
 export default HappeningNowPage;
+

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { menuItems } from '../utils/menuItems';
+import { menuItems } from '../utils/menuItems'; // Ensure this is correctly imported
 import { useToggleMenu } from '../hooks/useToggeMenu';
 import aclogo from '../assets/icons/AC-logo.png';
 import tabtext from '../assets/icons/tab-AC.gif';
@@ -10,12 +10,13 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import HamburgerIcon from './HamburgerIcon';
 import Menu from './Menu';
 import SearchComponent from './SearchComponent';
-import '../tailwind.css'
+import '../tailwind.css';
 
 const Header = ({ events, activities }) => {
     const { isOpen, toggleMenu } = useToggleMenu();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+    // Toggle function for search
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
     };
@@ -49,22 +50,32 @@ const Header = ({ events, activities }) => {
                     transition={{ duration: 0.5 }}
                 >
                     {Object.entries(menuItems).map(([key, item]) => (
-                        item.to ? (
-                            <Link
+                        key === 'search' ? (
+                            <button
                                 key={key}
-                                to={item.to}
+                                onClick={toggleSearch}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
                                 {item.label}
-                            </Link>
+                            </button>
                         ) : (
-                            <a
-                                key={key}
-                                href={item.href}
-                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
-                            >
-                                {item.label}
-                            </a>
+                            item.to ? (
+                                <Link
+                                    key={key}
+                                    to={item.to}
+                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                                >
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={key}
+                                    href={item.href}
+                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                                >
+                                    {item.label}
+                                </a>
+                            )
                         )
                     ))}
                 </motion.div>

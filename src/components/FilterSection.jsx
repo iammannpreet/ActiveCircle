@@ -63,7 +63,7 @@ const FilterSection = ({
                                         setFilter(FilterOptions[key]);
                                         setActiveDialog(null);
                                     }}
-                                    className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                    className="block w-full text-left px-2 py-1 hover:underline"
                                 >
                                     {key.replace('_', ' ')}
                                 </button>
@@ -80,7 +80,7 @@ const FilterSection = ({
                                         setFilter(FilterOptions[key]);
                                         setActiveDialog(null);
                                     }}
-                                    className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                    className="block w-full text-left px-2 py-1 hover:underline"
                                 >
                                     {key.replace('_', ' ')}
                                 </button>
@@ -100,7 +100,7 @@ const FilterSection = ({
                                         setSelectedType(type);
                                         setActiveDialog(null);
                                     }}
-                                    className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                    className="block w-full text-left px-2 py-1 hover:underline"
                                 >
                                     {type.replace('_', ' ')}
                                 </button>
@@ -116,7 +116,7 @@ const FilterSection = ({
                                         setSelectedType(type);
                                         setActiveDialog(null);
                                     }}
-                                    className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                    className="block w-full text-left px-2 py-1 hover:underline"
                                 >
                                     {type.replace('_', ' ')}
                                 </button>
@@ -126,7 +126,7 @@ const FilterSection = ({
                                     setSelectedType('');
                                     setActiveDialog(null);
                                 }}
-                                className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                className="block w-full text-left px-2 py-1 hover:underline"
                             >
                                 All Types
                             </button>
@@ -144,7 +144,7 @@ const FilterSection = ({
                                         setContentFilter(ContentFilterOptions[key]);
                                         setActiveDialog(null);
                                     }}
-                                    className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                    className="block w-full text-left px-2 py-1 hover:underline"
                                 >
                                     {key.replace('_', ' ')}
                                 </button>
@@ -157,7 +157,7 @@ const FilterSection = ({
                                     setContentFilter(ContentFilterOptions.ALL);
                                     setActiveDialog(null);
                                 }}
-                                className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+                                className="block w-full text-left px-2 py-1 hover:underline"
                             >
                                 All
                             </button>
