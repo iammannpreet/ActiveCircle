@@ -41,11 +41,16 @@ module.exports = {
           '0%': { width: '0%' },
           '100%': { width: '100%' },
         },
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
       },
       animation: {
         'underline-1': 'underline 1s forwards',
         'underline-2': 'underline 1s 1s forwards',
         'underline-3': 'underline 1s 2s forwards',
+        scroll: 'scroll 20s linear infinite',
       },
     },
   },

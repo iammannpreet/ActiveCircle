@@ -14,22 +14,23 @@ const Home = () => {
             <Header />
 
             <Hero />
-
-            {/* 
-            <TestPage />
-            <HoverCard />
-            <ParallaxSection />
-
+            <Slider></Slider>
             <CarouselSection
                 fetchData={true}
                 title="Explore Activities" />
+            <AnimatedCard></AnimatedCard>
 
 
-            <div className="home">
 
-            </div> */}
 
-            <AnimatedCard></AnimatedCard><Slider></Slider>
+            <ParallaxSection />
+
+            {/* <div className="home">
+                <TestPage />
+            </div>
+
+            <HoverCard /> */}
+
         </>
     );
 };

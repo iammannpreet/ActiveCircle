@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import useActivities from '../hooks/useActivities';
 import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
-import './AddActivityPage.css'; // Custom CSS for additional animations if needed
+import '../tailwind.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const initialActivityState = {

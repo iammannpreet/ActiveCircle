@@ -18,10 +18,7 @@
 }
 .card__data {
   width: 280px;
-  background-color: var(
-    --container-color,
-    white
-  ); /* Fallback color if variable is not set */
+  background-color: var(--container-color, white);
   padding: 1.5rem 2rem;
   box-shadow: 0 8px 24px hsla(0, 0%, 0%, 0.15);
   border-radius: 1rem;
@@ -31,10 +28,7 @@
   right: 0;
   margin-inline: auto;
   opacity: 0;
-  z-index: 1; /* Ensure it is above the image */
-  transition:
-    opacity 0.5s,
-    transform 1s; /* Added a smoother transition */
+  transition: opacity 1s 1s;
 }
 
 .card__description {
@@ -110,5 +104,38 @@
   }
   50% {
     overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .container {
+    margin-inline: 1rem;
+  }
+  .card__data {
+    width: 250px;
+    padding: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .card__container {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 1120px) {
+  .container {
+    height: 100vh;
+  }
+  .card__container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .card__img {
+    width: 348px;
+  }
+  .card__data {
+    width: 316px;
+    padding-inline: 2.5rem;
   }
 }
