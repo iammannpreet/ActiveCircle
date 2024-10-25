@@ -85,7 +85,7 @@ const EventModal = ({ event, onClose }) => {
                     <span className="font-semibold">Postal Code:</span> {locationDetails ? locationDetails.postal : 'Loading...'}
                 </p>
                 <button
-                    className="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none"
+                    className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600 focus:outline-none"
                     onClick={onClose}
                 >
                     Close

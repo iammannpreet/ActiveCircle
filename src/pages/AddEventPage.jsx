@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+
+import './AddActivityPage.css'; // Custom CSS for animations
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useFetchEvents from '../hooks/useFetchEvents';
 import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-// Initial event state
 const initialEventState = {
     type: '',
     location: '',
@@ -14,7 +16,7 @@ const initialEventState = {
     date: '',
     time: '',
     details: '',
-    image: null // Added field for image
+    image: null
 };
 
 const AddEventPage = () => {
@@ -22,9 +24,9 @@ const AddEventPage = () => {
     const [locationSuggestions, setLocationSuggestions] = useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log("Updated newEvent:", newEvent);
-    }, [newEvent]);
+    const goBack = () => {
+        navigate(-1);
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -60,7 +62,6 @@ const AddEventPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate the form
         const validationError = validateForm();
         if (validationError) {
             toast.error(validationError, {
@@ -70,15 +71,9 @@ const AddEventPage = () => {
         }
 
         try {
-            // Parse and log the date and time
             const dateTime = new Date(`${newEvent.date}T${newEvent.time}`);
-            console.log("Parsed DateTime:", dateTime.toISOString());
-
-            // Fetch and log geocoded location
             const { latitude, longitude } = await geocodeLocation(newEvent.location);
-            console.log("Geocoded Location:", { latitude, longitude });
 
-            // Check for valid latitude and longitude
             if (isNaN(latitude) || isNaN(longitude)) {
                 toast.error("Invalid location. Please check the address.", {
                     position: "top-center"
@@ -86,7 +81,6 @@ const AddEventPage = () => {
                 return;
             }
 
-            // Create FormData object
             const formData = new FormData();
             formData.append('type', newEvent.type);
             formData.append('location', newEvent.location);
@@ -96,17 +90,10 @@ const AddEventPage = () => {
             formData.append('longitude', longitude);
             formData.append('date', dateTime.toISOString());
 
-            // Append the image if it exists
             if (newEvent.image) {
                 formData.append('image', newEvent.image);
             }
 
-            // Log FormData for debugging
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
-
-            // Send the FormData using your existing handleAddEvent function
             await handleAddEvent(formData);
             setNewEvent(initialEventState);
 
@@ -114,101 +101,130 @@ const AddEventPage = () => {
                 position: "top-center"
             });
 
-            // Redirect to the 'Events' page after success
             setTimeout(() => {
                 navigate('/happening-now');
-            }, 1500); // Delay redirect to let the toast show
+            }, 1500);
         } catch (err) {
             toast.error('Failed to add event. Please check the location.', {
                 position: "top-center"
             });
-            console.error("Error adding event:", err); // Add a detailed error message
         }
     };
-
 
     const today = new Date().toISOString().split("T")[0];
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="bg-gradient-to-br from-lightGray to-orange-100 min-h-screen flex items-center justify-center">
             <ToastContainer />
-            <h1 className="text-2xl font-bold mb-4">Add New Event</h1>
-            <form onSubmit={handleSubmit}>
-                <TypeDropdown value={newEvent.type} onChange={handleInputChange} label="Event Type" />
-                {/* Location with Autocomplete */}
-                <label className="block mb-2">Location:</label>
-                <input
-                    type="text"
-                    name="location"
-                    value={newEvent.location}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                {locationSuggestions.length > 0 && (
-                    <ul className="border border-gray-300 bg-white max-h-48 overflow-y-auto mb-4">
-                        {locationSuggestions.map((suggestion, index) => (
-                            <li
-                                key={index}
-                                className="p-2 hover:bg-gray-200 cursor-pointer"
-                                onClick={() => handleLocationSelect(suggestion.place_name)}
-                            >
-                                {suggestion.place_name}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                {/* Date and Time Fields */}
-                <label className="block mb-2">Date:</label>
-                <input
-                    type="date"
-                    name="date"
-                    value={newEvent.date}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    min={today}
-                    required
-                />
-                <label className="block mb-2">Time:</label>
-                <input
-                    type="time"
-                    name="time"
-                    value={newEvent.time}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                {/* Other Fields */}
-                <label className="block mb-2">Details:</label>
-                <input
-                    type="text"
-                    name="details"
-                    value={newEvent.details}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                <label className="block mb-2">Organizer:</label>
-                <input
-                    type="text"
-                    name="organizer"
-                    value={newEvent.organizer}
-                    onChange={handleInputChange}
-                    className="border p-2 mb-4 w-full"
-                    required
-                />
-                {/* Image Upload */}
-                <label className="block mb-2">Image:</label>
-                <input
-                    type="file"
-                    name="image"
-                    onChange={handleFileChange}
-                    className="border p-2 mb-4 w-full"
-                />
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Add Event
+            <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8 space-y-6 relative">
+                <button
+                    onClick={goBack}
+                    className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
+                >
+                    <ArrowBackIcon fontSize="large" />
+                    <span className="text-lg">Back</span>
                 </button>
-            </form>
+                <h1 className="text-3xl font-semibold mb-4 text-center text-darkGray">Add New Event</h1>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <TypeDropdown value={newEvent.type} onChange={handleInputChange} label="Event Type" />
+
+                    <div>
+                        <label className="block text-darkGray font-medium mb-2">Location:</label>
+                        <input
+                            type="text"
+                            name="location"
+                            value={newEvent.location}
+                            onChange={handleInputChange}
+                            className="input border-lightGray focus:ring-primary"
+                            placeholder="Enter event location"
+                            required
+                        />
+                        {locationSuggestions.length > 0 && (
+                            <ul className="dropdown mt-2">
+                                {locationSuggestions.map((suggestion, index) => (
+                                    <li
+                                        key={index}
+                                        className="dropdown-item"
+                                        onClick={() => handleLocationSelect(suggestion.place_name)}
+                                    >
+                                        {suggestion.place_name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-darkGray font-medium mb-2">Date:</label>
+                            <input
+                                type="date"
+                                name="date"
+                                value={newEvent.date}
+                                onChange={handleInputChange}
+                                className="input border-lightGray focus:ring-primary"
+                                min={today}
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-darkGray font-medium mb-2">Time:</label>
+                            <input
+                                type="time"
+                                name="time"
+                                value={newEvent.time}
+                                onChange={handleInputChange}
+                                className="input border-lightGray focus:ring-primary"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-darkGray font-medium mb-2">Details:</label>
+                        <textarea
+                            name="details"
+                            value={newEvent.details}
+                            onChange={handleInputChange}
+                            className="input border-lightGray focus:ring-primary"
+                            placeholder="Provide event details"
+                            rows="4"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-darkGray font-medium mb-2">Organizer:</label>
+                        <input
+                            type="text"
+                            name="organizer"
+                            value={newEvent.organizer}
+                            onChange={handleInputChange}
+                            className="input border-lightGray focus:ring-primary"
+                            placeholder="Enter organizer name"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-darkGray font-medium mb-2">Image:</label>
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={handleFileChange}
+                            className="input border-lightGray focus:ring-primary"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-primary text-white font-bold py-3 rounded-lg shadow-lg hover:scale-105 transition duration-300"
+                    >
+                        Add Event
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };
