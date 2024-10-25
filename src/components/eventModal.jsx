@@ -39,11 +39,9 @@ const EventModal = ({ event, onClose }) => {
     const imageUrl = event.image ? `${API_URL}/public${event.image}` : null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" onClick={onClose}>
-            <div
-                className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg mx-4 relative"
-                onClick={(e) => e.stopPropagation()}
-            >
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg mx-4 relative" onClick={(e) => e.stopPropagation()}>
+
                 <button
                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 focus:outline-none"
                     onClick={onClose}
@@ -87,7 +85,7 @@ const EventModal = ({ event, onClose }) => {
                     <span className="font-semibold">Postal Code:</span> {locationDetails ? locationDetails.postal : 'Loading...'}
                 </p>
                 <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none"
+                    className="bg-primary text-white px-4 py-2 rounded hover:bg-orange-600 focus:outline-none"
                     onClick={onClose}
                 >
                     Close

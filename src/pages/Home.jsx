@@ -4,6 +4,9 @@ import ParallaxSection from '../components/ParallaxSection';
 import HoverCard from '../components/HoverCard';
 import Hero from '../components/Hero';
 import CarouselSection from '../components/CarouselSection';
+import TestPage from '../components/TestPage';
+import AnimatedCard from '../components/AnimatedCard';
+import Slider from '../components/Slider';
 
 const Home = () => {
     return (
@@ -11,18 +14,23 @@ const Home = () => {
             <Header />
 
             <Hero />
-
-            <ParallaxSection />
-
+            <Slider></Slider>
             <CarouselSection
                 fetchData={true}
                 title="Explore Activities" />
+            <AnimatedCard></AnimatedCard>
 
 
-            <div className="home">
 
-                <HoverCard />
+
+            <ParallaxSection />
+
+            {/* <div className="home">
+                <TestPage />
             </div>
+
+            <HoverCard /> */}
+
         </>
     );
 };

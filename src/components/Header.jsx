@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { menuItems } from '../utils/menuItems';
+import { menuItems } from '../utils/menuItems'; // Ensure this is correctly imported
 import { useToggleMenu } from '../hooks/useToggeMenu';
 import aclogo from '../assets/icons/AC-logo.png';
 import tabtext from '../assets/icons/tab-AC.gif';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import HamburgerIcon from './HamburgerIcon';
 import Menu from './Menu';
 import SearchComponent from './SearchComponent';
-import '../tailwind.css'
+import '../tailwind.css';
 
 const Header = ({ events, activities }) => {
     const { isOpen, toggleMenu } = useToggleMenu();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+    // Toggle function for search
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
     };
@@ -24,7 +24,7 @@ const Header = ({ events, activities }) => {
     return (
         <>
             {/* Header Section */}
-            <header className="sticky top-0 z-50 bg-lightGray text-darkGray p-4 md:px-8 lg:px-12 xl:px-16 flex justify-between items-center" style={{ height: '76px' }}>
+            <header className="sticky top-0 z-50 bg-lightGray text-darkGray p-4 md:px-8 lg:px-12 flex justify-between items-center" style={{ height: '76px' }}>
                 {/* Left side: Logo */}
                 <motion.div
                     className="flex items-center relative"
@@ -50,22 +50,32 @@ const Header = ({ events, activities }) => {
                     transition={{ duration: 0.5 }}
                 >
                     {Object.entries(menuItems).map(([key, item]) => (
-                        item.to ? (
-                            <Link
+                        key === 'search' ? (
+                            <button
                                 key={key}
-                                to={item.to}
-                                className="text-base font-light font-interthin text-primary pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                                onClick={toggleSearch}
+                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
                                 {item.label}
-                            </Link>
+                            </button>
                         ) : (
-                            <a
-                                key={key}
-                                href={item.href}
-                                className="text-base font-light font-interthin text-primary pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
-                            >
-                                {item.label}
-                            </a>
+                            item.to ? (
+                                <Link
+                                    key={key}
+                                    to={item.to}
+                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                                >
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={key}
+                                    href={item.href}
+                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                                >
+                                    {item.label}
+                                </a>
+                            )
                         )
                     ))}
                 </motion.div>
@@ -93,7 +103,7 @@ const Header = ({ events, activities }) => {
                     </div>
                 </motion.div>
 
-                <motion.div className=" lg:hidden flex space-x-6 items-center">
+                <motion.div className="flex space-x-6 items-center  lg:hidden " >
                     {/* Search Icon */}
                     <button onClick={toggleSearch} className="transform transition-transform duration-200 hover:scale-120">
                         <SearchIcon className="text-darkGray hover:text-black" />
@@ -121,14 +131,16 @@ const Header = ({ events, activities }) => {
 
             {/* Search Component (with no padding and z-index adjustments) */}
             <motion.div
-                className={`fixed left-0 w-full bg-gray-200 z-50 ${isSearchOpen ? 'block' : 'hidden'}`}
-                style={{ top: '76px' }}  // Fixed top value to start below the header
-                initial={{ y: '-100%', opacity: 0 }}  // Initially hidden above the header
-                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }}  // Slides in from above
-                transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+                className="fixed left-0 w-full bg-gray-200 z-50"
+                style={{ top: '76px' }} // Fixed top value to start below the header
+                initial={{ y: '-100%', opacity: 0 }} // Start hidden above the header
+                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }} // Animate visibility based on state
+                transition={{ type: 'spring', stiffness: 100, damping: 20 }} // Smooth spring effect
             >
-                <SearchComponent events={events} activities={activities} />
+                {/* Conditionally Render Search Component if search is open */}
+                {isSearchOpen && <SearchComponent events={events} activities={activities} />}
             </motion.div>
+
         </>
     );
 };

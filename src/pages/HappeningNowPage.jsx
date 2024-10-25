@@ -1,54 +1,36 @@
+
 import React, { useState, useEffect } from 'react';
 import useFetchEvents from '../hooks/useFetchEvents';
 import useActivities from '../hooks/useActivities';
 import Map from '../components/Map';
-import FilterButton from '../components/FilterButton'; // Import the reusable button
-import { applyDateFilter } from '../utils/dateFilters'; // Import the date filter logic
-import { applyTypeFilter } from '../utils/typeFilters'; // Import the type filter logic
-import { applyContentFilter } from '../utils/contentFilters'; // Import the content filter logic
-import { TypeFilterOptions } from '../utils/filterOptions'; // Import the predefined filter options
-
-// Date-based filter options
-const FilterOptions = {
-    ALL: 'all',
-    TODAY: 'today',
-    THIS_WEEKEND: 'this_weekend',
-    NEXT_7_DAYS: 'next_7_days',
-    NEXT_10_DAYS: 'next_10_days',
-    THIS_MONTH: 'this_month',
-};
-
-// Content filter options
-const ContentFilterOptions = {
-    EVENTS_ONLY: 'events_only',
-    ACTIVITIES_ONLY: 'activities_only',
-    ALL: 'all',
-};
+import { applyDateFilter } from '../utils/dateFilters';
+import { applyTypeFilter } from '../utils/typeFilters';
+import { applyContentFilter } from '../utils/contentFilters';
+import { TypeFilterOptions } from '../utils/filterOptions';
+import EventModal from '../components/eventModal';
+import Header from '../components/Header';
+import FilterSection from '../components/FilterSection';
 
 const HappeningNowPage = () => {
-    const { events, loading: eventsLoading, error: eventsError, handleDeleteEvent } = useFetchEvents(process.env.REACT_APP_API_URL);
-    const { activities, loading: activitiesLoading, error: activitiesError, handleDeleteActivity } = useActivities();
-
+    const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
+    const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([]);
-    const [filter, setFilter] = useState(FilterOptions.ALL);
-    const [contentFilter, setContentFilter] = useState(ContentFilterOptions.ALL);
+    const [filter, setFilter] = useState('all');
+    const [contentFilter, setContentFilter] = useState('all');
     const [selectedType, setSelectedType] = useState('');
     const [hoveredItem, setHoveredItem] = useState(null);
+    const [activeDialog, setActiveDialog] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
-        // Apply Date Filter
         const { filteredEvents: eventsFiltered, filteredActivities: activitiesFiltered } = applyDateFilter(filter, events, activities);
-
-        // Apply Type Filter
         const { filteredEvents: typeFilteredEvents, filteredActivities: typeFilteredActivities } = applyTypeFilter(
             selectedType,
             eventsFiltered,
             activitiesFiltered,
             TypeFilterOptions
         );
-
-        // Apply Content Filter
         const { filteredEvents: finalFilteredEvents, filteredActivities: finalFilteredActivities } = applyContentFilter(
             contentFilter,
             typeFilteredEvents,
@@ -59,111 +41,124 @@ const HappeningNowPage = () => {
         setFilteredActivities(finalFilteredActivities);
     }, [filter, selectedType, contentFilter, events, activities]);
 
+    // Define the handleItemClick function to open the modal with the selected item
+    const handleItemClick = (item) => {
+        setSelectedItem(item);
+    };
+
     return (
-        <div className="flex flex-col md:flex-row h-screen">
-            <div>
-                <a href="/">Back</a>
+        <>
+            <Header />
+            <div className="flex p-4 md:px-8 lg:px-12 bg-lightGray text-darkGray h-screen">
+                {/* Left Section: List */}
+                <div className='w-full md:w-1/2 lg:w-1/3 pr-4 h-full overflow-y-auto'>
+                    <h2 className="text-2xl font-bold text-black text-center md:text-start mb-4">Happening Now</h2>
+                    <div className='flex align-middle justify-center md:justify-start'>
+                        <FilterSection
+                            filter={filter}
+                            setFilter={setFilter}
+                            selectedType={selectedType}
+                            setSelectedType={setSelectedType}
+                            contentFilter={contentFilter}
+                            setContentFilter={setContentFilter}
+                            activeDialog={activeDialog}
+                            setActiveDialog={setActiveDialog}
+                        />
+                    </div>
+                    {/* Events Section */}
+                    <div className="mb-6">
+                        <h3 className="text-xl font-bold mb-2 text-black">Events</h3>
+                        {eventsLoading && <p>Loading events...</p>}
+                        {eventsError && <p>Error loading events</p>}
+                        {!eventsLoading && !eventsError && filteredEvents.length > 0 && (
+                            <ul>
+                                {filteredEvents.map((event) => {
+                                    const imageUrl = event.image ? `${process.env.REACT_APP_API_URL}/public${event.image}` : null;
+                                    return (
+                                        <li
+                                            key={event._id}
+                                            className="mb-4 border-b pb-2 hover:border-gray-700 hover:text-black transform transition duration-300 flex items-center justify-between group"
+                                            onMouseEnter={() => setHoveredItem(event)}
+                                            onMouseLeave={() => setHoveredItem(null)}
+                                            onClick={() => handleItemClick(event)}
+                                        >
+                                            {/* Event Details */}
+                                            <div className="w-1/2">
+                                                <h4 className="font-bold text-base">{event.type}</h4>
+                                                <p className='text-xs lg:text-sm mt-2'>{event.location}</p>
+                                                <p className='text-xs lg:text-sm mt-2'>Organized by: {event.organizer}</p>
+                                            </div>
+
+                                            {/* Display the image if available */}
+                                            {imageUrl && (
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={`${event.type}`}
+                                                    className="w-1/2 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105 "
+                                                    onError={() => console.error("Error loading image:", imageUrl)}
+                                                />
+                                            )}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        )}
+                    </div>
+
+                    {/* Activities Section */}
+                    <div>
+                        <h3 className="text-xl font-bold mb-2 text-black">Activities</h3>
+                        {activitiesLoading && <p>Loading activities...</p>}
+                        {activitiesError && <p>Error loading activities</p>}
+                        {!activitiesLoading && !activitiesError && filteredActivities.length > 0 && (
+                            <ul>
+                                {filteredActivities.map((activity) => {
+                                    const imageUrl = activity.image ? `${process.env.REACT_APP_API_URL}/public${activity.image}` : null;
+                                    return (
+                                        <li
+                                            key={activity._id}
+                                            className="mb-4 border-b pb-2 hover:border-gray-700 hover:text-black transform  transition duration-300 flex items-center justify-between group"
+                                            onMouseEnter={() => setHoveredItem(activity)}
+                                            onMouseLeave={() => setHoveredItem(null)}
+                                            onClick={() => handleItemClick(activity)}
+                                        >
+
+                                            {/* Activity Details */}
+                                            <div className="w-1/2">
+                                                <h4 className="font-bold text-base">{activity.type}</h4>
+                                                <p className='text-xs lg:text-sm mt-2'>{activity.location}</p>
+                                                <p className='text-xs lg:text-sm mt-2'>Organized by: {activity.organizer}</p>
+                                            </div>
+
+                                            {/* Display the image if available */}
+                                            {imageUrl && (
+                                                <img
+                                                    src={imageUrl}
+                                                    alt={`${activity.type}`}
+                                                    className="w-1/2 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105"
+                                                    onError={() => console.error("Error loading image:", imageUrl)}
+                                                />
+                                            )}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+
+                {/* Right Section: Map */}
+                <div className="hidden md:block md:w-1/2 lg:w-2/3 h-full">
+                    <Map hoveredItem={hoveredItem} />
+                </div>
             </div>
 
-            {/* Filter Section */}
-            <div className="w-full md:w-1/3 bg-white p-4 overflow-auto">
-                <h2 className="text-2xl font-bold mb-4">Happening Now</h2>
-
-                {/* Date Filter Buttons */}
-                <div className="filter-buttons mb-4">
-                    <FilterButton label="All Dates" onClick={() => setFilter(FilterOptions.ALL)} />
-                    <FilterButton label="Today" onClick={() => setFilter(FilterOptions.TODAY)} />
-                    <FilterButton label="This Weekend" onClick={() => setFilter(FilterOptions.THIS_WEEKEND)} />
-                    <FilterButton label="Next 7 Days" onClick={() => setFilter(FilterOptions.NEXT_7_DAYS)} />
-                    <FilterButton label="Next 10 Days" onClick={() => setFilter(FilterOptions.NEXT_10_DAYS)} />
-                    <FilterButton label="This Month" onClick={() => setFilter(FilterOptions.THIS_MONTH)} />
-                </div>
-
-                {/* Type Filter Buttons */}
-                <div className="filter-buttons mb-4">
-                    <FilterButton label="Gym Activities" onClick={() => setSelectedType('GYM')} />
-                    <FilterButton label="Yoga Sessions" onClick={() => setSelectedType('YOGA')} />
-                    <FilterButton label="Walking/Running" onClick={() => setSelectedType('WALK_RUN')} />
-                    <FilterButton label="Fishing" onClick={() => setSelectedType('FISHING')} />
-                    <FilterButton label="Sports" onClick={() => setSelectedType('SPORTS')} />
-                    <FilterButton label="Water Activities" onClick={() => setSelectedType('WATER')} />
-                    <FilterButton label="Dance" onClick={() => setSelectedType('DANCE')} />
-                    <FilterButton label="Cycling" onClick={() => setSelectedType('CYCLING')} />
-                    <FilterButton label="All Types" onClick={() => setSelectedType('')} />
-                </div>
-
-                {/* Content Filter Buttons */}
-                <div className="filter-buttons mb-4">
-                    <FilterButton label="All" onClick={() => setContentFilter(ContentFilterOptions.ALL)} />
-                    <FilterButton label="Events Only" onClick={() => setContentFilter(ContentFilterOptions.EVENTS_ONLY)} />
-                    <FilterButton label="Activities Only" onClick={() => setContentFilter(ContentFilterOptions.ACTIVITIES_ONLY)} />
-                </div>
-
-                {/* Events Section */}
-                <div className="mb-6">
-                    <h3 className="text-xl font-bold mb-2">Events</h3>
-                    {eventsLoading && <p>Loading events...</p>}
-                    {eventsError && <p>Error loading events</p>}
-                    {!eventsLoading && !eventsError && filteredEvents.length > 0 && (
-                        <ul>
-                            {filteredEvents.map((event) => (
-                                <li
-                                    key={event._id}
-                                    className="mb-4 border-b pb-2"
-                                    onMouseEnter={() => setHoveredItem(event)}
-                                    onMouseLeave={() => setHoveredItem(null)}
-                                >
-                                    <h4 className="font-bold text-lg">{event.type}</h4>
-                                    <p>{event.location}</p>
-                                    <p>Organized by: {event.organizer}</p>
-                                    <button
-                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                                        onClick={() => handleDeleteEvent(event._id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-
-                {/* Activities Section */}
-                <div>
-                    <h3 className="text-xl font-bold mb-2">Activities</h3>
-                    {activitiesLoading && <p>Loading activities...</p>}
-                    {activitiesError && <p>Error loading activities</p>}
-                    {!activitiesLoading && !activitiesError && filteredActivities.length > 0 && (
-                        <ul>
-                            {filteredActivities.map((activity) => (
-                                <li
-                                    key={activity._id}
-                                    className="mb-4 border-b pb-2"
-                                    onMouseEnter={() => setHoveredItem(activity)}
-                                    onMouseLeave={() => setHoveredItem(null)}
-                                >
-                                    <h4 className="font-bold text-lg">{activity.type}</h4>
-                                    <p>{activity.location}</p>
-                                    <p>Organized by: {activity.organizer}</p>
-                                    <button
-                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                                        onClick={() => handleDeleteActivity(activity._id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            </div>
-
-            {/* Right Section: Map */}
-            <div className="w-full md:w-2/3">
-                <Map hoveredItem={hoveredItem} />
-            </div>
-        </div>
+            {selectedItem && (
+                <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />
+            )}
+        </>
     );
 };
 
 export default HappeningNowPage;
+
