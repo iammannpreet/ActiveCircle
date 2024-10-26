@@ -115,7 +115,7 @@ const AddActivityPage = () => {
                     onClick={goBack}
                     className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
                 >
-                    <ArrowBackIcon fontSize="large" />
+                    <ArrowBackIcon fontSize="" />
                     <span className="text-lg">Back</span>
                 </button>
                 <h1 className="text-3xl font-semibold mb-4 text-center text-darkGray">Add New Activity</h1>

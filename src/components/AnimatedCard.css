@@ -1,7 +1,6 @@
 .container {
   display: grid;
   place-items: center;
-  margin-inline: 1.5rem;
   padding-block: 5rem;
 }
 .card__container {
@@ -122,11 +121,14 @@
     grid-template-columns: repeat(2, 1fr);
     column-gap: 1.5rem;
   }
+  .container {
+    margin-inline: 2rem;
+  }
 }
 
 @media screen and (min-width: 1120px) {
   .container {
-    height: 100vh;
+    margin-inline: none;
   }
   .card__container {
     grid-template-columns: repeat(3, 1fr);

@@ -1,5 +1,4 @@
 
-import './AddActivityPage.css'; // Custom CSS for animations
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -121,7 +120,7 @@ const AddEventPage = () => {
                     onClick={goBack}
                     className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
                 >
-                    <ArrowBackIcon fontSize="large" />
+                    <ArrowBackIcon fontSize="small" />
                     <span className="text-lg">Back</span>
                 </button>
                 <h1 className="text-3xl font-semibold mb-4 text-center text-darkGray">Add New Event</h1>
