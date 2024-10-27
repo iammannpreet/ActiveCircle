@@ -8,7 +8,7 @@ User Profile
 Primary users:
 
 Fitness Enthusiasts: People who seek workout buddies or want to organize group workouts.
-Parents: Individuals looking to arrange or join kids' playdates.
+Parents: Individuals looking to arrange or join kids' playdates. 
 Health-Conscious Individuals: People interested in organizing or joining community walks or yoga sessions.
 Community Organizers: Individuals or organizations that host events for welfare, social, or health-focused groups.
 Special Considerations:
