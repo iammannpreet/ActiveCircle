@@ -70,7 +70,7 @@ type: string (Gym, Walk, Kids' Play, Yoga)
 location: string
 organizerId: userId
 details: string (e.g., workout type, kids' activity details)
-Listings:
+Listings: 
 
 listingId: unique identifier
 activityId: activityId
