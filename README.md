@@ -78,7 +78,7 @@ organizerId: userId
 participants: array of userIds
 Endpoints
 POST /activities: Creates a new activity listing.
-Parameters: activityType, location, details
+Parameters: activityType, location, details 
 Example Response: { activityId: '123', message: 'Activity created successfully.' }
 GET /activities: Retrieves a list of activities based on filters.
 Parameters: type, location, radius
