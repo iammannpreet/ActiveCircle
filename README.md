@@ -5,7 +5,7 @@ Problem Space
 Many individuals struggle to find local activities that align with their fitness or social interests. There’s a growing need for a platform that consolidates community-driven events, making it easier for people to discover, join, or organize events near them. ActiveCircle solves this problem by providing a simple and effective platform for discovering and managing fitness, family-friendly, and wellness activities in their area.
 
 User Profile
-Primary users:
+Primary users: 
 
 Fitness Enthusiasts: People who seek workout buddies or want to organize group workouts.
 Parents: Individuals looking to arrange or join kids' playdates. 
