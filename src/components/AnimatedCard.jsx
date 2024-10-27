@@ -9,7 +9,7 @@ const AnimatedCard = () => {
             <h1 className='hidden md:block md:text-center md:mb-2  lg:text-lg text-darkGray'>Learn More</h1>
             <div className='card__container'>
                 <div className='md:flex
-                md:gap-4 pb-12 md:pd-8'>
+                md:gap-4 md:pb-12 md:pd-8'>
                     <article className='card__article'>
                         <img src={run} alt='image' className='card__img' />
                         <div className='card__data'>

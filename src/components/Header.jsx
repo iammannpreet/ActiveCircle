@@ -66,13 +66,11 @@ const Header = ({ events, activities }) => {
                             </button>
                         ) : item.to && item.to.startsWith('#') ? (
                             <HashLink
-                                key={key}
                                 smooth
-                                to={item.to}
-                                scroll={el => scrollWithOffset(el)}
+                                to="/#partner"
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
-                                {item.label}
+                                Our Mission
                             </HashLink>
                         ) : (
                             <Link
