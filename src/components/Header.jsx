@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { menuItems } from '../utils/menuItems'; // Ensure this is correctly imported
+import { menuItems } from '../utils/menuItems';
 import { useToggleMenu } from '../hooks/useToggeMenu';
+import { HashLink } from 'react-router-hash-link';
 import aclogo from '../assets/icons/AC-logo.png';
 import tabtext from '../assets/icons/tab-AC.gif';
 import SearchIcon from '@mui/icons-material/Search';
@@ -19,6 +20,11 @@ const Header = ({ events, activities }) => {
     // Toggle function for search
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
+    };
+    const scrollWithOffset = (el) => {
+        const yOffset = -window.innerHeight / 2 + el.getBoundingClientRect().height / 2;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
     };
 
     return (
@@ -44,7 +50,7 @@ const Header = ({ events, activities }) => {
 
                 {/* Desktop View: Menu Links */}
                 <motion.div
-                    className="hidden lg:flex space-x-8 items-center"
+                    className="hidden lg:flex space-x-6 items-center"
                     initial={{ x: 100, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
@@ -58,27 +64,28 @@ const Header = ({ events, activities }) => {
                             >
                                 {item.label}
                             </button>
+                        ) : item.to && item.to.startsWith('#') ? (
+                            <HashLink
+                                key={key}
+                                smooth
+                                to={item.to}
+                                scroll={el => scrollWithOffset(el)}
+                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                            >
+                                {item.label}
+                            </HashLink>
                         ) : (
-                            item.to ? (
-                                <Link
-                                    key={key}
-                                    to={item.to}
-                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
-                                >
-                                    {item.label}
-                                </Link>
-                            ) : (
-                                <a
-                                    key={key}
-                                    href={item.href}
-                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
-                                >
-                                    {item.label}
-                                </a>
-                            )
+                            <Link
+                                key={key}
+                                to={item.to}
+                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                            >
+                                {item.label}
+                            </Link>
                         )
                     ))}
                 </motion.div>
+
 
                 {/* Right side: Login and Sign Up */}
                 <motion.div

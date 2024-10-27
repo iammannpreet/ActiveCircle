@@ -7,6 +7,7 @@ import useFetchEvents from '../hooks/useFetchEvents';
 import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Header from '../components/Header';
 
 const initialEventState = {
     type: '',
@@ -112,7 +113,8 @@ const AddEventPage = () => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    return (
+    return (<>
+        <Header></Header>
         <div className="bg-gradient-to-br from-lightGray to-orange-100 min-h-screen flex items-center justify-center">
             <ToastContainer />
             <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8 space-y-6 relative">
@@ -225,6 +227,7 @@ const AddEventPage = () => {
                 </form>
             </div>
         </div>
+    </>
     );
 };
 
