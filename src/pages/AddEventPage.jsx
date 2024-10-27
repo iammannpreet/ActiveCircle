@@ -1,5 +1,4 @@
 
-import './AddActivityPage.css'; // Custom CSS for animations
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -8,6 +7,7 @@ import useFetchEvents from '../hooks/useFetchEvents';
 import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Header from '../components/Header';
 
 const initialEventState = {
     type: '',
@@ -113,7 +113,8 @@ const AddEventPage = () => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    return (
+    return (<>
+        <Header></Header>
         <div className="bg-gradient-to-br from-lightGray to-orange-100 min-h-screen flex items-center justify-center">
             <ToastContainer />
             <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8 space-y-6 relative">
@@ -121,7 +122,7 @@ const AddEventPage = () => {
                     onClick={goBack}
                     className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
                 >
-                    <ArrowBackIcon fontSize="large" />
+                    <ArrowBackIcon fontSize="small" />
                     <span className="text-lg">Back</span>
                 </button>
                 <h1 className="text-3xl font-semibold mb-4 text-center text-darkGray">Add New Event</h1>
@@ -226,6 +227,7 @@ const AddEventPage = () => {
                 </form>
             </div>
         </div>
+    </>
     );
 };
 

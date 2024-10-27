@@ -1,36 +1,21 @@
 import React from 'react';
 import Header from '../components/Header';
-import ParallaxSection from '../components/ParallaxSection';
 import HoverCard from '../components/HoverCard';
 import Hero from '../components/Hero';
 import CarouselSection from '../components/CarouselSection';
-import TestPage from '../components/TestPage';
-import AnimatedCard from '../components/AnimatedCard';
-import Slider from '../components/Slider';
+
+import OurMission from '../components/OurMission';
+import Footer from '../components/Footer';
 
 const Home = () => {
     return (
         <>
             <Header />
-
             <Hero />
-            <Slider></Slider>
-            <CarouselSection
-                fetchData={true}
-                title="Explore Activities" />
-            <AnimatedCard></AnimatedCard>
+            <CarouselSection fetchData={true} />
 
-
-
-
-            <ParallaxSection />
-
-            {/* <div className="home">
-                <TestPage />
-            </div>
-
-            <HoverCard /> */}
-
+            <OurMission></OurMission>
+            <Footer></Footer>
         </>
     );
 };
