@@ -28,7 +28,7 @@ const Header = ({ events, activities }) => {
     };
 
     return (
-        <>
+        <div>
             {/* Header Section */}
             <header className="sticky top-0 z-50 bg-lightGray text-darkGray p-4 md:px-8 lg:px-12 flex justify-between items-center" style={{ height: '76px' }}>
                 {/* Left side: Logo */}
@@ -58,7 +58,7 @@ const Header = ({ events, activities }) => {
                     {Object.entries(menuItems).map(([key, item]) => (
                         key === 'search' ? (
                             <button
-                                key={key}
+                                key={key} // Missing key here causes the warning
                                 onClick={toggleSearch}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
@@ -66,6 +66,7 @@ const Header = ({ events, activities }) => {
                             </button>
                         ) : item.to && item.to.startsWith('#') ? (
                             <HashLink
+                                key={key} // Missing key here causes the warning
                                 smooth
                                 to="/#partner"
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
@@ -74,7 +75,7 @@ const Header = ({ events, activities }) => {
                             </HashLink>
                         ) : (
                             <Link
-                                key={key}
+                                key={key} // Missing key here causes the warning
                                 to={item.to}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
@@ -82,6 +83,7 @@ const Header = ({ events, activities }) => {
                             </Link>
                         )
                     ))}
+
                 </motion.div>
 
 
@@ -146,7 +148,7 @@ const Header = ({ events, activities }) => {
                 {isSearchOpen && <SearchComponent events={events} activities={activities} />}
             </motion.div>
 
-        </>
+        </div>
     );
 };
 

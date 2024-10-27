@@ -10,7 +10,7 @@ const Hero = () => {
     useTextShadowAnimation();
 
     return (
-        <div className="hero-container h-1/2 lg:h-screen w-full p-4 pb-8 md:p-8 lg:px-16  bg-black overflow-hidden cursor-none justify-center">
+        <div className=" hero-container h-1/2 lg:h-screen w-full p-4 pb-8 md:p-8 lg:px-16  bg-black overflow-hidden cursor-none justify-center">
             <div
                 className="cursor-follower"
                 style={{
