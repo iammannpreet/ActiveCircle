@@ -9,12 +9,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function App() {
   return (
     <Router>
-      <div>
+      <div className='bg-lightGray'> {/* Fallback color */}
         <Routes>
-          <Route path="/" element={<Home />} />  {/* Home Page Route */}
-          <Route path="/add-activity" element={<AddActivityPage />} />  {/* Add Activity Page */}
-          <Route path="/add-event" element={<AddEventPage />} />  {/* Add Event Page */}
-          <Route path="/happening-now" element={<HappeningNowPage />} />  {/* Happening Now Page */}
+          <Route path="/" element={<Home />} />
+          <Route path="/add-activity" element={<AddActivityPage />} />
+          <Route path="/add-event" element={<AddEventPage />} />
+          <Route path="/happening-now" element={<HappeningNowPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

@@ -3,7 +3,7 @@ import AnimatedCard from '../components/AnimatedCard'
 import Slider from '../components/Slider'
 const OurMission = () => {
     return (
-        <div className=' md:flex w-screen md:px-12 md:py-8 h-auto'>
+        <div className=' bg-lightGray md:flex w-screen md:px-12 md:py-8 h-auto'>
             <div className='hidden md:block w-1/2 h-[350px]'>
                 <div className='h-[300px] md:h-[450px] lg:h-[490px] overflow-y-auto px-4 '>
                     <h1 className='pb-2 text-center text-primary text-3xl hover:underline'>Our Mission</h1>

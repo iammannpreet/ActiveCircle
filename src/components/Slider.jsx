@@ -21,8 +21,8 @@ const Slider = () => {
                 ))}
             </div>
             {/* Gradient Fade Effect */}
-            <div className="absolute inset-y-0 left-0 w-[50px] z-10 bg-gradient-to-r from-[#ffffff] to-transparent"></div>
-            <div className="absolute inset-y-0 right-0 w-[50px] z-10 bg-gradient-to-l from-[#ffffff] to-transparent"></div>
+            <div className="absolute inset-y-0 left-0 w-[50px] z-10 bg-gradient-to-r from-lightGray to-transparent"></div>
+            <div className="absolute inset-y-0 right-0 w-[50px] z-10 bg-gradient-to-l from-lightGray to-transparent"></div>
         </div>
     );
 };
