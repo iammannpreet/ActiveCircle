@@ -23,7 +23,7 @@ const OurMission = () => {
                     <AnimatedCard />
                 </div>
                 <div className='md:w-[80%]'>
-                    <div className='ml-16'>
+                    <div className='px-8 md:ml-16 md:px-0'>
                         <Slider /></div>
                     <div className='p-4 md:hidden py-4 pb-12'>
                         <div className='h-[300px] md:h-[478px] overflow-y-auto px-4 '>
