@@ -1,4 +1,3 @@
-// OnboardingModal.jsx
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
@@ -24,7 +23,7 @@ const OnboardingModal = ({ isVisible, onClose }) => {
         if (currentStep < steps.length - 1) {
             setCurrentStep(currentStep + 1);
         } else {
-            onClose(); // Close modal on last step
+            onClose();
         }
     };
 

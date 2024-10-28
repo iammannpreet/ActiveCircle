@@ -10,7 +10,6 @@ const CarouselSection = ({ data, fetchData, title }) => {
 
     const API_URL = process.env.REACT_APP_API_URL; // Using environment variable for API URL
 
-    // Fetch data if the fetchData prop is provided
     useEffect(() => {
         const fetchActivities = async () => {
             if (fetchData) {

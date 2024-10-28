@@ -67,7 +67,7 @@ const Footer = () => {
                                 />
                             </a>
                         </div>
-                        <p className="text-primary text-sm md:text-base ">©Copyright. BrainStation capstone.</p>
+                        <p className="text-primary text-sm md:text-base ">©Copyright. Capstone BrainStation.</p>
                     </div>
                 </div>
             </footer>

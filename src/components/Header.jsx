@@ -58,7 +58,7 @@ const Header = ({ events, activities }) => {
                     {Object.entries(menuItems).map(([key, item]) => (
                         key === 'search' ? (
                             <button
-                                key={key} // Missing key here causes the warning
+                                key={key}
                                 onClick={toggleSearch}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
@@ -66,7 +66,7 @@ const Header = ({ events, activities }) => {
                             </button>
                         ) : item.to && item.to.startsWith('#') ? (
                             <HashLink
-                                key={key} // Missing key here causes the warning
+                                key={key}
                                 smooth
                                 to="/#partner"
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
@@ -75,7 +75,7 @@ const Header = ({ events, activities }) => {
                             </HashLink>
                         ) : (
                             <Link
-                                key={key} // Missing key here causes the warning
+                                key={key}
                                 to={item.to}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
@@ -136,15 +136,13 @@ const Header = ({ events, activities }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={toggleSearch}></div>
             )}
 
-            {/* Search Component (with no padding and z-index adjustments) */}
             <motion.div
                 className="fixed left-0 w-full bg-gray-200 z-50"
-                style={{ top: '76px' }} // Fixed top value to start below the header
-                initial={{ y: '-100%', opacity: 0 }} // Start hidden above the header
-                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }} // Animate visibility based on state
-                transition={{ type: 'spring', stiffness: 100, damping: 20 }} // Smooth spring effect
+                style={{ top: '76px' }}
+                initial={{ y: '-100%', opacity: 0 }}
+                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 100, damping: 20 }}
             >
-                {/* Conditionally Render Search Component if search is open */}
                 {isSearchOpen && <SearchComponent events={events} activities={activities} />}
             </motion.div>
 

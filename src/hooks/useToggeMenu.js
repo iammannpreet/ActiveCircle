@@ -1,4 +1,3 @@
-// src/hooks/useToggleMenu.js
 import { useState, useEffect } from 'react';
 
 export const useToggleMenu = () => {

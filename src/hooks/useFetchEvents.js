@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchEvents, addEvent, deleteEvent } from '../services/eventService'; // Assuming you have event services
+import { fetchEvents, addEvent, deleteEvent } from '../services/eventService';
 
 const useFetchEvents = (apiUrl) => {
     const [events, setEvents] = useState([]);

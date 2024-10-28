@@ -1,7 +1,6 @@
 import React from 'react';
-import '../tailwind.css'; // Make sure Tailwind CSS is imported in your main CSS entry point
+import '../tailwind.css';
 
-// Dynamically import all images from the directory
 const importAll = (r) => r.keys().map((item) => r(item));
 const images = importAll(require.context('../assets/icons/partners', false, /\.(png|jpe?g|svg)$/));
 

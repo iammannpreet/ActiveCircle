@@ -11,15 +11,10 @@ export const fetchEvents = () => {
         });
 };
 
-// Add a new event
 export const addEvent = (newEvent) => {
     return fetch(`${API_URL}/api/v1/events`, {
         method: 'POST',
         body: newEvent,
-        // headers: {
-        //     'Content-Type': 'application/json',
-        // },
-        // body: JSON.stringify(newEvent),
     }).then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

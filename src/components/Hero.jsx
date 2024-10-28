@@ -1,6 +1,6 @@
 import React from "react";
-import useCursorPosition from "../hooks/useCursorPosition"; // Import the custom hook
-import useTextShadowAnimation from "../hooks/useTextShadowAnimation"; // Import the new custom hook
+import useCursorPosition from "../hooks/useCursorPosition";
+import useTextShadowAnimation from "../hooks/useTextShadowAnimation";
 import Glowingpng from "./Glowingpng";
 import specialC from "../assets/icons/special-c.svg"
 import { Link } from "react-router-dom";

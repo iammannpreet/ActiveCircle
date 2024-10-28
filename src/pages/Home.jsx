@@ -13,7 +13,6 @@ const Home = () => {
             <Header />
             <Hero />
             <CarouselSection fetchData={true} />
-
             <OurMission></OurMission>
             <Footer></Footer>
         </>
