@@ -51,3 +51,6 @@ Finding activities that align with specific interests, locations, and schedules 
 ActiveCircle is an effective, community-focused app that makes it easier for people to discover and participate in local activities. While the current version focuses on core features like creating, viewing, and searching activities, future updates will include profile management, safety features, payment processing, and RSVP capabilities. This project showcases practical solutions for community engagement through shared interests and local activities.
 
 **Tech Stack Used**: React.js, Tailwind CSS, Node.js, Express.js, MongoDB, Mapbox API
+
+###Installation and Setup
+To fully experience ActiveCircle, you need to install the required dependencies, set up the environment variables, and seed the database with initial data. Instructions on setting up and running the application are detailed in the Installation Guide section. Additionally, remember to create and add at least three activities and events to explore the app’s complete features.
