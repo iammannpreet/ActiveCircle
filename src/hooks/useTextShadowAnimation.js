@@ -1,4 +1,3 @@
-// src/hooks/useTextShadowAnimation.js
 import { useEffect } from "react";
 
 const useTextShadowAnimation = (selector = ".line") => {

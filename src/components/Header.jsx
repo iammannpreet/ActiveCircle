@@ -117,9 +117,9 @@ const Header = ({ events, activities }) => {
                     </button>
 
                     {/* Filter Icon */}
-                    <div className="transform transition-transform duration-200 hover:scale-120">
+                    <button onClick={toggleSearch} className="transform transition-transform duration-200 hover:scale-120">
                         <FilterAltIcon className="text-darkGray hover:text-black" />
-                    </div>
+                    </button>
 
                     {/* Hamburger Icon */}
                     <div className="transform transition-transform duration-200 hover:scale-120 ">

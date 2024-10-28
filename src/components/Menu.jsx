@@ -44,8 +44,10 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.6 }}
                 onClick={toggleMenu}
-            >
-                Create an Activity
+            ><Link to="//add-activity">
+                    Create an Activity
+                </Link>
+
             </motion.a>
             <motion.a
                 href="#services"
@@ -55,7 +57,10 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.7 }}
                 onClick={toggleMenu}
-            >Host an Event
+            >
+                <Link to="/add-event">
+                    Host an Event
+                </Link>
             </motion.a>
             <motion.a
                 href="#contact"
