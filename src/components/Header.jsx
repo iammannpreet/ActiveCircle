@@ -1,3 +1,4 @@
+// src/components/Header.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -21,6 +22,7 @@ const Header = ({ events, activities }) => {
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
     };
+
     const scrollWithOffset = (el) => {
         const yOffset = -window.innerHeight / 2 + el.getBoundingClientRect().height / 2;
         const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -83,9 +85,7 @@ const Header = ({ events, activities }) => {
                             </Link>
                         )
                     ))}
-
                 </motion.div>
-
 
                 {/* Right side: Login and Sign Up */}
                 <motion.div
@@ -95,18 +95,21 @@ const Header = ({ events, activities }) => {
                     transition={{ duration: 0.5 }}
                 >
                     <div className="w-16 h-8 bg-black overflow-hidden inline-block rounded-xl">
-                        <a
-                            href="#login"
+                        <Link
+                            to="/login" // Update to use Link for navigation
                             className="relative z-10 text-sm text-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
                         >
                             Log In
-                        </a>
+                        </Link>
                     </div>
 
-                    <div className=" w-16 h-8 bg-white overflow-hidden inline-block rounded-xl">
-                        <a href="#signup" className="relative z-10 text-sm bg-primary text-black rounded-lg hover:bg-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300">
+                    <div className="w-16 h-8 bg-white overflow-hidden inline-block rounded-xl">
+                        <Link
+                            to="/register" // Update to use Link for navigation
+                            className="relative z-10 text-sm bg-primary text-black rounded-lg hover:bg-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
+                        >
                             Sign Up
-                        </a>
+                        </Link>
                     </div>
                 </motion.div>
 
