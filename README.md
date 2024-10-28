@@ -52,5 +52,5 @@ ActiveCircle is an effective, community-focused app that makes it easier for peo
 
 **Tech Stack Used**: React.js, Tailwind CSS, Node.js, Express.js, MongoDB, Mapbox API
 
-###Installation and Setup
+### Installation and Setup
 To fully experience ActiveCircle, you need to install the required dependencies, set up the environment variables, and seed the database with initial data. Instructions on setting up and running the application are detailed in the Installation Guide section. Additionally, remember to create and add at least three activities and events to explore the app’s complete features.
