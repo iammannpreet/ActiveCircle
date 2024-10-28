@@ -8,7 +8,6 @@ import { applyTypeFilter } from '../utils/typeFilters';
 import { applyContentFilter } from '../utils/contentFilters';
 import { TypeFilterOptions } from '../utils/filterOptions';
 import EventModal from '../components/eventModal';
-import Header from '../components/Header';
 import FilterSection from '../components/FilterSection';
 
 const HappeningNowPage = () => {
@@ -48,7 +47,6 @@ const HappeningNowPage = () => {
 
     return (
         <>
-            <Header />
             <div className="flex p-4 md:px-8 lg:px-12 bg-lightGray text-darkGray h-screen">
                 {/* Left Section: List */}
                 <div className='w-full md:w-1/2 lg:w-1/3 pr-4 h-full overflow-y-auto'>

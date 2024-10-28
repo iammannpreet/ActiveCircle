@@ -1,3 +1,4 @@
+// src/components/Header.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -13,7 +14,7 @@ import Menu from './Menu';
 import SearchComponent from './SearchComponent';
 import '../tailwind.css';
 
-const Header = ({ events, activities }) => {
+const Header = ({ events, activities, isAuthenticated, onLogout }) => { // Accept isAuthenticated and onLogout as props
     const { isOpen, toggleMenu } = useToggleMenu();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -21,6 +22,7 @@ const Header = ({ events, activities }) => {
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
     };
+
     const scrollWithOffset = (el) => {
         const yOffset = -window.innerHeight / 2 + el.getBoundingClientRect().height / 2;
         const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -58,7 +60,7 @@ const Header = ({ events, activities }) => {
                     {Object.entries(menuItems).map(([key, item]) => (
                         key === 'search' ? (
                             <button
-                                key={key} // Missing key here causes the warning
+                                key={key}
                                 onClick={toggleSearch}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
@@ -66,7 +68,7 @@ const Header = ({ events, activities }) => {
                             </button>
                         ) : item.to && item.to.startsWith('#') ? (
                             <HashLink
-                                key={key} // Missing key here causes the warning
+                                key={key}
                                 smooth
                                 to="/#partner"
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
@@ -75,7 +77,7 @@ const Header = ({ events, activities }) => {
                             </HashLink>
                         ) : (
                             <Link
-                                key={key} // Missing key here causes the warning
+                                key={key}
                                 to={item.to}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
@@ -83,52 +85,46 @@ const Header = ({ events, activities }) => {
                             </Link>
                         )
                     ))}
-
                 </motion.div>
 
-
-                {/* Right side: Login and Sign Up */}
+                {/* Right side: Log In/Sign Up or Log Out */}
                 <motion.div
                     className="hidden lg:flex space-x-4"
                     initial={{ x: 100, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="w-16 h-8 bg-black overflow-hidden inline-block rounded-xl">
-                        <a
-                            href="#login"
-                            className="relative z-10 text-sm text-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
-                        >
-                            Log In
-                        </a>
-                    </div>
+                    {isAuthenticated ? (
+                        <div className="w-16 h-8 bg-black overflow-hidden inline-block rounded-xl">
+                            <button
+                                onClick={onLogout}
+                                className="relative z-10 text-sm text-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
+                            >
+                                Log Out
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="w-16 h-8 bg-black overflow-hidden inline-block rounded-xl">
+                                <Link
+                                    to="/login"
+                                    className="relative z-10 text-sm text-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
+                                >
+                                    Log In
+                                </Link>
+                            </div>
 
-                    <div className=" w-16 h-8 bg-white overflow-hidden inline-block rounded-xl">
-                        <a href="#signup" className="relative z-10 text-sm bg-primary text-black rounded-lg hover:bg-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300">
-                            Sign Up
-                        </a>
-                    </div>
+                            <div className="w-16 h-8 bg-white overflow-hidden inline-block rounded-xl">
+                                <Link
+                                    to="/register"
+                                    className="relative z-10 text-sm bg-primary text-black rounded-lg hover:bg-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
+                                >
+                                    Sign Up
+                                </Link>
+                            </div>
+                        </>
+                    )}
                 </motion.div>
-
-                <motion.div className="flex space-x-6 items-center  lg:hidden " >
-                    {/* Search Icon */}
-                    <button onClick={toggleSearch} className="transform transition-transform duration-200 hover:scale-120">
-                        <SearchIcon className="text-darkGray hover:text-black" />
-                    </button>
-
-                    {/* Filter Icon */}
-                    <div className="transform transition-transform duration-200 hover:scale-120">
-                        <FilterAltIcon className="text-darkGray hover:text-black" />
-                    </div>
-
-                    {/* Hamburger Icon */}
-                    <div className="transform transition-transform duration-200 hover:scale-120 ">
-                        <HamburgerIcon isOpen={isOpen} toggleMenu={toggleMenu} />
-                    </div>
-                </motion.div>
-
-                {/* Mobile Menu */}
-                <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
             </header>
 
             {/* Backdrop overlay */}
@@ -140,14 +136,12 @@ const Header = ({ events, activities }) => {
             <motion.div
                 className="fixed left-0 w-full bg-gray-200 z-50"
                 style={{ top: '76px' }} // Fixed top value to start below the header
-                initial={{ y: '-100%', opacity: 0 }} // Start hidden above the header
-                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }} // Animate visibility based on state
-                transition={{ type: 'spring', stiffness: 100, damping: 20 }} // Smooth spring effect
+                initial={{ y: '-100%', opacity: 0 }}
+                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 100, damping: 20 }}
             >
-                {/* Conditionally Render Search Component if search is open */}
                 {isSearchOpen && <SearchComponent events={events} activities={activities} />}
             </motion.div>
-
         </div>
     );
 };
