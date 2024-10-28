@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { menuItems } from '../utils/menuItems'; // Ensure this is correctly imported
+import { menuItems } from '../utils/menuItems';
 import { useToggleMenu } from '../hooks/useToggeMenu';
+import { HashLink } from 'react-router-hash-link';
 import aclogo from '../assets/icons/AC-logo.png';
 import tabtext from '../assets/icons/tab-AC.gif';
 import SearchIcon from '@mui/icons-material/Search';
@@ -20,9 +21,14 @@ const Header = ({ events, activities }) => {
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
     };
+    const scrollWithOffset = (el) => {
+        const yOffset = -window.innerHeight / 2 + el.getBoundingClientRect().height / 2;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+    };
 
     return (
-        <>
+        <div>
             {/* Header Section */}
             <header className="sticky top-0 z-50 bg-lightGray text-darkGray p-4 md:px-8 lg:px-12 flex justify-between items-center" style={{ height: '76px' }}>
                 {/* Left side: Logo */}
@@ -44,7 +50,7 @@ const Header = ({ events, activities }) => {
 
                 {/* Desktop View: Menu Links */}
                 <motion.div
-                    className="hidden lg:flex space-x-8 items-center"
+                    className="hidden lg:flex space-x-6 items-center"
                     initial={{ x: 100, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
@@ -58,27 +64,28 @@ const Header = ({ events, activities }) => {
                             >
                                 {item.label}
                             </button>
+                        ) : item.to && item.to.startsWith('#') ? (
+                            <HashLink
+                                key={key}
+                                smooth
+                                to="/#partner"
+                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                            >
+                                Our Mission
+                            </HashLink>
                         ) : (
-                            item.to ? (
-                                <Link
-                                    key={key}
-                                    to={item.to}
-                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
-                                >
-                                    {item.label}
-                                </Link>
-                            ) : (
-                                <a
-                                    key={key}
-                                    href={item.href}
-                                    className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
-                                >
-                                    {item.label}
-                                </a>
-                            )
+                            <Link
+                                key={key}
+                                to={item.to}
+                                className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
+                            >
+                                {item.label}
+                            </Link>
                         )
                     ))}
+
                 </motion.div>
+
 
                 {/* Right side: Login and Sign Up */}
                 <motion.div
@@ -129,19 +136,17 @@ const Header = ({ events, activities }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={toggleSearch}></div>
             )}
 
-            {/* Search Component (with no padding and z-index adjustments) */}
             <motion.div
                 className="fixed left-0 w-full bg-gray-200 z-50"
-                style={{ top: '76px' }} // Fixed top value to start below the header
-                initial={{ y: '-100%', opacity: 0 }} // Start hidden above the header
-                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }} // Animate visibility based on state
-                transition={{ type: 'spring', stiffness: 100, damping: 20 }} // Smooth spring effect
+                style={{ top: '76px' }}
+                initial={{ y: '-100%', opacity: 0 }}
+                animate={isSearchOpen ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 100, damping: 20 }}
             >
-                {/* Conditionally Render Search Component if search is open */}
                 {isSearchOpen && <SearchComponent events={events} activities={activities} />}
             </motion.div>
 
-        </>
+        </div>
     );
 };
 

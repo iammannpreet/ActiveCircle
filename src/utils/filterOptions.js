@@ -1,5 +1,3 @@
-// utils/filterOptions.js
-
 export const TypeFilterOptions = {
     GYM: ['Weightlifting', 'Cardio', 'Strength training', 'Circuit training'],
     YOGA: ['Vinyasa Yoga', 'Hatha Yoga', 'Ashtanga Yoga', 'Power Yoga', 'Meditation', 'Pilates'],
@@ -11,7 +9,6 @@ export const TypeFilterOptions = {
     CYCLING: ['Road cycling', 'Mountain biking'],
 };
 
-// Time-based filter options for event selection
 export const FilterOptions = {
     ALL: 'all',
     TODAY: 'today',

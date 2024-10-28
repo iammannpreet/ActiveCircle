@@ -22,7 +22,6 @@ function Map({ hoveredItem }) {
     const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
     const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 
-    // Get user's current location on mount
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -41,7 +40,6 @@ function Map({ hoveredItem }) {
         }
     }, []);
 
-    // Center map based on events/activities or user location
     useEffect(() => {
         if (!eventsLoading && !activitiesLoading && (events.length > 0 || activities.length > 0)) {
             const coordinates = [...events, ...activities]
@@ -61,12 +59,11 @@ function Map({ hoveredItem }) {
         }
     }, [events, activities, eventsLoading, activitiesLoading]);
 
-    // Highlight the marker corresponding to the hovered item in the list
     useEffect(() => {
         if (hoveredItem) {
             setHoveredLocation(hoveredItem);
         } else {
-            setHoveredLocation(null); // Reset hovered location when no item is hovered
+            setHoveredLocation(null);
         }
     }, [hoveredItem]);
 

@@ -1,7 +1,5 @@
-// components/TypeDropdown.js
-
 import React from 'react';
-import { TypeFilterOptions } from '../utils/filterOptions'; // Assuming the same options for both
+import { TypeFilterOptions } from '../utils/filterOptions';
 
 const TypeDropdown = ({ value, onChange, label }) => {
     return (

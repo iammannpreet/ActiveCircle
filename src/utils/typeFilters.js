@@ -1,5 +1,3 @@
-// utils/typeFilters.js
-
 export const applyTypeFilter = (type, events, activities, typeFilters) => {
     if (!type) {
         return { filteredEvents: events, filteredActivities: activities };

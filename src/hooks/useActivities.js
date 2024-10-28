@@ -1,4 +1,3 @@
-// hooks/useActivities.js
 import { useEffect, useState } from 'react';
 import { fetchActivities, addActivity, deleteActivity } from '../services/activityService';
 

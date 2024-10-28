@@ -7,6 +7,7 @@ import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
 import '../tailwind.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Header from '../components/Header';
 
 const initialActivityState = {
     type: '',
@@ -106,7 +107,8 @@ const AddActivityPage = () => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    return (
+    return (<>
+        <Header></Header>
         <div className="bg-gradient-to-br from-lightGray to-orange-100 min-h-screen flex items-center justify-center">
             <ToastContainer />
             <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8 space-y-6 relative">
@@ -115,7 +117,7 @@ const AddActivityPage = () => {
                     onClick={goBack}
                     className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
                 >
-                    <ArrowBackIcon fontSize="large" />
+                    <ArrowBackIcon fontSize="" />
                     <span className="text-lg">Back</span>
                 </button>
                 <h1 className="text-3xl font-semibold mb-4 text-center text-darkGray">Add New Activity</h1>
@@ -220,6 +222,7 @@ const AddActivityPage = () => {
                 </form>
             </div>
         </div>
+    </>
     );
 };
 

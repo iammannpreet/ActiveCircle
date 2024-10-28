@@ -14,9 +14,9 @@ export const applyDateFilter = (filter, events, activities) => {
         case 'this_weekend':
             const day = now.getDay();
             const nextSaturday = new Date(now);
-            nextSaturday.setDate(now.getDate() + (6 - day)); // Move to Saturday
+            nextSaturday.setDate(now.getDate() + (6 - day));
             const nextSunday = new Date(nextSaturday);
-            nextSunday.setDate(nextSunday.getDate() + 1); // Sunday
+            nextSunday.setDate(nextSunday.getDate() + 1);
 
             filteredE = events.filter(event => {
                 const eventDate = new Date(event.date);

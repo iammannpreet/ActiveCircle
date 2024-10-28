@@ -1,6 +1,6 @@
 import React from "react";
-import useCursorPosition from "../hooks/useCursorPosition"; // Import the custom hook
-import useTextShadowAnimation from "../hooks/useTextShadowAnimation"; // Import the new custom hook
+import useCursorPosition from "../hooks/useCursorPosition";
+import useTextShadowAnimation from "../hooks/useTextShadowAnimation";
 import Glowingpng from "./Glowingpng";
 import specialC from "../assets/icons/special-c.svg"
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ const Hero = () => {
     useTextShadowAnimation();
 
     return (
-        <div className="hero-container h-screen w-full p-4 md:p-8 lg:px-16 bg-black overflow-hidden cursor-none justify-center">
+        <div className=" hero-container h-1/2 lg:h-screen w-full p-4 pb-8 md:p-8 lg:px-16  bg-black overflow-hidden cursor-none justify-center">
             <div
                 className="cursor-follower"
                 style={{
@@ -24,7 +24,7 @@ const Hero = () => {
                     borderRadius: "50%",
                 }}
             />
-            <div className="md:flex justify-between ">
+            <div className=" md:flex justify-between lg:mt-32 ">
                 <div className="text-center md:text-left my-16 space-y-4">
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white relative line">
                         Stay Active.
@@ -43,7 +43,7 @@ const Hero = () => {
             <div className="flex flex-col items-center">
 
                 <Link to="/happening-now">
-                    <button className="bg-primary text-white px-8 py-3 mt-6 rounded-lg hover:bg-orange-600 transition duration-300 ease-in-out drop-shadow-md">
+                    <button className="bg-primary text-white px-8 py-3 mt-6 rounded-lg hover:bg-orange-600 transition duration-300 ease-in-out drop-shadow-md lg:mt-40">
                         View Happening Now
                     </button>
                 </Link>

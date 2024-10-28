@@ -1,4 +1,3 @@
-// components/ItemList.js
 import React from 'react';
 
 const ItemList = ({ items, type, handleItemClick }) => {

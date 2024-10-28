@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import EventModal from './eventModal'; // Import your EventModal component
+import EventModal from './eventModal';
 
 const SearchComponent = ({ events, activities }) => {
-    const [searchInput, setSearchInput] = useState('');  // Store the user's search input
-    const [filteredResults, setFilteredResults] = useState([]);  // Store results from the database
-    const [loading, setLoading] = useState(false);  // Store loading state
-    const [error, setError] = useState(null);  // Store error state
-    const [selectedItem, setSelectedItem] = useState(null);  // Store selected item for the modal
-    const [isEvent, setIsEvent] = useState(true);  // Track if the selected item is an event or activity
-    const [placeholder, setPlaceholder] = useState('Step outside. Find an adventure.'); // Default placeholder for mobile
+    const [searchInput, setSearchInput] = useState('');
+    const [filteredResults, setFilteredResults] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isEvent, setIsEvent] = useState(true);
+    const [placeholder, setPlaceholder] = useState('Step outside. Find an adventure.');
 
-    // Detect screen width and adjust placeholder
     useEffect(() => {
         const updatePlaceholder = () => {
             if (window.innerWidth < 768) {
@@ -20,19 +19,15 @@ const SearchComponent = ({ events, activities }) => {
             }
         };
 
-        // Initial check when component mounts
         updatePlaceholder();
 
-        // Update placeholder on window resize
         window.addEventListener('resize', updatePlaceholder);
 
-        // Cleanup listener on unmount
         return () => {
             window.removeEventListener('resize', updatePlaceholder);
         };
     }, []);
 
-    // Function to fetch search results from the backend
     const fetchSearchResults = async (query) => {
         setLoading(true);
         setError(null);
@@ -55,22 +50,20 @@ const SearchComponent = ({ events, activities }) => {
         }
     };
 
-    // Handle user input in the search bar
     const handleInputChange = (e) => {
         const input = e.target.value;
         setSearchInput(input);
 
         if (input.length > 2) {
-            fetchSearchResults(input);  // Trigger search when input has more than 2 characters
+            fetchSearchResults(input);
         } else {
-            setFilteredResults([]);  // Clear results if input is too short
+            setFilteredResults([]);
         }
     };
 
-    // Handle item click to show the modal
     const handleItemClick = (item) => {
         setSelectedItem(item);
-        setIsEvent(!!item.type); // Determine if it's an event (based on the presence of type)
+        setIsEvent(!!item.type);
     };
 
     return (
@@ -81,7 +74,7 @@ const SearchComponent = ({ events, activities }) => {
                 value={searchInput}
                 onChange={handleInputChange}
                 className="border border-gray-300 p-3 w-full rounded-lg bg-white text-darkGray placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder={placeholder}  // Dynamically set placeholder based on screen size
+                placeholder={placeholder}
             />
 
             {/* Loading State */}
@@ -99,7 +92,7 @@ const SearchComponent = ({ events, activities }) => {
                             <li
                                 key={index}
                                 className="p-4 cursor-pointer hover:bg-gray-100 transition-all duration-200 ease-in-out"
-                                onClick={() => handleItemClick(item)}  // Handle click to show modal
+                                onClick={() => handleItemClick(item)}
                             >
                                 <h4 className="font-semibold text-lg mb-1 text-primary">{item.type || item.details}</h4>
                                 <p className="text-sm text-gray-600">{item.location}</p>
@@ -118,9 +111,9 @@ const SearchComponent = ({ events, activities }) => {
             {/* Display Modal for the selected item */}
             {selectedItem && (
                 isEvent ? (
-                    <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />  // Show event modal
+                    <EventModal event={selectedItem} onClose={() => setSelectedItem(null)} />
                 ) : (
-                    <EventModal activity={selectedItem} onClose={() => setSelectedItem(null)} />  // Show activity modal
+                    <EventModal activity={selectedItem} onClose={() => setSelectedItem(null)} />
                 )
             )}
         </div>

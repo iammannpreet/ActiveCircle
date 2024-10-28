@@ -1,7 +1,7 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const fetchActivities = () => {
-    return fetch(`${API_URL}/api/v1/activities`)  // Corrected URL to include versioning
+    return fetch(`${API_URL}/api/v1/activities`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -13,8 +13,7 @@ export const fetchActivities = () => {
 export const addActivity = (newActivity) => {
     return fetch(`${API_URL}/api/v1/activities`, {
         method: 'POST',
-        // Removed headers since we're sending FormData
-        body: newActivity,  // Assuming `newActivity` is a FormData object
+        body: newActivity,
     }).then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -24,7 +23,7 @@ export const addActivity = (newActivity) => {
 };
 
 export const deleteActivity = (id) => {
-    return fetch(`${API_URL}/api/v1/activities/${id}`, {  // Corrected URL and path
+    return fetch(`${API_URL}/api/v1/activities/${id}`, {
         method: 'DELETE',
     }).then(response => {
         if (!response.ok) {
