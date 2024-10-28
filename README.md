@@ -1,91 +1,53 @@
-Overview
-ActiveCircle is a community-driven app designed to help people discover and participate in activities happening near them. Users can post listings for activities such as gym sessions, yoga classes, kids' playdates, and group walks. The app provides an easy way to organize or join events based on location, activity type, and preferences, encouraging social connections through shared interests.
+## ActiveCircle Capstone Project Submission
 
-Problem Space
-Many individuals struggle to find local activities that align with their fitness or social interests. There’s a growing need for a platform that consolidates community-driven events, making it easier for people to discover, join, or organize events near them. ActiveCircle solves this problem by providing a simple and effective platform for discovering and managing fitness, family-friendly, and wellness activities in their area.
+### Overview
+**ActiveCircle** is a community-driven application that helps users discover, organize, and participate in local activities. Whether users are fitness enthusiasts, parents arranging kids’ playdates, or individuals looking for a group walk or yoga class, ActiveCircle is designed to foster social connections and promote wellness through shared activities.
 
-User Profile
-Primary users: 
+### Problem Space
+Finding activities that align with specific interests, locations, and schedules can be challenging. There is a growing need for a consolidated platform where people can discover, join, and organize activities within their community. **ActiveCircle** addresses this need by offering a user-friendly platform that filters and manages local fitness, wellness, and family-friendly activities in one place.
 
-Fitness Enthusiasts: People who seek workout buddies or want to organize group workouts.
-Parents: Individuals looking to arrange or join kids' playdates. 
-Health-Conscious Individuals: People interested in organizing or joining community walks or yoga sessions.
-Community Organizers: Individuals or organizations that host events for welfare, social, or health-focused groups.
-Special Considerations:
+### Project Features (Current Version)
+1. **User Listings**: Users can post activities like gym sessions, yoga classes, kids’ playdates, and community walks. Each listing includes key details like location, time, type, and participants.
+2. **Filters & Search**: Users can search and filter activities based on type (Gym, Yoga, Walk, Kids’ Play), location, and schedule. Multiple filters can be applied simultaneously for precise results.
+3. **Interactive Map**: The app uses Mapbox API to provide an interactive map view of activities, enabling users to explore events visually based on their location.
+4. **Authentication**: User authentication is implemented with JWT, ensuring secure access and personalized content.
+5. **Community Engagement**: Users can organize and view events representing community groups.
+6. **Responsive Design**: The app is responsive and optimized for mobile, tablet, and desktop devices using a combination of Tailwind CSS and React.
 
-Users will want to filter activities by location, time, and activity type.
-Parents may need extra security features, such as identifying responsible adults for children’s activities.
-Yoga sessions might require payment processing integration.
-Ease of use and quick access to local activities is crucial to retain engagement.
-Features
-User Listings: Users can post listings for activities (gym sessions, walks, kids' play, and yoga). Each post will include location, number of participants, and details specific to the activity.
-Filters: Filter activities by type (Gym, Yoga, Kids' Play, Walk), location, and time.
-Search Functionality: Search for activities happening nearby, or within a set radius, based on user location.
-Profile Creation: Users can create profiles that store preferences and make posting or joining events easier.
-Community Engagement: Users can join or organize events representing community or welfare groups.
-Safety Features for Kids' Play: Organizers can designate responsible adults for kids' activities.
-Payment Integration: Yoga session listings can include price details and support for payments via Stripe.
-Favorites/RSVP: Users can mark events as favorites or RSVP to activities they’re interested in attending.
+### Upcoming Features (Future Version)
+1. **Profile Creation**: Users will be able to create and customize profiles to store preferences and event history.
+2. **Safety Features for Kids' Play**: Organizers will have the ability to designate responsible adults for activities involving children.
+3. **Payment Integration**: For activities like yoga classes, there will be an integrated payment system using Stripe.
+4. **Favorites/RSVP**: Users will have the option to mark activities as favorites and RSVP for events.
 
-Implementation
-Tech Stack
-Frontend: React.js for building dynamic and responsive user interfaces.
-Styling: SASS for styling and maintaining design consistency.
-Backend: Node.js with Express for server-side logic and API requests.
-Database: TBD
-Authentication: TBD
-Payment Integration: TBD
-Deployment: TBD
-APIs
-Google Maps API: For location-based filtering and displaying activities.
-Firebase Authentication: TBD
-Stripe API: TBD
+### Implementation
+1. **Tech Stack**:
+   - **Frontend**: React.js for building dynamic user interfaces.
+   - **Styling**: Tailwind CSS for responsive design and clean styling.
+   - **Backend**: Node.js with Express.js for handling API requests and server-side logic.
+   - **Database**: MongoDB for scalable data storage and retrieval.
+   - **APIs**: Mapbox for interactive maps, and Useless Facts API for providing fun facts on the 404 page.
+  
+2. **Endpoints**:
+   - **POST /activities**: Allows users to create new activity listings.
+   - **GET /activities**: Retrieves a list of activities with filter support.
+   - **POST /join**: Allows users to join an existing activity.
+   - **GET /user/:id**: Fetches user profile data and activity history.
 
-Sitemap
-Home Page: Displays a list of nearby activities with filters for gym, yoga, kids' play, and walk events.
-Post Listing Page: Allows users to create a new listing for an activity, specifying details such as location, participants, and time.
-Activity Detail Page: Displays the details of a specific activity and provides options to join or contact the organizer.
-Profile Page: Shows user details, event history, and preferences.
-Search Results Page: Lists filtered activities based on user’s search criteria (location, type, time).
-Mockups
-Mockups will show the following pages:
+### Current Achievements
+- **User Activities**: Users can post and view activities, explore events using multiple filters, and search by keywords or location. The backend securely handles all POST and GET requests, ensuring data integrity and user authentication.
+- **Fully Functional Map**: The Mapbox API integration allows users to explore activities visually with full interactivity.
+- **Responsive Design**: The app adjusts seamlessly across all devices—mobile, tablet, and desktop.
+- **Authentication and Authorization**: Implemented secure authentication with JWT, allowing users to create and manage their listings.
+- **404 Page**: A creative “Not Found” page that displays random fun facts using the Useless Facts API.
 
-Home Page: With filters and activity listings.
-Post Activity Form: For users to post new listings.
-Activity Detail Page: Showing activity information with options to join or contact the organizer.
-Profile Page: With user details and list of posted or joined activities.
-Tools like Figma or hand-drawn sketches can be used to create visual representations.
+### Future Goals
+- Enhance user profiles with personalized settings and activity history.
+- Implement security measures for kids’ activities by allowing responsible adult assignments.
+- Integrate payment processing for premium events such as yoga classes.
+- Add RSVP functionality to allow users to express their interest in activities.
 
-Data
-Users:
+### Final Summary
+ActiveCircle is an effective, community-focused app that makes it easier for people to discover and participate in local activities. While the current version focuses on core features like creating, viewing, and searching activities, future updates will include profile management, safety features, payment processing, and RSVP capabilities. This project showcases practical solutions for community engagement through shared interests and local activities.
 
-userId: unique identifier
-name: string
-email: string
-preferences: array (e.g., preferred activities)
-Activities:
-
-activityId: unique identifier
-type: string (Gym, Walk, Kids' Play, Yoga)
-location: string
-organizerId: userId
-details: string (e.g., workout type, kids' activity details)
-Listings: 
-
-listingId: unique identifier
-activityId: activityId
-organizerId: userId
-participants: array of userIds
-Endpoints
-POST /activities: Creates a new activity listing.
-Parameters: activityType, location, details 
-Example Response: { activityId: '123', message: 'Activity created successfully.' }
-GET /activities: Retrieves a list of activities based on filters. 
-Parameters: type, location, radius
-Example Response: [ { activityId: '123', type: 'Gym', location: 'XYZ' } ]
-POST /join: Allows a user to join an activity.
-Parameters: activityId, userId
-Example Response: { message: 'Joined activity successfully.' }
-GET /user/
-: Retrieves user profile data and activity history.
-Example Response: { name: 'John Doe', activities: [{ activityId: '123', type: 'Walk' }] }
+**Tech Stack Used**: React.js, Tailwind CSS, Node.js, Express.js, MongoDB, Mapbox API
