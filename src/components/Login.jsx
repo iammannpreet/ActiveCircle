@@ -1,12 +1,13 @@
 // src/components/Login.jsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import an icon for the back button
-import { ToastContainer, toast } from 'react-toastify'; // Import toast for notifications
-import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS for styles
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../context/UserContext';
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = () => {
+    const { loginUser } = useContext(UserContext); // Access the loginUser function from UserContext
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -19,9 +20,19 @@ const Login = ({ setIsAuthenticated }) => {
                 password,
             });
 
-            if (response?.data?.token) {
-                localStorage.setItem('token', response.data.token);
-                setIsAuthenticated(true);
+            if (response?.data?.token && response?.data?.user) {
+                // Create user data object
+                const userData = {
+                    id: response.data.user.id,
+                    name: response.data.user.name,
+                    token: response.data.token,
+                    email: response.data.user.email,
+                };
+
+                // Update the user state globally using the context
+                loginUser(userData);
+
+                // Display success message and navigate to homepage
                 toast.success('Login successful!');
                 navigate('/');
             } else {
@@ -34,21 +45,11 @@ const Login = ({ setIsAuthenticated }) => {
         }
     };
 
-    const goBack = () => {
-        navigate(-1); // Navigate back to the previous page
-    };
-
     return (
         <div className="bg-gradient-to-br from-lightGray to-orange-100 h-screen flex justify-center items-center">
             <ToastContainer /> {/* Include the Toast container for notifications */}
             <div className="bg-white shadow-lg rounded-xl w-full max-w-md p-8 space-y-6 relative">
-                <button
-                    onClick={goBack}
-                    className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
-                >
-                    <ArrowBackIcon fontSize="small" />
-                    <span className="text-lg">Back</span>
-                </button>
+
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-semibold text-darkGray">Log in to ActiveCircle</h1>
                     <p className="text-gray-500 text-sm mt-2">Enter your credentials to access your account</p>

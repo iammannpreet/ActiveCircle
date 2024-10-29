@@ -1,5 +1,6 @@
 // src/components/Header.jsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { menuItems } from '../utils/menuItems';
@@ -14,7 +15,9 @@ import Menu from './Menu';
 import SearchComponent from './SearchComponent';
 import '../tailwind.css';
 
-const Header = ({ events, activities, isAuthenticated, onLogout }) => { // Accept isAuthenticated and onLogout as props
+const Header = ({ events, activities }) => {
+    const { user, logoutUser } = useContext(UserContext); // Use UserContext
+
     const { isOpen, toggleMenu } = useToggleMenu();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -70,10 +73,10 @@ const Header = ({ events, activities, isAuthenticated, onLogout }) => { // Accep
                             <HashLink
                                 key={key}
                                 smooth
-                                to="/#partner"
+                                to={item.to}
                                 className="text-base font-light font-interthin text-darkGray pl-3 pr-3 hover:scale-110 hover:text-black hover:border-l-2 hover:border-r-2 border-orange transition-all duration-300"
                             >
-                                Our Mission
+                                {item.label}
                             </HashLink>
                         ) : (
                             <Link
@@ -94,10 +97,10 @@ const Header = ({ events, activities, isAuthenticated, onLogout }) => { // Accep
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    {isAuthenticated ? (
+                    {user ? ( // Check if the user is logged in
                         <div className="w-16 h-8 bg-black overflow-hidden inline-block rounded-xl">
                             <button
-                                onClick={onLogout}
+                                onClick={logoutUser}
                                 className="relative z-10 text-sm text-white hover:scale-105 link-shiny flex justify-center items-center h-full w-full transition-all duration-300"
                             >
                                 Log Out
@@ -125,6 +128,26 @@ const Header = ({ events, activities, isAuthenticated, onLogout }) => { // Accep
                         </>
                     )}
                 </motion.div>
+
+                <motion.div className="flex space-x-6 items-center  lg:hidden " >
+                    {/* Search Icon */}
+                    <button onClick={toggleSearch} className="transform transition-transform duration-200 hover:scale-120">
+                        <SearchIcon className="text-darkGray hover:text-black" />
+                    </button>
+
+                    {/* Filter Icon */}
+                    <button onClick={toggleSearch} className="transform transition-transform duration-200 hover:scale-120">
+                        <FilterAltIcon className="text-darkGray hover:text-black" />
+                    </button>
+
+                    {/* Hamburger Icon */}
+                    <div className="transform transition-transform duration-200 hover:scale-120 ">
+                        <HamburgerIcon isOpen={isOpen} toggleMenu={toggleMenu} />
+                    </div>
+                </motion.div>
+
+                {/* Mobile Menu */}
+                <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
             </header>
 
             {/* Backdrop overlay */}

@@ -1,13 +1,18 @@
+// index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import reportWebVitals from './reportWebVitals'; import './tailwind.css';  // This should be at the top of the file
-
+import reportWebVitals from './reportWebVitals';
+import './tailwind.css';
+import { UserProvider } from './context/UserContext'; // Import the UserProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* Wrap the entire app with the UserProvider */}
+    <UserProvider>
+      <App />
+    </UserProvider>
   </React.StrictMode>
 );
 

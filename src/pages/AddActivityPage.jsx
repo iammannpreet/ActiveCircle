@@ -7,12 +7,10 @@ import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
 import '../tailwind.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Header from '../components/Header';
 
 const initialActivityState = {
     type: '',
     location: '',
-    organizer: '',
     date: '',
     time: '',
     details: '',
@@ -23,6 +21,24 @@ const AddActivityPage = () => {
     const { newActivity, setNewActivity, handleAddActivity } = useActivities();
     const [locationSuggestions, setLocationSuggestions] = useState([]);
     const navigate = useNavigate();
+
+    // Retrieve and validate logged-in user's name from localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const organizerName = storedUser?.name || "Anonymous";
+
+    // Check if the user is not logged in and redirect to the login page
+    useEffect(() => {
+        if (!storedUser || !storedUser.token) {
+            toast.error('You must be logged in to add an activity.', {
+                position: "top-center"
+            });
+
+            // Redirect to the login page
+            setTimeout(() => {
+                navigate('/login');
+            }, 1500);
+        }
+    }, [storedUser, navigate]);
 
     // Function to navigate back
     const goBack = () => {
@@ -39,7 +55,6 @@ const AddActivityPage = () => {
         }
     };
 
-
     const handleLocationSelect = (location) => {
         setNewActivity({ ...newActivity, location });
         setLocationSuggestions([]);
@@ -53,8 +68,8 @@ const AddActivityPage = () => {
     };
 
     const validateForm = () => {
-        const { type, location, organizer, date, time, details } = newActivity;
-        if (!type || !location || !organizer || !date || !time || !details) {
+        const { type, location, date, time, details } = newActivity;
+        if (!type || !location || !date || !time || !details) {
             return 'Please fill out all required fields.';
         }
         return null;
@@ -79,7 +94,7 @@ const AddActivityPage = () => {
             formData.append('type', newActivity.type);
             formData.append('location', newActivity.location);
             formData.append('details', newActivity.details);
-            formData.append('organizer', newActivity.organizer);
+            formData.append('organizer', organizerName); // Automatically set the organizer name
             formData.append('latitude', latitude);
             formData.append('longitude', longitude);
             formData.append('date', dateTime.toISOString());
@@ -107,121 +122,109 @@ const AddActivityPage = () => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    return (<>
-        <div className="bg-gradient-to-br from-lightGray to-orange-100 min-h-screen flex items-center justify-center">
+    return (
+        <>
             <ToastContainer />
-            <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8 space-y-6 relative">
-                {/* Back Button */}
-                <button
-                    onClick={goBack}
-                    className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
-                >
-                    <ArrowBackIcon fontSize="" />
-                    <span className="text-lg">Back</span>
-                </button>
-                <h1 className="text-3xl font-semibold mb-4 text-center text-darkGray">Add New Activity</h1>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <TypeDropdown value={newActivity.type} onChange={handleInputChange} label="Activity Type" />
-
-                    <div>
-                        <label className="block text-darkGray font-medium mb-2">Location:</label>
-                        <input
-                            type="text"
-                            name="location"
-                            value={newActivity.location}
-                            onChange={handleInputChange}
-                            className="input border-lightGray focus:ring-primary"
-                            placeholder="Enter activity location"
-                            required
-                        />
-                        {locationSuggestions.length > 0 && (
-                            <ul className="dropdown mt-2">
-                                {locationSuggestions.map((suggestion, index) => (
-                                    <li
-                                        key={index}
-                                        className="dropdown-item"
-                                        onClick={() => handleLocationSelect(suggestion.place_name)}
-                                    >
-                                        {suggestion.place_name}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-darkGray font-medium mb-2">Date:</label>
-                            <input
-                                type="date"
-                                name="date"
-                                value={newActivity.date}
-                                onChange={handleInputChange}
-                                className="input border-lightGray focus:ring-primary"
-                                min={today}
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-darkGray font-medium mb-2">Time:</label>
-                            <input
-                                type="time"
-                                name="time"
-                                value={newActivity.time}
-                                onChange={handleInputChange}
-                                className="input border-lightGray focus:ring-primary"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-darkGray font-medium mb-2">Details:</label>
-                        <textarea
-                            name="details"
-                            value={newActivity.details}
-                            onChange={handleInputChange}
-                            className="input border-lightGray focus:ring-primary"
-                            placeholder="Provide activity details"
-                            rows="4"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-darkGray font-medium mb-2">Organizer:</label>
-                        <input
-                            type="text"
-                            name="organizer"
-                            value={newActivity.organizer}
-                            onChange={handleInputChange}
-                            className="input border-lightGray focus:ring-primary"
-                            placeholder="Enter organizer name"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-darkGray font-medium mb-2">Image:</label>
-                        <input
-                            type="file"
-                            name="image"
-                            onChange={handleFileChange}
-                            className="input border-lightGray focus:ring-primary"
-                        />
-                    </div>
-
+            <div className="bg-gradient-to-br from-lightGray to-orange-100 min-h-screen flex items-center justify-center">
+                <div className="bg-white shadow-lg rounded-xl w-full max-w-2xl p-8 space-y-6 relative">
+                    {/* Back Button */}
                     <button
-                        type="submit"
-                        className="w-full bg-primary text-white font-bold py-3 rounded-lg shadow-lg hover:scale-105 transition duration-300"
+                        onClick={goBack}
+                        className="absolute top-4 left-4 flex items-center space-x-2 text-gray-600 hover:text-primary transition duration-200"
                     >
-                        Add Activity
+                        <ArrowBackIcon fontSize="" />
+                        <span className="text-lg">Back</span>
                     </button>
-                </form>
+                    <h1 className="text-3xl font-semibold mb-4 text-center text-darkGray">Add New Activity</h1>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <TypeDropdown value={newActivity.type} onChange={handleInputChange} label="Activity Type" />
+
+                        <div>
+                            <label className="block text-darkGray font-medium mb-2">Location:</label>
+                            <input
+                                type="text"
+                                name="location"
+                                value={newActivity.location}
+                                onChange={handleInputChange}
+                                className="input border-lightGray focus:ring-primary"
+                                placeholder="Enter activity location"
+                                required
+                            />
+                            {locationSuggestions.length > 0 && (
+                                <ul className="dropdown mt-2">
+                                    {locationSuggestions.map((suggestion, index) => (
+                                        <li
+                                            key={index}
+                                            className="dropdown-item"
+                                            onClick={() => handleLocationSelect(suggestion.place_name)}
+                                        >
+                                            {suggestion.place_name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-darkGray font-medium mb-2">Date:</label>
+                                <input
+                                    type="date"
+                                    name="date"
+                                    value={newActivity.date}
+                                    onChange={handleInputChange}
+                                    className="input border-lightGray focus:ring-primary"
+                                    min={today}
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-darkGray font-medium mb-2">Time:</label>
+                                <input
+                                    type="time"
+                                    name="time"
+                                    value={newActivity.time}
+                                    onChange={handleInputChange}
+                                    className="input border-lightGray focus:ring-primary"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-darkGray font-medium mb-2">Details:</label>
+                            <textarea
+                                name="details"
+                                value={newActivity.details}
+                                onChange={handleInputChange}
+                                className="input border-lightGray focus:ring-primary"
+                                placeholder="Provide activity details"
+                                rows="4"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-darkGray font-medium mb-2">Image:</label>
+                            <input
+                                type="file"
+                                name="image"
+                                onChange={handleFileChange}
+                                className="input border-lightGray focus:ring-primary"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-primary text-white font-bold py-3 rounded-lg shadow-lg hover:scale-105 transition duration-300"
+                        >
+                            Add Activity
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </>
+        </>
     );
 };
 

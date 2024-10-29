@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import useFetchEvents from '../hooks/useFetchEvents';
 import useActivities from '../hooks/useActivities';
@@ -9,8 +8,14 @@ import { applyContentFilter } from '../utils/contentFilters';
 import { TypeFilterOptions } from '../utils/filterOptions';
 import EventModal from '../components/eventModal';
 import FilterSection from '../components/FilterSection';
+import { deleteActivity } from '../services/activityService'; // Import the delete function
 
 const HappeningNowPage = () => {
+    // Retrieve the user data from localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const userId = storedUser?.id;
+    const userToken = storedUser?.token;
+
     const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
     const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
     const [filteredEvents, setFilteredEvents] = useState([]);
@@ -43,6 +48,17 @@ const HappeningNowPage = () => {
     // Define the handleItemClick function to open the modal with the selected item
     const handleItemClick = (item) => {
         setSelectedItem(item);
+    };
+
+    // Handle deleting an activity
+    const handleDelete = async (activityId) => {
+        try {
+            await deleteActivity(activityId, userToken); // Pass the activity ID and the user's token
+            // Refresh the activities list by removing the deleted activity from state
+            setFilteredActivities(filteredActivities.filter(activity => activity._id !== activityId));
+        } catch (err) {
+            console.error('Failed to delete activity:', err);
+        }
     };
 
     return (
@@ -115,12 +131,11 @@ const HappeningNowPage = () => {
                                     return (
                                         <li
                                             key={activity._id}
-                                            className="mb-4 border-b pb-2 hover:border-gray-700 hover:text-black transform  transition duration-300 flex items-center justify-between group"
+                                            className="mb-4 border-b pb-2 hover:border-gray-700 hover:text-black transform transition duration-300 flex items-center justify-between group"
                                             onMouseEnter={() => setHoveredItem(activity)}
                                             onMouseLeave={() => setHoveredItem(null)}
                                             onClick={() => handleItemClick(activity)}
                                         >
-
                                             {/* Activity Details */}
                                             <div className="w-1/2">
                                                 <h4 className="font-bold text-base">{activity.type}</h4>
@@ -136,6 +151,19 @@ const HappeningNowPage = () => {
                                                     className="w-1/2 ml-4 rounded-lg transition-filter duration-300 filter brightness-75 group-hover:brightness-100 group-hover:scale-105"
                                                     onError={() => console.error("Error loading image:", imageUrl)}
                                                 />
+                                            )}
+
+                                            {/* Display delete button if the user is the owner */}
+                                            {activity.user === userId && (
+                                                <button
+                                                    className="text-red-600 hover:text-red-800"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent parent onClick event from firing
+                                                        handleDelete(activity._id);
+                                                    }}
+                                                >
+                                                    Delete
+                                                </button>
                                             )}
                                         </li>
                                     );
@@ -159,4 +187,3 @@ const HappeningNowPage = () => {
 };
 
 export default HappeningNowPage;
-

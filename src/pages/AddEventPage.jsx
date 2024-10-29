@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -7,7 +6,6 @@ import useFetchEvents from '../hooks/useFetchEvents';
 import { fetchLocationSuggestions, geocodeLocation } from '../utils/location';
 import TypeDropdown from '../components/TypeDropdown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Header from '../components/Header';
 
 const initialEventState = {
     type: '',
