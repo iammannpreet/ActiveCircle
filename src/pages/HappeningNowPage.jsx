@@ -140,7 +140,18 @@ const HappeningNowPage = () => {
                                             <div className="w-1/2">
                                                 <h4 className="font-bold text-base">{activity.type}</h4>
                                                 <p className='text-xs lg:text-sm mt-2'>{activity.location}</p>
-                                                <p className='text-xs lg:text-sm mt-2'>Organized by: {activity.organizer}</p>
+                                                <p className='text-xs lg:text-sm mt-2'>Organized by: {activity.user?.name}</p>
+                                                {String(activity.user?._id || activity.user) === String(userId) && (
+                                                    <button
+                                                        className="text-red-600 hover:text-red-800 py-4"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); // Prevent parent onClick event from firing
+                                                            handleDelete(activity._id);
+                                                        }}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                )}
                                             </div>
 
                                             {/* Display the image if available */}
@@ -153,18 +164,9 @@ const HappeningNowPage = () => {
                                                 />
                                             )}
 
-                                            {/* Display delete button if the user is the owner */}
-                                            {activity.user === userId && (
-                                                <button
-                                                    className="text-red-600 hover:text-red-800"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation(); // Prevent parent onClick event from firing
-                                                        handleDelete(activity._id);
-                                                    }}
-                                                >
-                                                    Delete
-                                                </button>
-                                            )}
+
+
+
                                         </li>
                                     );
                                 })}
