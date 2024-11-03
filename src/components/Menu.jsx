@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { UserContext } from '../context/UserContext';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 const Menu = ({ isOpen, toggleMenu }) => {
     const menuVariants = {
