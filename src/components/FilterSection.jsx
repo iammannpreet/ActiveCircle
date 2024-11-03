@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
@@ -29,31 +29,29 @@ const FilterSection = ({
         ALL: 'all',
     };
 
-    // Toggle active dialog on button click
     const handleButtonClick = (dialogName) => {
         setActiveDialog((prev) => (prev === dialogName ? null : dialogName));
     };
 
     // Close the dialog if the user clicks outside
-    const handleClickOutside = (event) => {
+    const handleClickOutside = useCallback((event) => {
         if (dialogRef.current && !dialogRef.current.contains(event.target)) {
             setActiveDialog(null);
         }
-    };
+    }, [setActiveDialog]);
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [handleClickOutside]);
 
     const renderDialogContent = () => {
         switch (activeDialog) {
             case 'date':
                 return (
                     <div className="flex flex-row">
-                        {/* First List */}
                         <div className="w-1/2">
                             <h3 className="font-semibold mb-2">This Week</h3>
                             {Object.keys(FilterOptions).slice(0, 3).map((key) => (
@@ -70,7 +68,6 @@ const FilterSection = ({
                             ))}
                         </div>
 
-                        {/* Second List */}
                         <div className="w-1/2">
                             <h3 className="font-semibold mb-2">This Month</h3>
                             {Object.keys(FilterOptions).slice(3).map((key) => (
@@ -198,7 +195,6 @@ const FilterSection = ({
                 </div>
             </ButtonGroup>
 
-            {/* Shared dialog content */}
             {activeDialog && (
                 <div ref={dialogRef} className="relative bg-darkGray text-orange-100 border rounded shadow-lg p-2 z-10 transition-opacity duration-300">
                     {renderDialogContent()}
