@@ -19,8 +19,8 @@ function Map({ hoveredItem }) {
         zoom: 11,
     });
 
-    const { events, loading: eventsLoading, error: eventsError } = useFetchEvents(process.env.REACT_APP_API_URL);
-    const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
+    const { events, loading: eventsLoading } = useFetchEvents(process.env.REACT_APP_API_URL);
+    const { activities, loading: activitiesLoading } = useActivities();
 
     // Get user's current location on mount
     useEffect(() => {
