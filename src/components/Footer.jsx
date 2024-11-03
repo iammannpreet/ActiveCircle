@@ -4,6 +4,7 @@ import logo from '../assets/icons/tab-AC.gif'
 import github from '../assets/icons/connect-icons/github.png'
 import link from '../assets/icons/connect-icons/link.png'
 import resume from '../assets/icons/connect-icons/resume.png'
+import { HashLink } from 'react-router-hash-link';
 
 const Footer = () => {
     return (
@@ -14,29 +15,33 @@ const Footer = () => {
                         <div>
                             <Link to="/" className="block items-center">
                                 <img src={logo} alt="Logo" className="block w-32 h-8 md:2-36 md:h-10 lg:w-40 lg:h-12" />
-                            </Link>
-                            <p className="text-lightGray text-sm mt-1 md:text-base lg:text-lg">
-                                Explore the <span className='text-primary'>C</span>ircle
-                            </p>
 
+                                <p className="text-lightGray text-sm mt-1 md:text-base lg:text-lg">
+                                    Explore the <span className='text-primary'>C</span>ircle
+                                </p>
+                            </Link>
                         </div>
                         <div className='flex py-6 justify-between md:justify-evenly'>
                             <div>
                                 <ul className="space-y-2 pb-2">
-                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">About Us</li>
+                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">
+                                        <HashLink to='#partner'>About Us</HashLink></li>
                                     <Link to="/happening-now">
                                         <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">Events Near You</li></Link>
                                 </ul>
                                 <ul className="space-y-2">
-                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">Join Active<span className='text-primary'>C</span>ircle</li>
-                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">Services</li>
+                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">
+                                        <Link to='/login'>Join Active</Link><span className='text-primary'>C</span>ircle</li>
+                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">
+                                        <Link to='/add-activity'>Services</Link></li>
                                 </ul></div><div>
                                 <ul className="space-y-2 pb-2">
                                     <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">Terms & Conditions</li>
                                     <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">Privacy Policy</li>
                                 </ul>
                                 <ul className="space-y-2">
-                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">Blog/Resources</li>
+                                    <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">
+                                        <HashLink to='#partner'>Blog/Resources</HashLink></li>
                                     <li className="text-sm md:text-base lg:text-lg hover:text-primary cursor-pointer">Cookies Policy</li>
                                 </ul></div>
                         </div>

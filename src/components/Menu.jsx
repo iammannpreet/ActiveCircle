@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
-
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
+import { UserContext } from '../context/UserContext';
+import { useContext, useState } from 'react';
+
 const Menu = ({ isOpen, toggleMenu }) => {
     const menuVariants = {
         hidden: { opacity: 0, y: '100%' },
         visible: { opacity: 1, y: 0 },
         exit: { opacity: 0, y: '100%' },
     };
+
+    const { user, logoutUser } = useContext(UserContext); // Use UserContext
 
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -23,7 +28,6 @@ const Menu = ({ isOpen, toggleMenu }) => {
             variants={menuVariants}
             transition={{ type: 'tween', duration: 0.5 }}
         >
-            {/* Centeed on mobile, aligned to the right on tablet */}
             <motion.div
                 className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
@@ -32,12 +36,10 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 transition={{ delay: 0.5 }}
                 onClick={toggleMenu}
             >
-                <Link to="/happening-now">
-                    Discover New Events
-                </Link>
+                <Link to="/happening-now">Discover New Events</Link>
             </motion.div>
-            <motion.a
-                href="#about"
+
+            <motion.div
                 className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
@@ -45,56 +47,70 @@ const Menu = ({ isOpen, toggleMenu }) => {
                 transition={{ delay: 0.6 }}
                 onClick={toggleMenu}
             >
-                Create an Activity
-            </motion.a>
-            <motion.a
-                href="#services"
+                <Link to="/add-activity">Create an Activity</Link>
+            </motion.div>
+
+            <motion.div
                 className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.7 }}
                 onClick={toggleMenu}
-            >Host an Event
-            </motion.a>
-            <motion.a
-                href="#contact"
+            >
+                <Link to="/add-event">Host an Event</Link>
+            </motion.div>
+
+            <motion.div
                 className="text-xl mb-4 hover:scale-110 hover:text-black"
                 variants={itemVariants}
                 initial="hidden"
                 animate={isOpen ? 'visible' : 'hidden'}
                 transition={{ delay: 0.8 }}
                 onClick={toggleMenu}
-            >Our Mission
-            </motion.a><motion.a
-                href="#contact"
-                className="text-xl mb-4 hover:scale-110 hover:text-black"
-                variants={itemVariants}
-                initial="hidden"
-                animate={isOpen ? 'visible' : 'hidden'}
-                transition={{ delay: 0.8 }}
-                onClick={toggleMenu}
-            >About
-            </motion.a><motion.a
-                href="#contact"
-                className="text-xl mb-4 hover:scale-110 hover:text-black"
-                variants={itemVariants}
-                initial="hidden"
-                animate={isOpen ? 'visible' : 'hidden'}
-                transition={{ delay: 0.8 }}
-                onClick={toggleMenu}
-            >Log In
-            </motion.a><motion.a
-                href="#contact"
-                className="text-xl mb-4 hover:scale-110 hover:text-black"
-                variants={itemVariants}
-                initial="hidden"
-                animate={isOpen ? 'visible' : 'hidden'}
-                transition={{ delay: 0.8 }}
-                onClick={toggleMenu}
-            >Sign Up
-            </motion.a>
-        </motion.div >
+            >
+                <HashLink to="#partner">Our Mission</HashLink>
+            </motion.div>
+
+            {user ? (
+                <motion.div
+                    className="text-xl mb-4 hover:scale-110 hover:text-black"
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate={isOpen ? 'visible' : 'hidden'}
+                    transition={{ delay: 0.8 }}
+                    onClick={() => {
+                        toggleMenu();
+                        logoutUser();
+                    }}
+                >
+                    Log Out
+                </motion.div>
+            ) : (
+                <>
+                    <motion.div
+                        className="text-xl mb-4 hover:scale-110 hover:text-black"
+                        variants={itemVariants}
+                        initial="hidden"
+                        animate={isOpen ? 'visible' : 'hidden'}
+                        transition={{ delay: 0.8 }}
+                        onClick={toggleMenu}
+                    >
+                        <Link to="/login">Log In</Link>
+                    </motion.div>
+                    <motion.div
+                        className="text-xl mb-4 hover:scale-110 hover:text-black"
+                        variants={itemVariants}
+                        initial="hidden"
+                        animate={isOpen ? 'visible' : 'hidden'}
+                        transition={{ delay: 0.8 }}
+                        onClick={toggleMenu}
+                    >
+                        <Link to="/register">Sign Up</Link>
+                    </motion.div>
+                </>
+            )}
+        </motion.div>
     );
 };
 
