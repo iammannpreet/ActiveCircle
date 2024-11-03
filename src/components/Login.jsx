@@ -15,10 +15,11 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5050/api/v1/auth/login', {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/auth/login`, {
                 email,
                 password,
             });
+
 
             if (response?.data?.token && response?.data?.user) {
                 // Create user data object
