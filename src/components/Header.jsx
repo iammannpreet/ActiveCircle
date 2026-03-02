@@ -21,11 +21,6 @@ const Header = ({ events, activities }) => {
     const toggleSearch = () => {
         setIsSearchOpen(!isSearchOpen);
     };
-    const scrollWithOffset = (el) => {
-        const yOffset = -window.innerHeight / 2 + el.getBoundingClientRect().height / 2;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-    };
 
     return (
         <div>

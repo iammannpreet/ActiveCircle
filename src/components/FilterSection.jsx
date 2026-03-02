@@ -35,18 +35,17 @@ const FilterSection = ({
     };
 
     // Close the dialog if the user clicks outside
-    const handleClickOutside = (event) => {
-        if (dialogRef.current && !dialogRef.current.contains(event.target)) {
-            setActiveDialog(null);
-        }
-    };
-
     useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dialogRef.current && !dialogRef.current.contains(event.target)) {
+                setActiveDialog(null);
+            }
+        };
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [setActiveDialog]);
 
     const renderDialogContent = () => {
         switch (activeDialog) {

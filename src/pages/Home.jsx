@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../components/Header';
-import HoverCard from '../components/HoverCard';
+// HoverCard removed - not currently used
 import Hero from '../components/Hero';
 import CarouselSection from '../components/CarouselSection';
 

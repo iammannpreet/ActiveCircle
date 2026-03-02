@@ -13,7 +13,7 @@ const AnimatedCard = () => {
                 <div className='md:flex
                 md:gap-4 md:pb-12 md:pd-8'>
                     <article className='card__article'>
-                        <img src={children} alt='image' className='card__img' />
+                        <img src={children} alt='children playing outdoors' className='card__img' />
                         <div className='card__data'>
                             <span className='card__description'>Importance of</span>
                             <h2 className='card__title'>Kid's play</h2>
@@ -22,7 +22,7 @@ const AnimatedCard = () => {
                     </article>
 
                     <article className='card__article'>
-                        <img src={dance} alt='image' className='card__img' />
+                        <img src={dance} alt='dancing activity' className='card__img' />
                         <div className='card__data'>
                             <span className='card__description'>Benefits of</span>
                             <h2 className='card__title'>being in nature</h2>
@@ -31,7 +31,7 @@ const AnimatedCard = () => {
                     </article></div>
                 <div className='md:flex md:gap-4 md:pb-8'>
                     <article className='card__article'>
-                        <img src={outdoor} alt='image' className='card__img' />
+                        <img src={outdoor} alt='outdoor nature scene' className='card__img' />
                         <div className='card__data'>
                             <span className='card__description'>Benefits of</span>
                             <h2 className='card__title'>taking a break</h2>
@@ -39,10 +39,10 @@ const AnimatedCard = () => {
                         </div>
                     </article>
                     <article className='card__article hidden md:block'>
-                        <img src={hike} alt='image' className='card__img' />
+                        <img src={hike} alt='hiking trail' className='card__img' />
                         <div className='card__data'>
                             <span className='card__description'>Helping others</span>
-                            <h2 className='card__title'></h2>
+                            <h2 className='card__title'>stay active</h2>
                             <a href='https://www.uclahealth.org/news/article/weight-training-old-age-can-be-beneficial#:~:text=Resistance%20training%20has%20been%20shown,and%20lead%20to%20improved%20sleep.' target='blank' className='card__button'>Read More</a>
                         </div>
                     </article></div>
